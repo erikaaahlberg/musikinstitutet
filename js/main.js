@@ -5,6 +5,8 @@ class FetchHandle {
     constructor(apiPath) {
         this.apiPath = apiPath;
     }
+    
+    
     /* Fetches all the albums using this.apiPath which is available in the class */
     fetchAlbums() {
         fetch(`https://folksa.ga/api/${this.apiPath}?key=flat_eric`)
@@ -18,6 +20,7 @@ class FetchHandle {
                 displayAlbum.displayAlbums();
             });
     }
+    
 }
 
 /* Handles the DOM. */
@@ -28,46 +31,70 @@ class DOMHandle {
     }
     /* Console logs the JSON-object. Doesn't add anything to the DOM right now. */
     displayAlbums() {
-        console.log('hej', this.json);
+        
+        const searchResults = document.getElementById('searchResults');
+        let searchedAlbumButtons = ""
+        /* Loops json object */
+        for(let albums of this.json){
+            /* Storing the albums in a button */
+            searchedAlbumButtons += `
+                <button class="searchedAlbumButton" id="${albums._id}">
+                    ARTISTNAME
+                    ${albums.title}
+                    ${albums.releaseDate}
+                    <img src="images/rightArrow.svg">
+                </div>
+            `;
+        }
+        /* Prints the search results for Albums */
+        searchResults.innerHTML=searchedAlbumButtons
+        
     }
 }
 
-/* Creates a new instance of the FetchHandle-class and runs fetchAlbum() */ 
-const newFetch = new FetchHandle('albums');
-newFetch.fetchAlbums();
 const searchButton = document.getElementById('searchButton');
 
 searchButton.addEventListener('click', function () {
     const searchEvent = new Controller();
-    searchEvent.search(event);
     /* Runs the search in Controller. */
+    const values = searchEvent.search(event);
+    /* Creates a new instance of the FetchHandle-class and runs fetchAlbum() */ 
+    const newFetch = new FetchHandle(values.radioButtonValue);
+    newFetch.fetchAlbums();
     
 })
 
 class Controller {
-
+    /* Search function, fetches the values of searchForm */
     search(event) {
-    /* Search function */
-        event.preventDefault();
         /* Prevents page from updating */
+        event.preventDefault();
+        /* Value of text input field */
         const searchFieldValue = document.getElementById('searchField').value
-        /* Value of inputfield */
+        
         const searchRadioButton = document.
         getElementsByClassName('searchRadioButton');
 
         let radioButtonValue = "";
-        
+        /* Loop thru the radiobuttons */
         for (let i = 0; i < searchRadioButton.length; i++) {
-            /* Loop thru the radiobuttons */
+            /* If checked, store value from checked button in varible */
             if (searchRadioButton[i].checked) {
-                /* If checked, store value */
                 radioButtonValue = searchRadioButton[i].value
             }
         }
-    }
-    
-}
+        /* Object to return all searchValues from searchForm */
+        const searchValues = {
+            radioButtonValue : radioButtonValue,
+            searchFieldValue : searchFieldValue
+        }
 
-/* USEFULL VARIBLES OF Controller.search
+        return searchValues;
+        
+    }
+ 
+/* -  USEFULL VARIBLES OF Controller.search
    -  radioButtonValue
    -  searchFieldValue */
+    
+}
