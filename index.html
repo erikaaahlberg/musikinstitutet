@@ -3,20 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Musikinstitutet</title>
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-
-   <header>
-
-   </header>
-
-   <main>
-
-   </main>
-
-   <footer>
-
-   </footer>
+   
+    <header>
+    
+    </header>
+   
+    <main>
+        <form>
+           
+            albums
+            <input type="radio" name="searchValue" value="album" class="searchRadioButton">
+            tracks
+            <input type="radio" name ="searchValue" class="searchRadioButton" value="track">
+            artists
+            <input type="radio" name ="searchValue" value="artists" class="searchRadioButton">
+            playlists
+            <input type="radio" name ="searchValue" value="playlist" class="searchRadioButton">
+            
+            <input type="text" id="searchField">
+            
+            <input type="submit" id="searchButton" placeholder="search">
+            
+        </form>
+    </main>
+   
+    <footer>
+       
+    </footer>
     <script src="js/main.js"></script>
 </body>
 </html>
