@@ -52,49 +52,21 @@ class DOMHandle {
     }
 }
 
-const searchButton = document.getElementById('searchButton');
+const searchRadioButton = document.
+getElementsByClassName('searchRadioButton');
 
-searchButton.addEventListener('click', function () {
-    const searchEvent = new Controller();
-    /* Runs the search in Controller. */
-    const values = searchEvent.search(event);
-    /* Creates a new instance of the FetchHandle-class and runs fetchAlbum() */ 
-    const newFetch = new FetchHandle(values.radioButtonValue);
+/* Loops thru the searchRadioButtons then runs Fetch class. */ 
+for (i = 0; i < searchRadioButton.length; i++){
+   
+    searchRadioButton[i].addEventListener('click', function () {
+
+    const newFetch = new FetchHandle(this.value);
     newFetch.fetchAlbums();
     
 })
+    
+}
 
 class Controller {
-    /* Search function, fetches the values of searchForm */
-    search(event) {
-        /* Prevents page from updating */
-        event.preventDefault();
-        /* Value of text input field */
-        const searchFieldValue = document.getElementById('searchField').value
-        
-        const searchRadioButton = document.
-        getElementsByClassName('searchRadioButton');
-
-        let radioButtonValue = "";
-        /* Loop thru the radiobuttons */
-        for (let i = 0; i < searchRadioButton.length; i++) {
-            /* If checked, store value from checked button in varible */
-            if (searchRadioButton[i].checked) {
-                radioButtonValue = searchRadioButton[i].value
-            }
-        }
-        /* Object to return all searchValues from searchForm */
-        const searchValues = {
-            radioButtonValue : radioButtonValue,
-            searchFieldValue : searchFieldValue
-        }
-
-        return searchValues;
-        
-    }
- 
-/* -  USEFULL VARIBLES OF Controller.search
-   -  radioButtonValue
-   -  searchFieldValue */
     
 }
