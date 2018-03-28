@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Musikinstitutet</title>
     <link rel="stylesheet" href="css/main.css">
 </head>
@@ -14,18 +15,14 @@
     <main>
         <form id="searchForm">
            
-            albums
-            <input type="radio" name="searchValue" value="albums" class="searchRadioButton">
-            tracks
-            <input type="radio" name ="searchValue" class="searchRadioButton" value="tracks">
-            artists
-            <input type="radio" name ="searchValue" value="artists" class="searchRadioButton">
-            playlists
-            <input type="radio" name ="searchValue" value="playlists" class="searchRadioButton">
-            
             <input type="text" id="searchField">
-            
-            <input type="submit" id="searchButton" placeholder="search">
+           
+            <div class="buttonWrapper">
+                <button type="button" value="albums" class="searchButton">Albums</button>
+                <button type="button" value="tracks" class="searchButton">Tracks</button>
+                <button type="button" value="artists" class="searchButton">Artists</button>
+                <button type="button" value="playlists" class="searchButton">Playlists</button>
+            </div>
             
         </form>
         

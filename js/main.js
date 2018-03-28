@@ -29,6 +29,19 @@ class DOMHandle {
     constructor(json) {
         this.json = json;
     }
+    
+    activateSearchButton(){
+
+        const checkButton = this.json
+        /* Loops thru the buttons and removes the activeButton class */
+        for(i = 0; i < searchButton.length; i++){
+            searchButton[i].classList.remove('activeButton');       
+        }
+        /* Adds the activeButton class to selected button */
+        checkButton.classList.add('activeButton');
+        
+    }
+    
     /* Console logs the JSON-object. Doesn't add anything to the DOM right now. */
     displayAlbums() {
         
@@ -52,14 +65,17 @@ class DOMHandle {
     }
 }
 
-const searchRadioButton = document.
-getElementsByClassName('searchRadioButton');
+const searchButton = document.
+getElementsByClassName('searchButton');
 
 /* Loops thru the searchRadioButtons then runs Fetch class. */ 
-for (i = 0; i < searchRadioButton.length; i++){
+for (i = 0; i < searchButton.length; i++){
    
-    searchRadioButton[i].addEventListener('click', function () {
-
+    searchButton[i].addEventListener('click', function () {
+      
+    const activateButton = new DOMHandle(this);
+    activateButton.activateSearchButton();
+    
     const newFetch = new FetchHandle(this.value);
     newFetch.fetchAlbums();
     
