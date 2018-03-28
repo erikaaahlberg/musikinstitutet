@@ -20,6 +20,12 @@ class FetchHandle {
                 displayAlbum.displayAlbums();
             });
     }
+    /*
+    deleteStuff() {
+        fetch(`https://folksa.ga/api/${this.apiPath}?key=flat_eric`{
+            method: 'DELETE',
+        })
+    } */
     
 }
 
@@ -56,7 +62,7 @@ class DOMHandle {
                     ${albums.title}
                     ${albums.releaseDate}
                     <img src="images/rightArrow.svg">
-                </div>
+                </button>
             `;
         }
         /* Prints the search results for Albums */
