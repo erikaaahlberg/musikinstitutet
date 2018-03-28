@@ -21,6 +21,7 @@ class FetchHandle {
             });
     }
     
+    
 }
 
 /* Handles the DOM. */
@@ -48,15 +49,16 @@ class DOMHandle {
         const searchResults = document.getElementById('searchResults');
         let searchedAlbumButtons = ""
         /* Loops json object */
+        console.log(this.json);
         for(let albums of this.json){
             /* Storing the albums in a button */
             searchedAlbumButtons += `
                 <button class="searchedAlbumButton" id="${albums._id}">
                     ARTISTNAME
-                    ${albums.title}
+                    ${albums.title} | 
                     ${albums.releaseDate}
                     <img src="images/rightArrow.svg">
-                </div>
+                </button>
             `;
         }
         /* Prints the search results for Albums */
@@ -64,6 +66,9 @@ class DOMHandle {
         
     }
 }
+
+const newFetch = new FetchHandle("albums");
+    newFetch.fetchAlbums();
 
 const searchButton = document.
 getElementsByClassName('searchButton');
