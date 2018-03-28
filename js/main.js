@@ -84,5 +84,8 @@ for (i = 0; i < searchButton.length; i++){
 }
 
 class Controller {
-    
+    getInputValue(elementId) {
+        const element = getElementById(elementId);
+        return element.value;
+    }
 }
