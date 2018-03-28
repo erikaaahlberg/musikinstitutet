@@ -83,5 +83,9 @@ class DOMHandle {
 }
 
 class Controller {
-
+    getInputValue(elementId) {
+        const element = getElementById(elementId);
+        return element.value;
+    }
 }
+
