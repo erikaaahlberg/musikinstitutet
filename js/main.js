@@ -2,21 +2,25 @@ const searchButton = document.getElementsByClassName('searchButton');
 /* Loops thru the searchRadioButtons then runs Fetch class. */
 for (i = 0; i < searchButton.length; i++) {
     searchButton[i].addEventListener('click', function() {
-        const activateButton = new DOMHandle(this);
-        activateButton.activateSearchButton();
+        const activateButton = new DOMHandle();
+        activateButton.activateSearchButton(this);
         const newFetch = new FetchHandle(this.value);
-        newFetch.fetchAlbums();
-    })
+        if (this.value === 'albums') {
+            newFetch.fetchAlbums();
+        } else if (this.value === 'tracks') {
+            newFetch.fetchTracks();
+        }
+        else if (this.value === 'artists') {
+            newFetch.fetchArtists();
+        }
+        else if (this.value === 'playlists') {
+            newFetch.fetchPlaylists();
+        }
+    });
 }
 
 /* Handles all fetch queries. */
 class FetchHandle {
-    /* If a value is sent to the constructor it is available for all
-     * methods in the class. apiPath is the folksa.ga/api/->this<-/ */
-    constructor(apiPath) {
-        this.apiPath = apiPath;
-    }
-
     /* Fetches all the albums using this.apiPath which is available in the class */
     fetchAlbums() {
         fetch(`https://folksa.ga/api/albums?key=flat_eric`)
@@ -40,17 +44,38 @@ class FetchHandle {
                     })
             });
     }
+    
+    fetchTracks() {
+        fetch(`https://folksa.ga/api/tracks?key=flat_eric`)
+            .then((response) => response.json())
+            .then((tracks) => {
+                const displayTrack = new DOMHandle();
+                displayTrack.displayTracks(tracks);
+            });
+    }
+    fetchArtists() {
+        fetch(`https://folksa.ga/api/artists?key=flat_eric`)
+            .then((response) => response.json())
+            .then((artists) => {
+                const displayArtist = new DOMHandle();
+                displayArtist.displayArtists(artists);
+            });
+    }
+    fetchPlaylists() {
+        fetch(`https://folksa.ga/api/playlists?key=flat_eric`)
+            .then((response) => response.json())
+            .then((playlists) => {
+                const displayPlaylist = new DOMHandle();
+                displayPlaylist.displayPlaylists(playlists);
+            });
+    }
+
 }
 
 /* Handles the DOM. */
 class DOMHandle {
-    /* The constructor accepts a JSON-object that is available to all methods. */
-    constructor(json) {
-        this.json = json;
-    }
-
-    activateSearchButton() {
-        const checkButton = this.json
+    activateSearchButton(value) {
+        const checkButton = value;
         /* Loops thru the buttons and removes the activeButton class */
         for (i = 0; i < searchButton.length; i++) {
             searchButton[i].classList.remove('activeButton');
@@ -61,7 +86,6 @@ class DOMHandle {
 
     /* Console logs the JSON-object. Doesn't add anything to the DOM right now. */
     displayAlbums(allAlbums, allArtists) {
-        console.log(allAlbums, allArtists);
         const searchResults = document.getElementById('searchResults');
         let searchedAlbumButtons = '';
         /* Loops json object */
@@ -69,8 +93,8 @@ class DOMHandle {
             /* Storing the albums in a button */
             searchedAlbumButtons += `
                 <button class="searchedAlbumButton" id="${allAlbums[i]._id}">
-                    ${allArtists[i].name}
-                    ${allAlbums[i].title}
+                    ${allArtists[i].name} -
+                    ${allAlbums[i].title} -
                     ${allAlbums[i].releaseDate}
                     <img src="images/rightArrow.svg">
                 </button>
@@ -78,6 +102,46 @@ class DOMHandle {
         }
         /* Prints the search results for Albums */
         searchResults.innerHTML = searchedAlbumButtons;
+    }
+    displayTracks(allTracks) {
+        const searchResults = document.getElementById('searchResults');
+        let searchedTrackButtons = '';
+        for (let i = 0; i < allTracks.length; i++) {
+            searchedTrackButtons += `
+                <button class="searchedTrackButton" id="${allTracks[i]._id}">
+                    ${allTracks[i].title} -
+                    ${allTracks[i].artists[0].name}
+                    <img src="images/rightArrow.svg">
+                </button>
+            `;
+        }
+        searchResults.innerHTML = searchedTrackButtons;
+    }
+    displayArtists(allArtists) {
+        const searchResults = document.getElementById('searchResults');
+        let searchedArtistButtons = '';
+        for (let i = 0; i < allArtists.length; i++) {
+            searchedArtistButtons += `
+                <button class="searchedArtistButton" id="${allArtists[i]._id}">
+                    ${allArtists[i].name}
+                    <img src="images/rightArrow.svg">
+                </button>
+            `;
+        }
+        searchResults.innerHTML = searchedArtistButtons;
+    }
+    displayPlaylists(allPlaylists) {
+        const searchResults = document.getElementById('searchResults');
+        let searchedPlaylistButtons = '';
+        for (let i = 0; i < allPlaylists.length; i++) {
+            searchedPlaylistButtons += `
+                <button class="searchedPlaylistButton" id="${allPlaylists[i]._id}">
+                    ${allPlaylists[i].title}
+                    <img src="images/rightArrow.svg">
+                </button>
+            `;
+        }
+        searchResults.innerHTML = searchedPlaylistButtons;
     }
 }
 
@@ -87,4 +151,3 @@ class Controller {
         return element.value;
     }
 }
-
