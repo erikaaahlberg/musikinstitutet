@@ -167,14 +167,17 @@ class DOMHandle {
         
         let contentOfSpecificAlbum =`
             <div class="contentOfSpecificAlbum">
-                <header>
-                    <h2>${album.title}</h2>
-                    <h3>By ${album.artist}</h3>
-                </header>
+                <div id="albumTopContent">
+                    <img src="${album.coverImage}">
+                    <div id="albumInfo">
+                        <h2>${album.title}</h2>
+                        <p>By ${album.artist}</p>
+                        <p>Rating: ${album.rating}</p>
+                    </div>
+                </div>
                 <div class="underline"></div>
-                Tracklist:
+                <h3>Tracklist:</h3>
                 <div id="albumTracklist"></div>
-            
             </div>
         `
         searchResults.innerHTML = contentOfSpecificAlbum;
