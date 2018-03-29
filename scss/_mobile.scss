@@ -3,6 +3,8 @@ body{
     font-size: 12px;
     margin: 0;
     padding: 0;
+    color: white;
+    font-family: 'Roboto';
     button{
         outline: none;
     }
@@ -62,6 +64,12 @@ body{
             }
             button:hover{
                 background: rgba(255, 255, 255, 0.07);
+            }
+            .contentOfSpecificAlbum{
+                #albumTracklist{
+                    display: flex;
+                    flex-direction: column;
+                }   
             }
         }
     }

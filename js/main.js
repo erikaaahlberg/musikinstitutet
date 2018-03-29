@@ -43,8 +43,7 @@ class FetchHandle {
                         displayAlbum.displayAlbums(albums, allArtists);
                     })
             });
-    }
-    
+    }    
     fetchTracks() {
         fetch(`https://folksa.ga/api/tracks?key=flat_eric`)
             .then((response) => response.json())
@@ -67,6 +66,14 @@ class FetchHandle {
             .then((playlists) => {
                 const displayPlaylist = new DOMHandle();
                 displayPlaylist.displayPlaylists(playlists);
+            });
+    }
+    fetchAlbumById(albumId){
+        fetch(`https://folksa.ga/api/albums/${albumId}?key=flat_eric`)
+            .then((response) => response.json())
+            .then((album) => {
+            const displaySpecificAlbum = new DOMHandle();
+            displaySpecificAlbum.displaySpecificAlbum(album);
             });
     }
 
@@ -92,7 +99,7 @@ class DOMHandle {
         for (let i = 0; i < allAlbums.length; i++) {
             /* Storing the albums in a button */
             searchedAlbumButtons += `
-                <button class="searchedAlbumButton" id="${allAlbums[i]._id}">
+                <button class="selectedButton" id="${allAlbums[i]._id}">
                     ${allArtists[i].name} -
                     ${allAlbums[i].title} -
                     ${allAlbums[i].releaseDate}
@@ -102,6 +109,17 @@ class DOMHandle {
         }
         /* Prints the search results for Albums */
         searchResults.innerHTML = searchedAlbumButtons;
+        
+        const selectedButton = document.
+        getElementsByClassName('selectedButton');
+
+        for (i = 0; i < selectedButton.length; i++) {
+            selectedButton[i].addEventListener('click', function(){
+                const newFetch = new FetchHandle();
+                newFetch.fetchAlbumById(this.id);
+            })
+        }
+        
     }
     displayTracks(allTracks) {
         const searchResults = document.getElementById('searchResults');
@@ -142,6 +160,34 @@ class DOMHandle {
             `;
         }
         searchResults.innerHTML = searchedPlaylistButtons;
+    }
+    displaySpecificAlbum(album){
+        console.log(album)
+        const searchResults = document.getElementById('searchResults');
+        
+        let contentOfSpecificAlbum =`
+            <div class="contentOfSpecificAlbum">
+                <header>
+                    <h2>${album.title}</h2>
+                    <h3>By ${album.artist}</h3>
+                </header>
+                <div class="underline"></div>
+                Tracklist:
+                <div id="albumTracklist"></div>
+            
+            </div>
+        `
+        searchResults.innerHTML = contentOfSpecificAlbum;
+
+        let trackTitles = "";
+        for (let i = 0; i < album.tracks.length; i++) {
+            trackTitles += `<p>${album.tracks[i].title}</p>`
+        }
+        
+        const albumTracklist = document.getElementById('albumTracklist');
+        
+        albumTracklist.innerHTML=trackTitles;
+        
     }
 }
 
