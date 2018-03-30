@@ -33,12 +33,13 @@ const Controller = (function() {
         },
         isEmpty: function (value) {
             if(value && value != '') {
-                return true;
-            }
-            else {
                 return false;
             }
+            else {
+                return true;
+            }
         },
+        // If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres. This does not yet support if the user types in 'hip hop' instead of 'hiphop' f.e 
         editGenresParameter: function (genresParameter) {
             var editedGenresParameter = '';
             if (genresParameter.includes(', ')) {
@@ -52,7 +53,22 @@ const Controller = (function() {
             else {
                 editedGenresParameter = genresParameter;
             }
-            return editedGenreParameter;
+            return editedGenresParameter;
+        },
+        checkUrl: function (urlAddress) {
+            var isValid = false;
+            const notAllowedCharacters = ['å', 'ä', 'ö', ' '];
+            if (urlAddress.includes('http://') || urlAddress.includes('https://')) {
+                for (let character of notAllowedCharacters) {
+                    if (urlAddress.includes(character)) {
+                        isValid = false;
+                    }
+                    else {
+                        isValid = true;
+                    }
+                }
+            }
+            return isValid;
         }
     }
 })();
@@ -64,30 +80,44 @@ const postTrackButton = document.getElementById('postTrackButton');
 postArtistButton.addEventListener('click', function(){
     event.preventDefault();
     const artistName = Controller.getInputValue('inputArtistName');
+    var artistGenres = Controller.getInputValue('inputArtistGenres');
+    const artistCoverImageUrl = Controller.getInputValue('inputArtistCoverImage');
     const isNameEmpty = Controller.isEmpty(artistName);
-    const artistGenres = Controller.getInputValue('inputArtistGenres');
-    const isGenresEmpty = Controller.isEmpty(artistGenres);
-    const artistCoverImage = Controller.getInputValue('inputArtistCoverImage');
-    const isCoverImageEmpty = Controller.isEmpty(artistCoverImage);
 
-    const errorMessage = [];
-    if (!isNameEmpty) {
+    // Checking the imported values before creating a new artist. This can also be a string because there is not gonna be more than one error message so far, but in case we want to expand 
+    const errorMessages = [];
+
+    // Name is the only one required so checking that first
+    if (isNameEmpty) {
         errorMessages.push('Please enter a name!');
     }
-    if (!isGenresEmpty) {
-        errorMessages.push('The genres you wrote is not valid');
+    // Checking which other input fields are filled in to see which parameters we have to check if valid
+    else {
+        const isGenresEmpty = Controller.isEmpty(artistGenres);
+        const isCoverImageEmpty = Controller.isEmpty(artistCoverImageUrl);
+        
+        // If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres
+        if (!isGenresEmpty) {
+            const editedGenresParameter = Controller.editGenresParameter(artistGenres);
+            artistGenres = editedGenresParameter;
+        }
+        // If cover image is filled in the URL must be checked
+        if (!isCoverImageEmpty) {
+            const isValidUrl = Controller.checkUrl(artistCoverImageUrl);
+            if (!isValidUrl) {
+                errorMessages.push('The URL is not valid, please enter another one.');
+            }
+        }
     }
-    if (!isCoverImageEmpty) {
-        errorMessages.push('The cover image URL is not valid');
-    }
+    // A DOM-function to print error-messages should be called for here
     if (errorMessages.length > 0) {
         for (let errorMessage of errorMessages) {
             console.log(errorMessage);
         }
     }
     else {
-        const editedGenresParameter = Controller.editGenresParameter(artistGenres);
-
-        const artistToPost = new Artist();
+        const artistToPost = new Artist(artistName, artistGenres, artistCoverImageUrl);
+        console.log(artistToPost);
     }
+    
 });
