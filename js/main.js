@@ -199,9 +199,40 @@ class DOMHandle {
     }
 }
 
-class Controller {
+/*class Controller {
     getInputValue(elementId) {
         const element = getElementById(elementId);
         return element.value;
     }
+    checkValue(value) {
+        if(value && value != '') {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }
+const postArtistButton = getElementById('postArtistButton');
+const postAlbumButton = getElementById('postAlbumButton');
+const postTrackButton = getElementById('postTrackButton');
+
+postArtistButton.addEventListener('click', function(){
+    const artistName = Controller.getInputValue('inputArtistName');
+    const isNameValid = Controller.checkValue(artistName);
+    const artistGenres = Controller.getInputValue('inputArtistGenres');
+    const isGenresValid = Controller.checkValue(artistGenres);
+    const artistCoverImage = Controller.getInputValue('inputArtistCoverImage');
+    const isCoverImageValid = Controller.checkValue(artistCoverImage);
+
+    const errorMessages = [];
+    if (!isNameValid) {
+        errorMessages.push('The name you wrote is not valid');
+    }
+    if (!isGenresValid) {
+        errorMessages.push('The genres you wrote is not valid');
+    }
+    if (!isCoverImageValid) {
+        errorMessages.push('The cover image URL is not valid');
+    }
+});*/

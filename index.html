@@ -41,7 +41,7 @@
                 Cover image URL:
             </label>
             <input type = "text" id = "inputArtistCoverImage">
-            <input type = "submit" value = "Add" id = "artistSubmitButton">
+            <button id = "postArtistButton">Add</button>
         </form>
         <form id = "importAlbum">
             <label for = "inputAlbumArtist">
@@ -64,9 +64,9 @@
                 Cover image URL:
             </label>
             <input type = "text" id = "inputAlbumCoverImage">
-            <input type = "submit" value = "Add" id = "albumSubmitButton">
+            <button type = "button" id = "postAlbumButton">Add</button>
         </form>
-        <form id = "importTrack">
+        <form id = "postTrack">
             <label for = "inputTrackArtist">
                 Artist:
             </label>
@@ -91,12 +91,13 @@
                 Spotify URL:
             </label>
             <input type = "text" id = "inputTrackSpotifyURL">
+            <button type = "button" id = "postTrackButton">Add</button>
         </form>
     </main>
    
     <footer>
        
     </footer>
-    <script src="js/main.js"></script>
+    <script src="js/musicClasses.js"></script>
 </body>
 </html>
