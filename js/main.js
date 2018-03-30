@@ -184,7 +184,12 @@ class DOMHandle {
 
         let trackTitles = "";
         for (let i = 0; i < album.tracks.length; i++) {
-            trackTitles += `<p>${album.tracks[i].title}</p>`
+            trackTitles += `
+                <button class="searchedArtistButton">
+                    ${album.tracks[i].title}
+                    <img src="images/rightArrow.svg">
+                </button>
+            `
         }
         
         const albumTracklist = document.getElementById('albumTracklist');
