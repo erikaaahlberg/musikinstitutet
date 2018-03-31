@@ -108,6 +108,15 @@ class FetchHandle {
         });
         }); 
     }
+    fetchPlaylistById(playlistId){
+         fetch(`https://folksa.ga/api/playlists/${playlistId}?key=flat_eric`)
+            .then((response) => response.json())
+            .then((playlist) => {
+              
+             const displaySpecificPlaylist = new DOMHandle();
+            displaySpecificPlaylist.displaySpecificPlaylist(playlist);
+         });
+    }
 }
 
 /* Handles the DOM. */
@@ -203,13 +212,22 @@ class DOMHandle {
         let searchedPlaylistButtons = '';
         for (let i = 0; i < allPlaylists.length; i++) {
             searchedPlaylistButtons += `
-                <button class="searchedPlaylistButton" id="${allPlaylists[i]._id}">
+                <button class="selectedButton" id="${allPlaylists[i]._id}">
                     ${allPlaylists[i].title}
                     <img src="images/rightArrow.svg">
                 </button>
             `;
         }
         searchResults.innerHTML = searchedPlaylistButtons;
+        
+               const selectedButton = document.
+        getElementsByClassName('selectedButton');
+        for (i = 0; i < selectedButton.length; i++){
+        selectedButton[i].addEventListener('click', function(){
+            const newFetch = new FetchHandle();
+            newFetch.fetchPlaylistById(this.id);
+            })
+        }
     }
     displaySpecificAlbum(album, artist){
         const searchResults = document.getElementById('searchResults');
@@ -270,14 +288,30 @@ class DOMHandle {
         searchResults.innerHTML = contentOfSpecificTrack;    
     }
     displaySpecificArtist(artist, albums){
-        console.log(artist.name)
-        console.log(artist.genres)
-        console.log(artist.image)
-        console.log(artist.countryBorn)
-        console.log(artist.born)
+        const searchResults = document.getElementById('searchResults');
+        let contentOfSpecificArtist =`
+            ${artist.name}
+            ${artist.genres}
+            <img src="${artist.image}">
+            ${artist.countryBorn}
+            ${artist.born}
+            ${albums}
+        `
+        searchResults.innerHTML = contentOfSpecificArtist; 
+
         console.log(albums)
+        console.log(artist)
     }
-    displaySpecificPlaylist(){}
+    displaySpecificPlaylist(playlist){
+        console.log(playlist)
+        console.log(playlist.title)
+        console.log(playlist.createdAt)
+        console.log(playlist.updatedAt)
+        console.log(playlist.genres)
+        console.log(playlist.ratings)
+        console.log(playlist.comments)
+        console.log(playlist.tracks)
+    }
 }
 
 class Controller {
