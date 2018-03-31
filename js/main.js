@@ -72,8 +72,7 @@ class FetchHandle {
         fetch(`https://folksa.ga/api/albums/${albumId}?key=flat_eric`)
             .then((response) => response.json())
             .then((album) => {
-           
-            fetch(`https://folksa.ga/api/artists/${album.artists[0]._id}?key=flat_eric`)
+           fetch(`https://folksa.ga/api/artists/${album.artists[0]._id}?key=flat_eric`)
                 .then((response) => response.json())
                 .then((artist) => {
 
@@ -87,10 +86,16 @@ class FetchHandle {
         fetch(`https://folksa.ga/api/tracks/${trackId}?key=flat_eric`)
             .then((response) => response.json())
             .then((track) => {
+            
+            fetch(`https://folksa.ga/api/artists/${track.artists[0]._id}?key=flat_eric`)
+                .then((response) => response.json())
+                .then((artist) => {
+            
             const displaySpecificTrack = new DOMHandle();
-            displaySpecificTrack.displaySpecificTrack(track);
+            displaySpecificTrack.displaySpecificTrack(track, artist);
         });
-    }
+    });
+}
 }
 
 /* Handles the DOM. */
@@ -197,6 +202,9 @@ class DOMHandle {
                         <p>Rating: ${album.rating}</p>
                     </div>
                 </div>
+                <button id="rateTrack">
+                    RATE TRACK
+                </button>
                 <div class="underline"></div>
                 <h3>Tracklist:</h3>
                 <div id="albumTracklist"></div>
@@ -219,20 +227,24 @@ class DOMHandle {
         albumTracklist.innerHTML=trackTitles;
         
     }
-    displaySpecificTrack(track){
+    displaySpecificTrack(track, artist){
+        console.log(track)
         const searchResults = document.getElementById('searchResults');
-        let contentOfSpecificAlbum =`
+        let contentOfSpecificTrack =`
             <div class="contentOfSpecificTrack">
                 <div id="trackTopContent">
                     <div id="trackInfo">
                         <h2>${track.title}</h2>
                         <p>By ${artist.name}</p>
-                        <p>Rating: ${album.rating}</p>
+                        <p>In album: ${track.album.title}</p>
                     </div>
                 </div>
-                <div class="underline"></div>
-                <h3>Tracklist:</h3>
-                <div id="albumTracklist"></div>
+                <button id="addToPlaylist">
+                    ADD TO PLAYLIST
+                </button>
+                <button id="rateTrack">
+                    RATE TRACK
+                </button>
             </div>
         `
         searchResults.innerHTML = contentOfSpecificTrack;    
