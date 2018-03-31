@@ -72,11 +72,25 @@ class FetchHandle {
         fetch(`https://folksa.ga/api/albums/${albumId}?key=flat_eric`)
             .then((response) => response.json())
             .then((album) => {
-            const displaySpecificAlbum = new DOMHandle();
-            displaySpecificAlbum.displaySpecificAlbum(album);
-            });
-    }
+           
+            fetch(`https://folksa.ga/api/artists/${album.artists[0]._id}?key=flat_eric`)
+                .then((response) => response.json())
+                .then((artist) => {
 
+                const displaySpecificAlbum = new DOMHandle();
+                displaySpecificAlbum.displaySpecificAlbum(album, artist);
+            })
+        
+        });
+    }
+    fetchTrackById(trackId){
+        fetch(`https://folksa.ga/api/tracks/${trackId}?key=flat_eric`)
+            .then((response) => response.json())
+            .then((track) => {
+            const displaySpecificTrack = new DOMHandle();
+            displaySpecificTrack.displaySpecificTrack(track);
+        });
+    }
 }
 
 /* Handles the DOM. */
@@ -126,7 +140,7 @@ class DOMHandle {
         let searchedTrackButtons = '';
         for (let i = 0; i < allTracks.length; i++) {
             searchedTrackButtons += `
-                <button class="searchedTrackButton" id="${allTracks[i]._id}">
+                <button class="selectedButton" id="${allTracks[i]._id}">
                     ${allTracks[i].title} -
                     ${allTracks[i].artists[0].name}
                     <img src="images/rightArrow.svg">
@@ -134,6 +148,16 @@ class DOMHandle {
             `;
         }
         searchResults.innerHTML = searchedTrackButtons;
+        
+        const selectedButton = document.
+        getElementsByClassName('selectedButton');
+
+        for (i = 0; i < selectedButton.length; i++) {
+            selectedButton[i].addEventListener('click', function(){
+                const newFetch = new FetchHandle();
+                newFetch.fetchTrackById(this.id);
+            })
+        }
     }
     displayArtists(allArtists) {
         const searchResults = document.getElementById('searchResults');
@@ -161,17 +185,15 @@ class DOMHandle {
         }
         searchResults.innerHTML = searchedPlaylistButtons;
     }
-    displaySpecificAlbum(album){
-        console.log(album)
+    displaySpecificAlbum(album, artist){
         const searchResults = document.getElementById('searchResults');
-        
         let contentOfSpecificAlbum =`
             <div class="contentOfSpecificAlbum">
                 <div id="albumTopContent">
                     <img src="${album.coverImage}">
                     <div id="albumInfo">
                         <h2>${album.title}</h2>
-                        <p>By ${album.artist}</p>
+                        <p>By ${artist.name}</p>
                         <p>Rating: ${album.rating}</p>
                     </div>
                 </div>
@@ -197,6 +219,26 @@ class DOMHandle {
         albumTracklist.innerHTML=trackTitles;
         
     }
+    displaySpecificTrack(track){
+        const searchResults = document.getElementById('searchResults');
+        let contentOfSpecificAlbum =`
+            <div class="contentOfSpecificTrack">
+                <div id="trackTopContent">
+                    <div id="trackInfo">
+                        <h2>${track.title}</h2>
+                        <p>By ${artist.name}</p>
+                        <p>Rating: ${album.rating}</p>
+                    </div>
+                </div>
+                <div class="underline"></div>
+                <h3>Tracklist:</h3>
+                <div id="albumTracklist"></div>
+            </div>
+        `
+        searchResults.innerHTML = contentOfSpecificTrack;    
+    }
+    displaySpecificArtist(){}
+    displaySpecificPlaylist(){}
 }
 
 class Controller {
