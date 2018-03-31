@@ -94,8 +94,20 @@ class FetchHandle {
             const displaySpecificTrack = new DOMHandle();
             displaySpecificTrack.displaySpecificTrack(track, artist);
         });
-    });
-}
+        }); 
+    }
+    fetchArtistById(artistId){
+        fetch(`https://folksa.ga/api/artists/${artistId}?key=flat_eric`)
+            .then((response) => response.json())
+            .then((artist) => {
+                fetch(`https://folksa.ga/api/albums/${artist.albums}?key=flat_eric`)
+            .then((response) => response.json())
+            .then((albums) => {
+            const displaySpecificArtist = new DOMHandle();
+            displaySpecificArtist.displaySpecificArtist(artist, albums);
+        });
+        }); 
+    }
 }
 
 /* Handles the DOM. */
@@ -169,13 +181,22 @@ class DOMHandle {
         let searchedArtistButtons = '';
         for (let i = 0; i < allArtists.length; i++) {
             searchedArtistButtons += `
-                <button class="searchedArtistButton" id="${allArtists[i]._id}">
+                <button class="selectedButton" id="${allArtists[i]._id}">
                     ${allArtists[i].name}
                     <img src="images/rightArrow.svg">
                 </button>
             `;
         }
         searchResults.innerHTML = searchedArtistButtons;
+        
+       const selectedButton = document.
+        getElementsByClassName('selectedButton');
+        for (i = 0; i < selectedButton.length; i++){
+        selectedButton[i].addEventListener('click', function(){
+            const newFetch = new FetchHandle();
+            newFetch.fetchArtistById(this.id);
+            })
+        }
     }
     displayPlaylists(allPlaylists) {
         const searchResults = document.getElementById('searchResults');
@@ -228,7 +249,6 @@ class DOMHandle {
         
     }
     displaySpecificTrack(track, artist){
-        console.log(track)
         const searchResults = document.getElementById('searchResults');
         let contentOfSpecificTrack =`
             <div class="contentOfSpecificTrack">
@@ -249,7 +269,14 @@ class DOMHandle {
         `
         searchResults.innerHTML = contentOfSpecificTrack;    
     }
-    displaySpecificArtist(){}
+    displaySpecificArtist(artist, albums){
+        console.log(artist.name)
+        console.log(artist.genres)
+        console.log(artist.image)
+        console.log(artist.countryBorn)
+        console.log(artist.born)
+        console.log(albums)
+    }
     displaySpecificPlaylist(){}
 }
 
