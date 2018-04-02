@@ -11,9 +11,9 @@ body{
     input{
         outline: none;
     }
-    
+
     header{
-        
+
     }
     main{
         #searchForm{
@@ -47,9 +47,9 @@ body{
         #searchResults{
             display: flex;
             flex-direction: column;
-            align-items: center; 
+            align-items: center;
             button{
-                display: flex;
+                display: none;
                 justify-content: space-between;
                 align-items: center;
                 font-size: 1.1em;
@@ -91,11 +91,11 @@ body{
                 #albumTracklist{
                     display: flex;
                     flex-direction: column;
-                }   
+                }
             }
         }
     }
     footer{
-        
+
     }
 }

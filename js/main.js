@@ -19,6 +19,12 @@ for (i = 0; i < searchButton.length; i++) {
     });
 }
 
+const searchField = document.getElementById('searchField');
+searchField.addEventListener('keyup', () => {
+    const filterRequest = new Controller();
+    filterRequest.filterSearch();
+});
+
 /* Handles all fetch queries. */
 class FetchHandle {
     /* Fetches all the albums using this.apiPath which is available in the class */
@@ -43,7 +49,7 @@ class FetchHandle {
                         displayAlbum.displayAlbums(albums, allArtists);
                     })
             });
-    }    
+    }
     fetchTracks() {
         fetch(`https://folksa.ga/api/tracks?key=flat_eric`)
             .then((response) => response.json())
@@ -79,22 +85,22 @@ class FetchHandle {
                 const displaySpecificAlbum = new DOMHandle();
                 displaySpecificAlbum.displaySpecificAlbum(album, artist);
             })
-        
+
         });
     }
     fetchTrackById(trackId){
         fetch(`https://folksa.ga/api/tracks/${trackId}?key=flat_eric`)
             .then((response) => response.json())
             .then((track) => {
-            
+
             fetch(`https://folksa.ga/api/artists/${track.artists[0]._id}?key=flat_eric`)
                 .then((response) => response.json())
                 .then((artist) => {
-            
+
             const displaySpecificTrack = new DOMHandle();
             displaySpecificTrack.displaySpecificTrack(track, artist);
         });
-        }); 
+        });
     }
     fetchArtistById(artistId){
         fetch(`https://folksa.ga/api/artists/${artistId}?key=flat_eric`)
@@ -106,13 +112,13 @@ class FetchHandle {
             const displaySpecificArtist = new DOMHandle();
             displaySpecificArtist.displaySpecificArtist(artist, albums);
         });
-        }); 
+        });
     }
     fetchPlaylistById(playlistId){
          fetch(`https://folksa.ga/api/playlists/${playlistId}?key=flat_eric`)
             .then((response) => response.json())
             .then((playlist) => {
-              
+
              const displaySpecificPlaylist = new DOMHandle();
             displaySpecificPlaylist.displaySpecificPlaylist(playlist);
          });
@@ -149,7 +155,7 @@ class DOMHandle {
         }
         /* Prints the search results for Albums */
         searchResults.innerHTML = searchedAlbumButtons;
-        
+
         const selectedButton = document.
         getElementsByClassName('selectedButton');
 
@@ -159,7 +165,7 @@ class DOMHandle {
                 newFetch.fetchAlbumById(this.id);
             })
         }
-        
+
     }
     displayTracks(allTracks) {
         const searchResults = document.getElementById('searchResults');
@@ -174,7 +180,7 @@ class DOMHandle {
             `;
         }
         searchResults.innerHTML = searchedTrackButtons;
-        
+
         const selectedButton = document.
         getElementsByClassName('selectedButton');
 
@@ -197,7 +203,7 @@ class DOMHandle {
             `;
         }
         searchResults.innerHTML = searchedArtistButtons;
-        
+
        const selectedButton = document.
         getElementsByClassName('selectedButton');
         for (i = 0; i < selectedButton.length; i++){
@@ -219,7 +225,7 @@ class DOMHandle {
             `;
         }
         searchResults.innerHTML = searchedPlaylistButtons;
-        
+
                const selectedButton = document.
         getElementsByClassName('selectedButton');
         for (i = 0; i < selectedButton.length; i++){
@@ -260,11 +266,11 @@ class DOMHandle {
                 </button>
             `
         }
-        
+
         const albumTracklist = document.getElementById('albumTracklist');
-        
+
         albumTracklist.innerHTML=trackTitles;
-        
+
     }
     displaySpecificTrack(track, artist){
         const searchResults = document.getElementById('searchResults');
@@ -285,7 +291,7 @@ class DOMHandle {
                 </button>
             </div>
         `
-        searchResults.innerHTML = contentOfSpecificTrack;    
+        searchResults.innerHTML = contentOfSpecificTrack;
     }
     displaySpecificArtist(artist, albums){
         const searchResults = document.getElementById('searchResults');
@@ -297,7 +303,7 @@ class DOMHandle {
             ${artist.born}
             ${albums}
         `
-        searchResults.innerHTML = contentOfSpecificArtist; 
+        searchResults.innerHTML = contentOfSpecificArtist;
 
         console.log(albums)
         console.log(artist)
@@ -314,7 +320,7 @@ class DOMHandle {
     }
 }
 
-/*class Controller {
+class Controller {
     getInputValue(elementId) {
         const element = getElementById(elementId);
         return element.value;
@@ -327,7 +333,24 @@ class DOMHandle {
             return false;
         }
     }
+    filterSearch() {
+        const filter = searchField.value.toUpperCase();
+        const buttons = searchResults.getElementsByTagName('button');
+        for (let i = 0; i < buttons.length; i++) {
+            if (buttons[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+             buttons[i].style.display = 'flex';
+            } else {
+             buttons[i].style.display = 'none';
+            }
+        }
+        if (filter == '') {
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].style.display = 'none';
+            }
+        }
+    }
 }
+/*
 const postArtistButton = getElementById('postArtistButton');
 const postAlbumButton = getElementById('postAlbumButton');
 const postTrackButton = getElementById('postTrackButton');
