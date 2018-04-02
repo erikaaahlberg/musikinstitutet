@@ -52,7 +52,7 @@ const Controller = (function() {
             }
             else {
                 editedGenresParameter = genresParameter;
-            }
+            }gi
             return editedGenresParameter;
         },
         checkUrl: function (urlAddress) {
@@ -77,7 +77,7 @@ const postArtistButton = document.getElementById('postArtistButton');
 const postAlbumButton = document.getElementById('postAlbumButton');
 const postTrackButton = document.getElementById('postTrackButton');
 
-postArtistButton.addEventListener('click', function(){
+postArtistButton.addEventListener('click', function() {
     event.preventDefault();
     const artistName = Controller.getInputValue('inputArtistName');
     var artistGenres = Controller.getInputValue('inputArtistGenres');
@@ -119,5 +119,4 @@ postArtistButton.addEventListener('click', function(){
         const artistToPost = new Artist(artistName, artistGenres, artistCoverImageUrl);
         console.log(artistToPost);
     }
-    
 });
