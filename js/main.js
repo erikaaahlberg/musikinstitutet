@@ -5,16 +5,19 @@ for (i = 0; i < searchButton.length; i++) {
         const activateButton = new DOMHandle();
         activateButton.activateSearchButton(this);
         const newFetch = new FetchHandle(this.value);
-        if (this.value === 'albums') {
-            newFetch.fetchAlbums();
-        } else if (this.value === 'tracks') {
-            newFetch.fetchTracks();
-        }
-        else if (this.value === 'artists') {
-            newFetch.fetchArtists();
-        }
-        else if (this.value === 'playlists') {
-            newFetch.fetchPlaylists();
+        switch (this.value) {
+            case 'albums':
+                newFetch.fetchAlbums();
+                break;
+            case 'tracks':
+                newFetch.fetchTracks();
+                break;
+            case 'artists':
+                newFetch.fetchArtists();
+                break;
+            case 'playlists':
+                newFetch.fetchPlaylists();
+                break;
         }
     });
 }
