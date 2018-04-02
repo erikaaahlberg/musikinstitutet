@@ -24,7 +24,7 @@ for (i = 0; i < searchButton.length; i++) {
 
 const searchField = document.getElementById('searchField');
 searchField.addEventListener('keyup', () => {
-    const filterRequest = new Controller();
+    const filterRequest = new DOMHandle();
     filterRequest.filterSearch();
 });
 
@@ -50,6 +50,7 @@ class FetchHandle {
                     .then((allArtists) => {
                         const displayAlbum = new DOMHandle();
                         displayAlbum.displayAlbums(albums, allArtists);
+                        displayAlbum.filterSearch();
                     })
             });
     }
@@ -59,6 +60,7 @@ class FetchHandle {
             .then((tracks) => {
                 const displayTrack = new DOMHandle();
                 displayTrack.displayTracks(tracks);
+                displayTrack.filterSearch();
             });
     }
     fetchArtists() {
@@ -67,6 +69,7 @@ class FetchHandle {
             .then((artists) => {
                 const displayArtist = new DOMHandle();
                 displayArtist.displayArtists(artists);
+                displayArtist.filterSearch();
             });
     }
     fetchPlaylists() {
@@ -75,6 +78,7 @@ class FetchHandle {
             .then((playlists) => {
                 const displayPlaylist = new DOMHandle();
                 displayPlaylist.displayPlaylists(playlists);
+                displayPlaylist.filterSearch();
             });
     }
     fetchAlbumById(albumId){
@@ -321,21 +325,6 @@ class DOMHandle {
         console.log(playlist.comments)
         console.log(playlist.tracks)
     }
-}
-
-class Controller {
-    getInputValue(elementId) {
-        const element = getElementById(elementId);
-        return element.value;
-    }
-    checkValue(value) {
-        if(value && value != '') {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
     filterSearch() {
         const filter = searchField.value.toUpperCase();
         const buttons = searchResults.getElementsByTagName('button');
@@ -350,6 +339,21 @@ class Controller {
             for (let i = 0; i < buttons.length; i++) {
                 buttons[i].style.display = 'none';
             }
+        }
+    }
+}
+
+class Controller {
+    getInputValue(elementId) {
+        const element = getElementById(elementId);
+        return element.value;
+    }
+    checkValue(value) {
+        if(value && value != '') {
+            return true;
+        }
+        else {
+            return false;
         }
     }
 }
