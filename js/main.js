@@ -113,12 +113,22 @@ class FetchHandle {
         fetch(`https://folksa.ga/api/artists/${artistId}?key=flat_eric`)
             .then((response) => response.json())
             .then((artist) => {
-                fetch(`https://folksa.ga/api/albums/${artist.albums}?key=flat_eric`)
-            .then((response) => response.json())
+            
+            let albumArray = [];
+            for (let i = 0; i < artist.albums.length; i++){
+                    
+                const albumPromise = fetch(`https://folksa.ga/api/albums/${artist.albums[i]}?key=flat_eric`)
+                .then((response) => response.json())
+                albumArray.push(albumPromise);
+            }
+            
+            Promise.all(albumArray)
             .then((albums) => {
+                
             const displaySpecificArtist = new DOMHandle();
             displaySpecificArtist.displaySpecificArtist(artist, albums);
-        });
+
+            });
         });
     }
     fetchPlaylistById(playlistId){
@@ -254,8 +264,11 @@ class DOMHandle {
                         <p>Rating: ${album.rating}</p>
                     </div>
                 </div>
-                <button id="rateTrack">
-                    RATE TRACK
+                <button id="rateAlbum">
+                    RATE ALBUM
+                </button>
+                <button id="deleteAlbum">
+                    DELETE ALBUM
                 </button>
                 <div class="underline"></div>
                 <h3>Tracklist:</h3>
@@ -267,13 +280,13 @@ class DOMHandle {
         let trackTitles = "";
         for (let i = 0; i < album.tracks.length; i++) {
             trackTitles += `
-                <button class="searchedArtistButton">
+                <button class="albumTrack">
                     ${album.tracks[i].title}
                     <img src="images/rightArrow.svg">
                 </button>
             `
         }
-
+    
         const albumTracklist = document.getElementById('albumTracklist');
 
         albumTracklist.innerHTML=trackTitles;
@@ -296,6 +309,9 @@ class DOMHandle {
                 <button id="rateTrack">
                     RATE TRACK
                 </button>
+                <button id="deleteTrack">
+                    DELETE TRACK
+                </button>
             </div>
         `
         searchResults.innerHTML = contentOfSpecificTrack;
@@ -303,17 +319,32 @@ class DOMHandle {
     displaySpecificArtist(artist, albums){
         const searchResults = document.getElementById('searchResults');
         let contentOfSpecificArtist =`
-            ${artist.name}
-            ${artist.genres}
-            <img src="${artist.image}">
-            ${artist.countryBorn}
-            ${artist.born}
-            ${albums}
+            <div class="artistContent">
+                <img src="${artist.image}">
+                ${artist.name}
+                ${artist.genres}
+                ${artist.countryBorn}
+                ${artist.born}
+                <button id="deleteArtist">
+                    DELETE ARTIST
+                </button>
+                <div id="artistAlbums"></div>
+            </div>
         `
         searchResults.innerHTML = contentOfSpecificArtist;
-
         console.log(albums)
-        console.log(artist)
+        let artistAlbum = "";
+        for(let i = 0; i < albums.length; i++){
+            artistAlbum +=`
+                <button class="selectedButton" id="${albums[i]._id}">
+                    ${albums[i].title} -
+                    ${albums[i].releaseDate}
+                    <img src="images/rightArrow.svg">
+                </button>
+            `;
+        }
+        const albumList = document.getElementById('artistAlbums');
+        albumList.innerHTML=artistAlbum;
     }
     displaySpecificPlaylist(playlist){
         console.log(playlist)
