@@ -5,19 +5,28 @@ for (i = 0; i < searchButton.length; i++) {
         const activateButton = new DOMHandle();
         activateButton.activateSearchButton(this);
         const newFetch = new FetchHandle(this.value);
-        if (this.value === 'albums') {
-            newFetch.fetchAlbums();
-        } else if (this.value === 'tracks') {
-            newFetch.fetchTracks();
-        }
-        else if (this.value === 'artists') {
-            newFetch.fetchArtists();
-        }
-        else if (this.value === 'playlists') {
-            newFetch.fetchPlaylists();
+        switch (this.value) {
+            case 'albums':
+                newFetch.fetchAlbums();
+                break;
+            case 'tracks':
+                newFetch.fetchTracks();
+                break;
+            case 'artists':
+                newFetch.fetchArtists();
+                break;
+            case 'playlists':
+                newFetch.fetchPlaylists();
+                break;
         }
     });
 }
+
+const searchField = document.getElementById('searchField');
+searchField.addEventListener('keyup', () => {
+    const filterRequest = new DOMHandle();
+    filterRequest.filterSearch();
+});
 
 /* Handles all fetch queries. */
 class FetchHandle {
@@ -41,15 +50,17 @@ class FetchHandle {
                     .then((allArtists) => {
                         const displayAlbum = new DOMHandle();
                         displayAlbum.displayAlbums(albums, allArtists);
+                        displayAlbum.filterSearch();
                     })
             });
-    }    
+    }
     fetchTracks() {
         fetch(`https://folksa.ga/api/tracks?key=flat_eric`)
             .then((response) => response.json())
             .then((tracks) => {
                 const displayTrack = new DOMHandle();
                 displayTrack.displayTracks(tracks);
+                displayTrack.filterSearch();
             });
     }
     fetchArtists() {
@@ -58,6 +69,7 @@ class FetchHandle {
             .then((artists) => {
                 const displayArtist = new DOMHandle();
                 displayArtist.displayArtists(artists);
+                displayArtist.filterSearch();
             });
     }
     fetchPlaylists() {
@@ -66,17 +78,58 @@ class FetchHandle {
             .then((playlists) => {
                 const displayPlaylist = new DOMHandle();
                 displayPlaylist.displayPlaylists(playlists);
+                displayPlaylist.filterSearch();
             });
     }
     fetchAlbumById(albumId){
         fetch(`https://folksa.ga/api/albums/${albumId}?key=flat_eric`)
             .then((response) => response.json())
             .then((album) => {
-            const displaySpecificAlbum = new DOMHandle();
-            displaySpecificAlbum.displaySpecificAlbum(album);
-            });
-    }
+           fetch(`https://folksa.ga/api/artists/${album.artists[0]._id}?key=flat_eric`)
+                .then((response) => response.json())
+                .then((artist) => {
 
+                const displaySpecificAlbum = new DOMHandle();
+                displaySpecificAlbum.displaySpecificAlbum(album, artist);
+            })
+
+        });
+    }
+    fetchTrackById(trackId){
+        fetch(`https://folksa.ga/api/tracks/${trackId}?key=flat_eric`)
+            .then((response) => response.json())
+            .then((track) => {
+
+            fetch(`https://folksa.ga/api/artists/${track.artists[0]._id}?key=flat_eric`)
+                .then((response) => response.json())
+                .then((artist) => {
+
+            const displaySpecificTrack = new DOMHandle();
+            displaySpecificTrack.displaySpecificTrack(track, artist);
+        });
+        });
+    }
+    fetchArtistById(artistId){
+        fetch(`https://folksa.ga/api/artists/${artistId}?key=flat_eric`)
+            .then((response) => response.json())
+            .then((artist) => {
+                fetch(`https://folksa.ga/api/albums/${artist.albums}?key=flat_eric`)
+            .then((response) => response.json())
+            .then((albums) => {
+            const displaySpecificArtist = new DOMHandle();
+            displaySpecificArtist.displaySpecificArtist(artist, albums);
+        });
+        });
+    }
+    fetchPlaylistById(playlistId){
+         fetch(`https://folksa.ga/api/playlists/${playlistId}?key=flat_eric`)
+            .then((response) => response.json())
+            .then((playlist) => {
+
+             const displaySpecificPlaylist = new DOMHandle();
+            displaySpecificPlaylist.displaySpecificPlaylist(playlist);
+         });
+    }
 }
 
 /* Handles the DOM. */
@@ -109,7 +162,7 @@ class DOMHandle {
         }
         /* Prints the search results for Albums */
         searchResults.innerHTML = searchedAlbumButtons;
-        
+
         const selectedButton = document.
         getElementsByClassName('selectedButton');
 
@@ -119,14 +172,14 @@ class DOMHandle {
                 newFetch.fetchAlbumById(this.id);
             })
         }
-        
+
     }
     displayTracks(allTracks) {
         const searchResults = document.getElementById('searchResults');
         let searchedTrackButtons = '';
         for (let i = 0; i < allTracks.length; i++) {
             searchedTrackButtons += `
-                <button class="searchedTrackButton" id="${allTracks[i]._id}">
+                <button class="selectedButton" id="${allTracks[i]._id}">
                     ${allTracks[i].title} -
                     ${allTracks[i].artists[0].name}
                     <img src="images/rightArrow.svg">
@@ -134,47 +187,76 @@ class DOMHandle {
             `;
         }
         searchResults.innerHTML = searchedTrackButtons;
+
+        const selectedButton = document.
+        getElementsByClassName('selectedButton');
+
+        for (i = 0; i < selectedButton.length; i++) {
+            selectedButton[i].addEventListener('click', function(){
+                const newFetch = new FetchHandle();
+                newFetch.fetchTrackById(this.id);
+            })
+        }
     }
     displayArtists(allArtists) {
         const searchResults = document.getElementById('searchResults');
         let searchedArtistButtons = '';
         for (let i = 0; i < allArtists.length; i++) {
             searchedArtistButtons += `
-                <button class="searchedArtistButton" id="${allArtists[i]._id}">
+                <button class="selectedButton" id="${allArtists[i]._id}">
                     ${allArtists[i].name}
                     <img src="images/rightArrow.svg">
                 </button>
             `;
         }
         searchResults.innerHTML = searchedArtistButtons;
+
+       const selectedButton = document.
+        getElementsByClassName('selectedButton');
+        for (i = 0; i < selectedButton.length; i++){
+        selectedButton[i].addEventListener('click', function(){
+            const newFetch = new FetchHandle();
+            newFetch.fetchArtistById(this.id);
+            })
+        }
     }
     displayPlaylists(allPlaylists) {
         const searchResults = document.getElementById('searchResults');
         let searchedPlaylistButtons = '';
         for (let i = 0; i < allPlaylists.length; i++) {
             searchedPlaylistButtons += `
-                <button class="searchedPlaylistButton" id="${allPlaylists[i]._id}">
+                <button class="selectedButton" id="${allPlaylists[i]._id}">
                     ${allPlaylists[i].title}
                     <img src="images/rightArrow.svg">
                 </button>
             `;
         }
         searchResults.innerHTML = searchedPlaylistButtons;
+
+               const selectedButton = document.
+        getElementsByClassName('selectedButton');
+        for (i = 0; i < selectedButton.length; i++){
+        selectedButton[i].addEventListener('click', function(){
+            const newFetch = new FetchHandle();
+            newFetch.fetchPlaylistById(this.id);
+            })
+        }
     }
-    displaySpecificAlbum(album){
-        console.log(album)
+    displaySpecificAlbum(album, artist){
         const searchResults = document.getElementById('searchResults');
-        
         let contentOfSpecificAlbum =`
             <div class="contentOfSpecificAlbum">
                 <div id="albumTopContent">
                     <img src="${album.coverImage}">
                     <div id="albumInfo">
                         <h2>${album.title}</h2>
-                        <p>By ${album.artist}</p>
+                        <p>By ${artist.name}</p>
                         <p>Rating: ${album.rating}</p>
                     </div>
                 </div>
+                <button id="rateTrack">
+                    RATE TRACK
+                </button>
                 <div class="underline"></div>
                 <h3>Tracklist:</h3>
                 <div id="albumTracklist"></div>
@@ -191,15 +273,77 @@ class DOMHandle {
                 </button>
             `
         }
-        
+
         const albumTracklist = document.getElementById('albumTracklist');
-        
+
         albumTracklist.innerHTML=trackTitles;
-        
+
+    }
+    displaySpecificTrack(track, artist){
+        const searchResults = document.getElementById('searchResults');
+        let contentOfSpecificTrack =`
+            <div class="contentOfSpecificTrack">
+                <div id="trackTopContent">
+                    <div id="trackInfo">
+                        <h2>${track.title}</h2>
+                        <p>By ${artist.name}</p>
+                        <p>In album: ${track.album.title}</p>
+                    </div>
+                </div>
+                <button id="addToPlaylist">
+                    ADD TO PLAYLIST
+                </button>
+                <button id="rateTrack">
+                    RATE TRACK
+                </button>
+            </div>
+        `
+        searchResults.innerHTML = contentOfSpecificTrack;
+    }
+    displaySpecificArtist(artist, albums){
+        const searchResults = document.getElementById('searchResults');
+        let contentOfSpecificArtist =`
+            ${artist.name}
+            ${artist.genres}
+            <img src="${artist.image}">
+            ${artist.countryBorn}
+            ${artist.born}
+            ${albums}
+        `
+        searchResults.innerHTML = contentOfSpecificArtist;
+
+        console.log(albums)
+        console.log(artist)
+    }
+    displaySpecificPlaylist(playlist){
+        console.log(playlist)
+        console.log(playlist.title)
+        console.log(playlist.createdAt)
+        console.log(playlist.updatedAt)
+        console.log(playlist.genres)
+        console.log(playlist.ratings)
+        console.log(playlist.comments)
+        console.log(playlist.tracks)
+    }
+    filterSearch() {
+        const filter = searchField.value.toUpperCase();
+        const buttons = searchResults.getElementsByTagName('button');
+        for (let i = 0; i < buttons.length; i++) {
+            if (buttons[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+             buttons[i].style.display = 'flex';
+            } else {
+             buttons[i].style.display = 'none';
+            }
+        }
+        if (filter == '') {
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].style.display = 'none';
+            }
+        }
     }
 }
 
-/*class Controller {
+class Controller {
     getInputValue(elementId) {
         const element = getElementById(elementId);
         return element.value;
@@ -213,6 +357,7 @@ class DOMHandle {
         }
     }
 }
+/*
 const postArtistButton = getElementById('postArtistButton');
 const postAlbumButton = getElementById('postAlbumButton');
 const postTrackButton = getElementById('postTrackButton');
