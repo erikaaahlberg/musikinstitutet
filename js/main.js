@@ -136,12 +136,29 @@ class FetchHandle {
             .then((response) => response.json())
             .then((playlist) => {
 
+             let commentArray = [];
+             for(let i = 0; i < playlist.comments.length; i++){
+                 
+                 const commentPromise = fetch(`https://folksa.ga/api/comments/${playlist.comments}?key=flat_eric`)
+                 .then((response) => response.json())
+                commentArray.push(commentPromise);
+            }
+             Promise.all(commentArray)
+            .then((comments) => {
+                 
              const displaySpecificPlaylist = new DOMHandle();
-            displaySpecificPlaylist.displaySpecificPlaylist(playlist);
+            displaySpecificPlaylist.displaySpecificPlaylist(playlist, comments);
          });
-    }
+    });
 }
+    addPlayListComment(body, user, playlistId){
+        console.log(body)
+        console.log(user)
+        console.log(playlistId)
 
+    }
+
+}
 /* Handles the DOM. */
 class DOMHandle {
     activateSearchButton(value) {
@@ -332,7 +349,7 @@ class DOMHandle {
             </div>
         `
         searchResults.innerHTML = contentOfSpecificArtist;
-        console.log(albums)
+
         let artistAlbum = "";
         for(let i = 0; i < albums.length; i++){
             artistAlbum +=`
@@ -343,18 +360,96 @@ class DOMHandle {
                 </button>
             `;
         }
+        
         const albumList = document.getElementById('artistAlbums');
         albumList.innerHTML=artistAlbum;
+        
     }
-    displaySpecificPlaylist(playlist){
-        console.log(playlist)
-        console.log(playlist.title)
-        console.log(playlist.createdAt)
-        console.log(playlist.updatedAt)
-        console.log(playlist.genres)
-        console.log(playlist.ratings)
-        console.log(playlist.comments)
-        console.log(playlist.tracks)
+    displaySpecificPlaylist(playlist, comments){
+        
+        const searchResults = document.getElementById('searchResults');
+        
+        let contentOfSpecificPlaylist =`
+            <div class="playlistContent">
+                ${playlist.title}
+                ${playlist.ratings}
+                ${playlist.genres}
+                ${playlist.createdBy}
+                ${playlist.createdAt}
+                ${playlist.updatedAt}
+                <button id="deletePlaylist">
+                    DELETE PLAYLIST
+                </button>
+                <button id="ratePlaylist">
+                    RATE PLAYLIST
+                </button>
+                <div id="playlistTracklist"></div>
+                <form id="commentform">
+                    <input type="text" id="commentField">
+                    <input type="text" id="commentUser">
+                    <button type="button" id="addCommentButton">ADD COMMENT</button>
+                </form>
+                <div id="playlistComments"></div>
+                
+            </div>
+        `
+        searchResults.innerHTML=contentOfSpecificPlaylist
+
+        const playlistTracklist = document.getElementById('playlistTracklist');
+ 
+        let trackButton = "";
+        for (let i = 0; i < playlist.tracks.length; i++){
+            trackButton +=`
+                <button class="playlistTrack">
+                    ${playlist.tracks[i].artists[0].name} - 
+                    ${playlist.tracks[i].title}
+                    <img src="images/rightArrow.svg">
+                </button>
+            `   
+        }
+        
+        playlistTracklist.innerHTML=trackButton;
+        
+        const playlistComments = document.getElementById('playlistComments');
+        
+        let commentContent = "";
+        for(let i = 0; i < comments.length; i++){
+            commentContent +=`
+                <div class="playlistComment">
+                    ${comments[0].username}
+                    ${comments[0].body}
+                </div>
+            `
+        }
+        playlistComments.innerHTML=commentContent;
+        
+        const addCommentButton = document.getElementById('addCommentButton');
+        const commentField = document.getElementById('commentField');
+        const commentUser = document.getElementById('commentUser');
+        
+        addCommentButton.addEventListener('click', function(){
+
+        const addPlayListComment = new FetchHandle();
+        addPlayListComment.addPlayListComment(commentField.value, commentUser.value, playlist._id);
+
+        })
+        
+    }
+    filterSearch() {
+        const filter = searchField.value.toUpperCase();
+        const buttons = searchResults.getElementsByTagName('button');
+        for (let i = 0; i < buttons.length; i++) {
+            if (buttons[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+             buttons[i].style.display = 'flex';
+            } else {
+             buttons[i].style.display = 'none';
+            }
+        }
+        if (filter == '') {
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].style.display = 'none';
+            }
+        }
     }
     filterSearch() {
         const filter = searchField.value.toUpperCase();
@@ -387,6 +482,7 @@ class Controller {
             return false;
         }
     }
+    
 }
 /*
 const postArtistButton = getElementById('postArtistButton');
