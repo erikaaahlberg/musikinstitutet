@@ -75,6 +75,7 @@ class FetchHandle {
                                         const displayAll = new DOMHandle();
                                         displayAll.displayAll(fetchedObject.albums, fetchedObject.tracks,
                                             fetchedObject.artists, fetchedObject.playlists, fetchedObject.albumartists);
+                                        displayAll.filterSearch();
                                     });
                             })
                     })
@@ -165,18 +166,18 @@ class FetchHandle {
         fetch(`https://folksa.ga/api/artists/${artistId}?key=flat_eric`)
             .then((response) => response.json())
             .then((artist) => {
-            
+
             let albumArray = [];
             for (let i = 0; i < artist.albums.length; i++){
-                    
+
                 const albumPromise = fetch(`https://folksa.ga/api/albums/${artist.albums[i]}?key=flat_eric`)
                 .then((response) => response.json())
                 albumArray.push(albumPromise);
             }
-            
+
             Promise.all(albumArray)
             .then((albums) => {
-                
+
             const displaySpecificArtist = new DOMHandle();
             displaySpecificArtist.displaySpecificArtist(artist, albums);
 
@@ -190,14 +191,14 @@ class FetchHandle {
 
              let commentArray = [];
              for(let i = 0; i < playlist.comments.length; i++){
-                 
+
                  const commentPromise = fetch(`https://folksa.ga/api/comments/${playlist.comments}?key=flat_eric`)
                  .then((response) => response.json())
                 commentArray.push(commentPromise);
             }
              Promise.all(commentArray)
             .then((comments) => {
-                 
+
              const displaySpecificPlaylist = new DOMHandle();
             displaySpecificPlaylist.displaySpecificPlaylist(playlist, comments);
          });
@@ -361,7 +362,7 @@ class DOMHandle {
                 </button>
             `
         }
-    
+
         const albumTracklist = document.getElementById('albumTracklist');
 
         albumTracklist.innerHTML = trackTitles;
@@ -417,15 +418,15 @@ class DOMHandle {
                 </button>
             `;
         }
-        
+
         const albumList = document.getElementById('artistAlbums');
         albumList.innerHTML=artistAlbum;
-        
+
     }
     displaySpecificPlaylist(playlist, comments){
-        
+
         const searchResults = document.getElementById('searchResults');
-        
+
         let contentOfSpecificPlaylist =`
             <div class="playlistContent">
                 ${playlist.title}
@@ -447,28 +448,28 @@ class DOMHandle {
                     <button type="button" id="addCommentButton">ADD COMMENT</button>
                 </form>
                 <div id="playlistComments"></div>
-                
+
             </div>
         `
         searchResults.innerHTML=contentOfSpecificPlaylist
 
         const playlistTracklist = document.getElementById('playlistTracklist');
- 
+
         let trackButton = "";
         for (let i = 0; i < playlist.tracks.length; i++){
             trackButton +=`
                 <button class="playlistTrack">
-                    ${playlist.tracks[i].artists[0].name} - 
+                    ${playlist.tracks[i].artists[0].name} -
                     ${playlist.tracks[i].title}
                     <img src="images/rightArrow.svg">
                 </button>
-            `   
+            `
         }
-        
+
         playlistTracklist.innerHTML=trackButton;
-        
+
         const playlistComments = document.getElementById('playlistComments');
-        
+
         let commentContent = "";
         for(let i = 0; i < comments.length; i++){
             commentContent +=`
@@ -479,18 +480,18 @@ class DOMHandle {
             `
         }
         playlistComments.innerHTML=commentContent;
-        
+
         const addCommentButton = document.getElementById('addCommentButton');
         const commentField = document.getElementById('commentField');
         const commentUser = document.getElementById('commentUser');
-        
+
         addCommentButton.addEventListener('click', function(){
 
         const addPlayListComment = new FetchHandle();
         addPlayListComment.addPlayListComment(commentField.value, commentUser.value, playlist._id);
 
         })
-        
+
     }
     filterSearch() {
         const filter = searchField.value.toUpperCase();
@@ -538,7 +539,7 @@ class Controller {
             return false;
         }
     }
-    
+
 }
 /*
 const postArtistButton = getElementById('postArtistButton');
