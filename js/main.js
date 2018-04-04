@@ -1,11 +1,16 @@
 const searchButton = document.getElementsByClassName('searchButton');
+const searchResults = document.getElementById('searchResults');
 /* Loops thru the searchRadioButtons then runs Fetch class. */
 for (i = 0; i < searchButton.length; i++) {
     searchButton[i].addEventListener('click', function() {
         const activateButton = new DOMHandle();
         activateButton.activateSearchButton(this);
         const newFetch = new FetchHandle(this.value);
+        searchResults.innerHTML = '';
         switch (this.value) {
+            case 'all':
+                newFetch.fetchAll();
+                break;
             case 'albums':
                 newFetch.fetchAlbums();
                 break;
@@ -30,6 +35,53 @@ searchField.addEventListener('keyup', () => {
 
 /* Handles all fetch queries. */
 class FetchHandle {
+    fetchAll() {
+        /* Contains promises and objects */
+        let promiseArray = [];
+        let artistPromiseArray = [];
+        let fetchedObject = { albums: [], albumartists: [], tracks: [], artists: [], playlists: [] };
+        const toFetch = ['albums', 'tracks', 'artists', 'playlists'];
+        /* Start of by fetching everything. */
+        for (let promise of toFetch) {
+            let fetchItem = fetch(`https://folksa.ga/api/${promise}?key=flat_eric`)
+                .then((response) => response.json())
+            promiseArray.push(fetchItem);
+            /* For albums we want the artist name too, so a new fetch is initiated
+             * based on the object that is retreived. */
+            if (promise == 'albums') {
+                Promise.resolve(fetchItem)
+                    .then((resolvedObject) => {
+                        for (let item of resolvedObject) {
+                            let artistPromise = fetch(`https://folksa.ga/api/artists/${item.artists}?key=flat_eric`)
+                                .then((response) => response.json())
+                            artistPromiseArray.push(artistPromise);
+                        }
+                        /* They are promised and applied to fetchedObject.  */
+                        Promise.all(artistPromiseArray)
+                            .then((artistPromisedArray) => {
+                                fetchedObject['albumartists'] = artistPromisedArray;
+                            })
+                            /* All data needs to be present, so we are using then to make sure
+                             * that they are async using then. */
+                            .then(() => {
+                                /* All the items from toFetch are Promised here and applied
+                                 * to fetchedObject. */
+                                Promise.all(promiseArray)
+                                    .then((promisedArray) => {
+                                        for (let i = 0; i < promisedArray.length; i++) {
+                                            fetchedObject[toFetch[i]] = promisedArray[i];
+                                        }
+                                        /* displayAll is called */
+                                        const displayAll = new DOMHandle();
+                                        displayAll.displayAll(fetchedObject.albums, fetchedObject.tracks,
+                                            fetchedObject.artists, fetchedObject.playlists, fetchedObject.albumartists);
+                                    });
+                            })
+                    })
+            }
+        }
+    }
+
     /* Fetches all the albums using this.apiPath which is available in the class */
     fetchAlbums() {
         fetch(`https://folksa.ga/api/albums?key=flat_eric`)
@@ -47,9 +99,9 @@ class FetchHandle {
                 /* Promise.all is used for the entire promiseArray. Values are then sent
                  * to the DOMHandle.displayAlbums function. */
                 Promise.all(promiseArray)
-                    .then((allArtists) => {
+                    .then((artistPromise) => {
                         const displayAlbum = new DOMHandle();
-                        displayAlbum.displayAlbums(albums, allArtists);
+                        displayAlbum.displayAlbums(albums, artistPromise);
                         displayAlbum.filterSearch();
                     })
             });
@@ -81,35 +133,35 @@ class FetchHandle {
                 displayPlaylist.filterSearch();
             });
     }
-    fetchAlbumById(albumId){
+    fetchAlbumById(albumId) {
         fetch(`https://folksa.ga/api/albums/${albumId}?key=flat_eric`)
             .then((response) => response.json())
             .then((album) => {
-           fetch(`https://folksa.ga/api/artists/${album.artists[0]._id}?key=flat_eric`)
-                .then((response) => response.json())
-                .then((artist) => {
+                fetch(`https://folksa.ga/api/artists/${album.artists[0]._id}?key=flat_eric`)
+                    .then((response) => response.json())
+                    .then((artist) => {
 
-                const displaySpecificAlbum = new DOMHandle();
-                displaySpecificAlbum.displaySpecificAlbum(album, artist);
-            })
+                        const displaySpecificAlbum = new DOMHandle();
+                        displaySpecificAlbum.displaySpecificAlbum(album, artist);
+                    })
 
-        });
+            });
     }
-    fetchTrackById(trackId){
+    fetchTrackById(trackId) {
         fetch(`https://folksa.ga/api/tracks/${trackId}?key=flat_eric`)
             .then((response) => response.json())
             .then((track) => {
 
-            fetch(`https://folksa.ga/api/artists/${track.artists[0]._id}?key=flat_eric`)
-                .then((response) => response.json())
-                .then((artist) => {
+                fetch(`https://folksa.ga/api/artists/${track.artists[0]._id}?key=flat_eric`)
+                    .then((response) => response.json())
+                    .then((artist) => {
 
-            const displaySpecificTrack = new DOMHandle();
-            displaySpecificTrack.displaySpecificTrack(track, artist);
-        });
-        });
+                        const displaySpecificTrack = new DOMHandle();
+                        displaySpecificTrack.displaySpecificTrack(track, artist);
+                    });
+            });
     }
-    fetchArtistById(artistId){
+    fetchArtistById(artistId) {
         fetch(`https://folksa.ga/api/artists/${artistId}?key=flat_eric`)
             .then((response) => response.json())
             .then((artist) => {
@@ -131,8 +183,8 @@ class FetchHandle {
             });
         });
     }
-    fetchPlaylistById(playlistId){
-         fetch(`https://folksa.ga/api/playlists/${playlistId}?key=flat_eric`)
+    fetchPlaylistById(playlistId) {
+        fetch(`https://folksa.ga/api/playlists/${playlistId}?key=flat_eric`)
             .then((response) => response.json())
             .then((playlist) => {
 
@@ -171,9 +223,15 @@ class DOMHandle {
         checkButton.classList.add('activeButton');
     }
 
+    displayAll(allAlbums, allTracks, allArtists, allPlaylists, allAlbumArtists) {
+        this.displayAlbums(allAlbums, allAlbumArtists);
+        this.displayTracks(allTracks);
+        this.displayArtists(allArtists);
+        this.displayPlaylists(allPlaylists);
+    }
+
     /* Console logs the JSON-object. Doesn't add anything to the DOM right now. */
     displayAlbums(allAlbums, allArtists) {
-        const searchResults = document.getElementById('searchResults');
         let searchedAlbumButtons = '';
         /* Loops json object */
         for (let i = 0; i < allAlbums.length; i++) {
@@ -188,13 +246,14 @@ class DOMHandle {
             `;
         }
         /* Prints the search results for Albums */
-        searchResults.innerHTML = searchedAlbumButtons;
+        //searchResults.innerHTML = searchedAlbumButtons;
+        searchResults.insertAdjacentHTML('beforeend', searchedAlbumButtons);
 
         const selectedButton = document.
         getElementsByClassName('selectedButton');
 
         for (i = 0; i < selectedButton.length; i++) {
-            selectedButton[i].addEventListener('click', function(){
+            selectedButton[i].addEventListener('click', function() {
                 const newFetch = new FetchHandle();
                 newFetch.fetchAlbumById(this.id);
             })
@@ -202,7 +261,6 @@ class DOMHandle {
 
     }
     displayTracks(allTracks) {
-        const searchResults = document.getElementById('searchResults');
         let searchedTrackButtons = '';
         for (let i = 0; i < allTracks.length; i++) {
             searchedTrackButtons += `
@@ -213,20 +271,20 @@ class DOMHandle {
                 </button>
             `;
         }
-        searchResults.innerHTML = searchedTrackButtons;
+        //searchResults.innerHTML = searchedTrackButtons;
+        searchResults.insertAdjacentHTML('beforeend', searchedTrackButtons);
 
         const selectedButton = document.
         getElementsByClassName('selectedButton');
 
         for (i = 0; i < selectedButton.length; i++) {
-            selectedButton[i].addEventListener('click', function(){
+            selectedButton[i].addEventListener('click', function() {
                 const newFetch = new FetchHandle();
                 newFetch.fetchTrackById(this.id);
             })
         }
     }
     displayArtists(allArtists) {
-        const searchResults = document.getElementById('searchResults');
         let searchedArtistButtons = '';
         for (let i = 0; i < allArtists.length; i++) {
             searchedArtistButtons += `
@@ -236,19 +294,19 @@ class DOMHandle {
                 </button>
             `;
         }
-        searchResults.innerHTML = searchedArtistButtons;
+        //searchResults.innerHTML = searchedArtistButtons;
+        searchResults.insertAdjacentHTML('beforeend', searchedArtistButtons);
 
-       const selectedButton = document.
+        const selectedButton = document.
         getElementsByClassName('selectedButton');
-        for (i = 0; i < selectedButton.length; i++){
-        selectedButton[i].addEventListener('click', function(){
-            const newFetch = new FetchHandle();
-            newFetch.fetchArtistById(this.id);
+        for (i = 0; i < selectedButton.length; i++) {
+            selectedButton[i].addEventListener('click', function() {
+                const newFetch = new FetchHandle();
+                newFetch.fetchArtistById(this.id);
             })
         }
     }
     displayPlaylists(allPlaylists) {
-        const searchResults = document.getElementById('searchResults');
         let searchedPlaylistButtons = '';
         for (let i = 0; i < allPlaylists.length; i++) {
             searchedPlaylistButtons += `
@@ -258,20 +316,20 @@ class DOMHandle {
                 </button>
             `;
         }
-        searchResults.innerHTML = searchedPlaylistButtons;
+        //searchResults.innerHTML = searchedPlaylistButtons;
+        searchResults.insertAdjacentHTML('beforeend', searchedPlaylistButtons);
 
-               const selectedButton = document.
+        const selectedButton = document.
         getElementsByClassName('selectedButton');
-        for (i = 0; i < selectedButton.length; i++){
-        selectedButton[i].addEventListener('click', function(){
-            const newFetch = new FetchHandle();
-            newFetch.fetchPlaylistById(this.id);
+        for (i = 0; i < selectedButton.length; i++) {
+            selectedButton[i].addEventListener('click', function() {
+                const newFetch = new FetchHandle();
+                newFetch.fetchPlaylistById(this.id);
             })
         }
     }
-    displaySpecificAlbum(album, artist){
-        const searchResults = document.getElementById('searchResults');
-        let contentOfSpecificAlbum =`
+    displaySpecificAlbum(album, artist) {
+        let contentOfSpecificAlbum = `
             <div class="contentOfSpecificAlbum">
                 <div id="albumTopContent">
                     <img src="${album.coverImage}">
@@ -306,12 +364,11 @@ class DOMHandle {
     
         const albumTracklist = document.getElementById('albumTracklist');
 
-        albumTracklist.innerHTML=trackTitles;
+        albumTracklist.innerHTML = trackTitles;
 
     }
-    displaySpecificTrack(track, artist){
-        const searchResults = document.getElementById('searchResults');
-        let contentOfSpecificTrack =`
+    displaySpecificTrack(track, artist) {
+        let contentOfSpecificTrack = `
             <div class="contentOfSpecificTrack">
                 <div id="trackTopContent">
                     <div id="trackInfo">
@@ -456,9 +513,9 @@ class DOMHandle {
         const buttons = searchResults.getElementsByTagName('button');
         for (let i = 0; i < buttons.length; i++) {
             if (buttons[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
-             buttons[i].style.display = 'flex';
+                buttons[i].style.display = 'flex';
             } else {
-             buttons[i].style.display = 'none';
+                buttons[i].style.display = 'none';
             }
         }
         if (filter == '') {
@@ -475,10 +532,9 @@ class Controller {
         return element.value;
     }
     checkValue(value) {
-        if(value && value != '') {
+        if (value && value != '') {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
