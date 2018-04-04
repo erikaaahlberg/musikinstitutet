@@ -150,6 +150,12 @@ class FetchHandle {
          });
     });
 }
+    addPlayListComment(body, user, playlistId){
+        console.log(body)
+        console.log(user)
+        console.log(playlistId)
+
+    }
 
 }
 /* Handles the DOM. */
@@ -379,6 +385,7 @@ class DOMHandle {
                 <div id="playlistTracklist"></div>
                 <form id="commentform">
                     <input type="text" id="commentField">
+                    <input type="text" id="commentUser">
                     <button type="button" id="addCommentButton">ADD COMMENT</button>
                 </form>
                 <div id="playlistComments"></div>
@@ -404,16 +411,27 @@ class DOMHandle {
         
         const playlistComments = document.getElementById('playlistComments');
         
-        let comment = "";
+        let commentContent = "";
         for(let i = 0; i < comments.length; i++){
-            comment +=`
+            commentContent +=`
                 <div class="playlistComment">
                     ${comments[0].username}
                     ${comments[0].body}
                 </div>
             `
         }
-        playlistComments.innerHTML=comment;
+        playlistComments.innerHTML=commentContent;
+        
+        const addCommentButton = document.getElementById('addCommentButton');
+        const commentField = document.getElementById('commentField');
+        const commentUser = document.getElementById('commentUser');
+        
+        addCommentButton.addEventListener('click', function(){
+
+        const addPlayListComment = new FetchHandle();
+        addPlayListComment.addPlayListComment(commentField.value, commentUser.value, playlist._id);
+
+        })
         
     }
     filterSearch() {
@@ -447,6 +465,7 @@ class Controller {
             return false;
         }
     }
+    
 }
 /*
 const postArtistButton = getElementById('postArtistButton');
