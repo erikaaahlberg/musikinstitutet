@@ -8,6 +8,9 @@ for (i = 0; i < searchButton.length; i++) {
         const newFetch = new FetchHandle(this.value);
         searchResults.innerHTML = '';
         switch (this.value) {
+            case 'all':
+                newFetch.fetchAll();
+                break;
             case 'albums':
                 newFetch.fetchAlbums();
                 break;
@@ -33,23 +36,50 @@ searchField.addEventListener('keyup', () => {
 /* Handles all fetch queries. */
 class FetchHandle {
     fetchAll() {
+        /* Contains promises and objects */
         let promiseArray = [];
+        let artistPromiseArray = [];
+        let fetchedObject = { albums: [], albumartists: [], tracks: [], artists: [], playlists: [] };
         const toFetch = ['albums', 'tracks', 'artists', 'playlists'];
+        /* Start of by fetching everything. */
         for (let promise of toFetch) {
             let fetchItem = fetch(`https://folksa.ga/api/${promise}?key=flat_eric`)
                 .then((response) => response.json())
             promiseArray.push(fetchItem);
+            /* For albums we want the artist name too, so a new fetch is initiated
+             * based on the object that is retreived. */
+            if (promise == 'albums') {
+                Promise.resolve(fetchItem)
+                    .then((resolvedObject) => {
+                        for (let item of resolvedObject) {
+                            let artistPromise = fetch(`https://folksa.ga/api/artists/${item.artists}?key=flat_eric`)
+                                .then((response) => response.json())
+                            artistPromiseArray.push(artistPromise);
+                        }
+                        /* They are promised and applied to fetchedObject.  */
+                        Promise.all(artistPromiseArray)
+                            .then((artistPromisedArray) => {
+                                fetchedObject['albumartists'] = artistPromisedArray;
+                            })
+                            /* All data needs to be present, so we are using then to make sure
+                             * that they are async using then. */
+                            .then(() => {
+                                /* All the items from toFetch are Promised here and applied
+                                 * to fetchedObject. */
+                                Promise.all(promiseArray)
+                                    .then((promisedArray) => {
+                                        for (let i = 0; i < promisedArray.length; i++) {
+                                            fetchedObject[toFetch[i]] = promisedArray[i];
+                                        }
+                                        /* displayAll is called */
+                                        const displayAll = new DOMHandle();
+                                        displayAll.displayAll(fetchedObject.albums, fetchedObject.tracks,
+                                            fetchedObject.artists, fetchedObject.playlists, fetchedObject.albumartists);
+                                    });
+                            })
+                    })
+            }
         }
-        Promise.all(promiseArray)
-            .then((promisedArray) => {
-                const fetchedObject = { albums: [], tracks: [], artists: [], playlists: [] };
-                for (let i = 0; i < promisedArray.length; i++) {
-                    fetchedObject[toFetch[i]] = promisedArray[i];
-                }
-                const displayAll = new DOMHandle();
-                displayAll.displayAll(fetchedObject.albums, fetchedObject.tracks,
-                    fetchedObject.artists, fetchedObject.playlists);
-            });
     }
 
     /* Fetches all the albums using this.apiPath which is available in the class */
@@ -166,8 +196,8 @@ class DOMHandle {
         checkButton.classList.add('activeButton');
     }
 
-    displayAll(allAlbums, allTracks, allArtists, allPlaylists) {
-        //this.displayAlbums(allAlbums);
+    displayAll(allAlbums, allTracks, allArtists, allPlaylists, allAlbumArtists) {
+        this.displayAlbums(allAlbums, allAlbumArtists);
         this.displayTracks(allTracks);
         this.displayArtists(allArtists);
         this.displayPlaylists(allPlaylists);
