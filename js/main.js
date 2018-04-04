@@ -191,7 +191,7 @@ class FetchHandle {
 
              let commentArray = [];
              for(let i = 0; i < playlist.comments.length; i++){
-      
+
                  const commentPromise = fetch(`https://folksa.ga/api/playlists/${playlistId}/comments?key=flat_eric`)
 
                  .then((response) => response.json())
@@ -223,14 +223,14 @@ class FetchHandle {
   })
   .then((response) => response.json())
   .then((playlist) => {
-    
+
     const displayPlaylistComments = new DOMHandle();
     displayPlaylistComments.displayPlaylistComments(comments);
 });
 
     }
     rateStuff(apiPath, id, rating){
-        
+
         console.log(apiPath)
         console.log(id)
         console.log(rating)
@@ -504,7 +504,7 @@ class DOMHandle {
         }
 
         playlistTracklist.innerHTML=trackButton;
-        
+
         const displayPlaylistComments = new DOMHandle();
         displayPlaylistComments.displayPlaylistComments(comments);
 
@@ -520,12 +520,12 @@ class DOMHandle {
         })
 
     }
-    
+
     displayPlaylistComments(comments){
         const playlistComments = document.getElementById('playlistComments');
         console.log(comments[0].length)
         let commentContent = "";
- 
+
         for(let i = 0; i < comments[0].length; i++){
             commentContent +=`
                 <div class="playlistComment">
@@ -535,9 +535,9 @@ class DOMHandle {
             `
         }
         playlistComments.innerHTML=commentContent;
-    
+
     }
-    
+
     filterSearch() {
         const filter = searchField.value.toUpperCase();
         const buttons = searchResults.getElementsByTagName('button');
@@ -571,6 +571,9 @@ class Controller {
     }
 
 }
+
+const startFetch = new FetchHandle();
+startFetch.fetchAll();
 /*
 const postArtistButton = getElementById('postArtistButton');
 const postAlbumButton = getElementById('postAlbumButton');
