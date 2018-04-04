@@ -191,10 +191,12 @@ class FetchHandle {
 
              let commentArray = [];
              for(let i = 0; i < playlist.comments.length; i++){
+      
+                 const commentPromise = fetch(`https://folksa.ga/api/playlists/${playlistId}/comments?key=flat_eric`)
 
-                 const commentPromise = fetch(`https://folksa.ga/api/comments/${playlist.comments}?key=flat_eric`)
                  .then((response) => response.json())
                 commentArray.push(commentPromise);
+
             }
              Promise.all(commentArray)
             .then((comments) => {
@@ -204,10 +206,27 @@ class FetchHandle {
          });
     });
 }
-    addPlayListComment(body, user, playlistId){
-        console.log(body)
-        console.log(user)
-        console.log(playlistId)
+    addPlayListComment(body, user, playlistId, comments){
+
+        let comment = {
+            playlist: playlistId,
+            body: body,
+            username: user
+        }
+        fetch(`https://folksa.ga/api/playlists/${playlistId}/comments?key=flat_eric`,{
+      method: 'POST',
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(comment)
+  })
+  .then((response) => response.json())
+  .then((playlist) => {
+    
+    const displayPlaylistComments = new DOMHandle();
+    displayPlaylistComments.displayPlaylistComments(comments);
+});
 
     }
     rateStuff(apiPath, id, rating){
@@ -485,19 +504,9 @@ class DOMHandle {
         }
 
         playlistTracklist.innerHTML=trackButton;
-
-        const playlistComments = document.getElementById('playlistComments');
-
-        let commentContent = "";
-        for(let i = 0; i < comments.length; i++){
-            commentContent +=`
-                <div class="playlistComment">
-                    ${comments[0].username}
-                    ${comments[0].body}
-                </div>
-            `
-        }
-        playlistComments.innerHTML=commentContent;
+        
+        const displayPlaylistComments = new DOMHandle();
+        displayPlaylistComments.displayPlaylistComments(comments);
 
         const addCommentButton = document.getElementById('addCommentButton');
         const commentField = document.getElementById('commentField');
@@ -506,11 +515,29 @@ class DOMHandle {
         addCommentButton.addEventListener('click', function(){
 
         const addPlayListComment = new FetchHandle();
-        addPlayListComment.addPlayListComment(commentField.value, commentUser.value, playlist._id);
+        addPlayListComment.addPlayListComment(commentField.value, commentUser.value, playlist._id, comments);
 
         })
 
     }
+    
+    displayPlaylistComments(comments){
+        const playlistComments = document.getElementById('playlistComments');
+        console.log(comments[0].length)
+        let commentContent = "";
+ 
+        for(let i = 0; i < comments[0].length; i++){
+            commentContent +=`
+                <div class="playlistComment">
+                    ${comments[0][i].username}
+                    ${comments[0][i].body}
+                </div>
+            `
+        }
+        playlistComments.innerHTML=commentContent;
+    
+    }
+    
     filterSearch() {
         const filter = searchField.value.toUpperCase();
         const buttons = searchResults.getElementsByTagName('button');
@@ -527,22 +554,7 @@ class DOMHandle {
             }
         }
     }
-    filterSearch() {
-        const filter = searchField.value.toUpperCase();
-        const buttons = searchResults.getElementsByTagName('button');
-        for (let i = 0; i < buttons.length; i++) {
-            if (buttons[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                buttons[i].style.display = 'flex';
-            } else {
-                buttons[i].style.display = 'none';
-            }
-        }
-        if (filter == '') {
-            for (let i = 0; i < buttons.length; i++) {
-                buttons[i].style.display = 'none';
-            }
-        }
-    }
+
 }
 
 class Controller {
