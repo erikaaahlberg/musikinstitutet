@@ -169,8 +169,8 @@ class FetchHandle {
   })
   .then((response) => response.json())
   .then((playlist) => {
-  
-  const displayPlaylistComments = new DOMHandle();
+    
+    const displayPlaylistComments = new DOMHandle();
     displayPlaylistComments.displayPlaylistComments(comments);
 });
 
@@ -464,8 +464,9 @@ class DOMHandle {
     
     displayPlaylistComments(comments){
         const playlistComments = document.getElementById('playlistComments');
-        console.log(comments[0])
+        console.log(comments[0].length)
         let commentContent = "";
+ 
         for(let i = 0; i < comments[0].length; i++){
             commentContent +=`
                 <div class="playlistComment">
@@ -475,6 +476,7 @@ class DOMHandle {
             `
         }
         playlistComments.innerHTML=commentContent;
+    
     }
     
     filterSearch() {
