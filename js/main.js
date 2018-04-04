@@ -157,6 +157,24 @@ class FetchHandle {
         console.log(playlistId)
 
     }
+    rateStuff(apiPath, id, rating){
+        
+        console.log(apiPath)
+        console.log(id)
+        console.log(rating)
+        /*fetch(`https://folksa.ga/api/${apiPath}/${id}/vote`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ rating: rating });
+    })
+    .then((response) => response.json())
+    .then((track) => {
+        console.log(track);
+    });*/
+    }
 
 }
 /* Handles the DOM. */
