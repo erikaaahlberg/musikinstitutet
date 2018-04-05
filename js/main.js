@@ -191,7 +191,7 @@ class FetchHandle {
 
              let commentArray = [];
              for(let i = 0; i < playlist.comments.length; i++){
-      
+
                  const commentPromise = fetch(`https://folksa.ga/api/playlists/${playlistId}/comments?key=flat_eric`)
 
                  .then((response) => response.json())
@@ -215,6 +215,7 @@ class FetchHandle {
         }
        console.log(comment)
         fetch(`https://folksa.ga/api/playlists/${playlistId}/comments?key=flat_eric`,{
+<<<<<<< HEAD
        method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -225,13 +226,25 @@ class FetchHandle {
     .then((response) => response.json())
     .then((playlist) => {
     
+=======
+      method: 'POST',
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(comment)
+  })
+  .then((response) => response.json())
+  .then((playlist) => {
+
+>>>>>>> c5871ebc0fb8ca46db7989e0c8268ac9e0cfcdcb
     const displayPlaylistComments = new DOMHandle();
     displayPlaylistComments.displayPlaylistComments(comments);
 });
 
     }
     rateStuff(apiPath, id, rating){
-        
+
         console.log(apiPath)
         console.log(id)
         console.log(rating)
@@ -505,7 +518,7 @@ class DOMHandle {
         }
 
         playlistTracklist.innerHTML=trackButton;
-        
+
         const displayPlaylistComments = new DOMHandle();
         displayPlaylistComments.displayPlaylistComments(comments);
 
@@ -521,12 +534,12 @@ class DOMHandle {
         })
 
     }
-    
+
     displayPlaylistComments(comments){
         const playlistComments = document.getElementById('playlistComments');
         console.log(comments[0].length)
         let commentContent = "";
- console.log(comments[0])
+
         for(let i = 0; i < comments[0].length; i++){
 
             commentContent +=`
@@ -538,9 +551,9 @@ class DOMHandle {
         }
 
         playlistComments.innerHTML=commentContent;
-    
+
     }
-    
+
     filterSearch() {
         const filter = searchField.value.toUpperCase();
         const buttons = searchResults.getElementsByTagName('button');
@@ -574,6 +587,9 @@ class Controller {
     }
 
 }
+
+const startFetch = new FetchHandle();
+startFetch.fetchAll();
 /*
 const postArtistButton = getElementById('postArtistButton');
 const postAlbumButton = getElementById('postAlbumButton');
