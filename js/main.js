@@ -213,16 +213,17 @@ class FetchHandle {
             body: body,
             username: user
         }
+       console.log(comment)
         fetch(`https://folksa.ga/api/playlists/${playlistId}/comments?key=flat_eric`,{
-      method: 'POST',
-      headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(comment)
-  })
-  .then((response) => response.json())
-  .then((playlist) => {
+       method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(comment)
+    })
+    .then((response) => response.json())
+    .then((playlist) => {
     
     const displayPlaylistComments = new DOMHandle();
     displayPlaylistComments.displayPlaylistComments(comments);
@@ -234,7 +235,7 @@ class FetchHandle {
         console.log(apiPath)
         console.log(id)
         console.log(rating)
-        /*fetch(`https://folksa.ga/api/${apiPath}/${id}/vote`, {
+        /*fetch(`https://folksa.ga/api/${apiPath}/${id}/vote?key=flat_eric`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -525,8 +526,9 @@ class DOMHandle {
         const playlistComments = document.getElementById('playlistComments');
         console.log(comments[0].length)
         let commentContent = "";
- 
+ console.log(comments[0])
         for(let i = 0; i < comments[0].length; i++){
+
             commentContent +=`
                 <div class="playlistComment">
                     ${comments[0][i].username}
@@ -534,6 +536,7 @@ class DOMHandle {
                 </div>
             `
         }
+
         playlistComments.innerHTML=commentContent;
     
     }
