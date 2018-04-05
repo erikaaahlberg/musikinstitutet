@@ -184,6 +184,7 @@ class FetchHandle {
             });
         });
     }
+
     fetchPlaylistById(playlistId) {
         fetch(`https://folksa.ga/api/playlists/${playlistId}?key=flat_eric`)
             .then((response) => response.json())
@@ -202,7 +203,6 @@ class FetchHandle {
             });
     }
     addPlayListComment(body, user, playlistId, comments) {
-
         let comment = {
           playlist: playlistId,
           body: body,
@@ -240,7 +240,6 @@ class FetchHandle {
         .catch((error) => {
             console.log(error);
         });
-
     }
 }
 /* Handles the DOM. */
@@ -509,10 +508,12 @@ class DOMHandle {
         }
 
         playlistTracklist.innerHTML=trackButton;
-
+        
+        if(!playlist.comments.length == 0){
         const displayPlaylistComments = new DOMHandle();
         displayPlaylistComments.displayPlaylistComments(comments);
-
+        }
+        
         const addCommentButton = document.getElementById('addCommentButton');
         const commentField = document.getElementById('commentField');
         const commentUser = document.getElementById('commentUser');
@@ -526,12 +527,13 @@ class DOMHandle {
 
     }
 
-    displayPlaylistComments(comments){
+    displayPlaylistComments(comments, newComment){
         const playlistComments = document.getElementById('playlistComments');
-        console.log(comments[0].length)
+
         let commentContent = "";
 
         for(let i = 0; i < comments[0].length; i++){
+
             commentContent +=`
                 <div class="playlistComment">
                     ${comments[0][i].username}
@@ -539,7 +541,20 @@ class DOMHandle {
                 </div>
             `
         }
+        
         playlistComments.innerHTML=commentContent;
+        
+        if(newComment){
+            const newCommentDiv = document.createElement('div');
+            newCommentDiv.classList.add('playlistComment');
+            const username = document.
+            createTextNode(newComment.username);
+            const body = document.
+            createTextNode(newComment.body);
+            newCommentDiv.appendChild(username)
+            newCommentDiv.appendChild(body)
+            playlistComments.appendChild(newCommentDiv);
+        }
 
     }
 
