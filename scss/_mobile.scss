@@ -20,50 +20,70 @@ body{
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            max-width: 600px;
+            margin: 0 20px;
+            #messageBox{
+                letter-spacing: 2px;
+                font-weight: 600;
+                color: $accentColor;
+            }
             #searchField{
                 border-radius: 5px;
                 border: none;
                 font-size: 1.1em;
-                width: 400px;
-                padding: 8px;
-                margin: 10px;
+                letter-spacing: 1px;
+                width: 100%;
+                padding: 10px;
             }
-            button{
-                padding: 5px 10px;
-                border-radius: 5px;
-                border: none;
-                margin: 8px;
-                letter-spacing: 2px;
-                color: $textColor;
-                background: none;
-                transition: 250ms;
-            }
-            .activeButton{
-                background: rgba(255, 255, 255, 0.9);
-                color: black;
+            #searchButtonWrapper{
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                margin: 20px 0;
+                width: 100%;
+                button{
+                    padding: 5px 10px;
+                    border-radius: 5px;
+                    border: none;
+                    margin: 5px;
+                    letter-spacing: 2px;
+                    color: $textColor;
+                    background: none;
+                    transition: 250ms;
+                }
+                .activeButton{
+                    background: rgba(255, 255, 255, 0.9);
+                    color: black;
+                }
             }
         }
-        #searchResults{
+        #mainOutput{
             display: flex;
             flex-direction: column;
-            align-items: center;
-            button{
+            max-width: 700px;
+            margin: auto;
+            padding: 0 10px;
+            .showByIdButton{
+                display: flex;
                 justify-content: space-between;
                 align-items: center;
-                font-size: 1.1em;
-                letter-spacing: 2px;
-                border: none;
-                background: none;
-                padding: 15px 20px;
-                border-radius: 5px;
-                width: 500px;
                 color: $textColor;
+                background: none;
+                border: none;
+                border-radius: 5px;
+                width: 100%;
+                padding: 15px 20px;
+                font-size: 1.1em;
+                letter-spacing: 1px;
                 transition: 200ms;
             }
             button:hover{
                 background: rgba(255, 255, 255, 0.07);
             }
+            .lightButton{
+                    background: rgba(255, 255, 255, 0.03);
+            }
+            
             .contentOfSpecificAlbum{
                 width: 500px;
                 #albumTopContent{
