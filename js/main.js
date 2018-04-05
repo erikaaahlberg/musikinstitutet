@@ -1,12 +1,12 @@
 const searchButton = document.getElementsByClassName('searchButton');
-const searchResults = document.getElementById('searchResults');
+const mainOutput = document.getElementById('mainOutput');
 /* Loops thru the searchRadioButtons then runs Fetch class. */
 for (i = 0; i < searchButton.length; i++) {
     searchButton[i].addEventListener('click', function() {
         const activateButton = new DOMHandle();
         activateButton.activateSearchButton(this);
         const newFetch = new FetchHandle(this.value);
-        searchResults.innerHTML = '';
+        mainOutput.innerHTML = '';
         switch (this.value) {
             case 'all':
                 newFetch.fetchAll();
@@ -268,7 +268,7 @@ class DOMHandle {
         for (let i = 0; i < allAlbums.length; i++) {
             /* Storing the albums in a button */
             searchedAlbumButtons += `
-                <button class="selectedButton" id="${allAlbums[i]._id}">
+                <button class="showByIdButton" id="${allAlbums[i]._id}">
                     ${allArtists[i].name} -
                     ${allAlbums[i].title} -
                     ${allAlbums[i].releaseDate}
@@ -277,87 +277,105 @@ class DOMHandle {
             `;
         }
         /* Prints the search results for Albums */
-        //searchResults.innerHTML = searchedAlbumButtons;
-        searchResults.insertAdjacentHTML('beforeend', searchedAlbumButtons);
+        mainOutput.insertAdjacentHTML('beforeend', searchedAlbumButtons);
 
-        const selectedButton = document.
-        getElementsByClassName('selectedButton');
+        const showByIdButton = document.
+        getElementsByClassName('showByIdButton');
 
-        for (i = 0; i < selectedButton.length; i++) {
-            selectedButton[i].addEventListener('click', function() {
+        for (i = 0; i < showByIdButton.length; i++) {
+            showByIdButton[i].addEventListener('click', function() {
                 const newFetch = new FetchHandle();
                 newFetch.fetchAlbumById(this.id);
             })
         }
-
+        
+        const everyOtherButton = new DOMHandle();
+        everyOtherButton.
+        everyOtherButton(mainOutput.children);
+              
     }
     displayTracks(allTracks) {
         let searchedTrackButtons = '';
         for (let i = 0; i < allTracks.length; i++) {
             searchedTrackButtons += `
-                <button class="selectedButton" id="${allTracks[i]._id}">
+                <button class="showByIdButton" id="${allTracks[i]._id}">
                     ${allTracks[i].title} -
                     ${allTracks[i].artists[0].name}
                     <img src="images/rightArrow.svg">
                 </button>
             `;
         }
-        //searchResults.innerHTML = searchedTrackButtons;
-        searchResults.insertAdjacentHTML('beforeend', searchedTrackButtons);
+        
+        mainOutput.insertAdjacentHTML('beforeend', searchedTrackButtons);
 
-        const selectedButton = document.
-        getElementsByClassName('selectedButton');
+        const showByIdButton = document.
+        getElementsByClassName('showByIdButton');
 
-        for (i = 0; i < selectedButton.length; i++) {
-            selectedButton[i].addEventListener('click', function() {
+        for (i = 0; i < showByIdButton.length; i++) {
+            showByIdButton[i].addEventListener('click', function() {
                 const newFetch = new FetchHandle();
                 newFetch.fetchTrackById(this.id);
             })
         }
+        
+        const everyOtherButton = new DOMHandle();
+        everyOtherButton.
+        everyOtherButton(mainOutput.children);
+        
     }
     displayArtists(allArtists) {
         let searchedArtistButtons = '';
         for (let i = 0; i < allArtists.length; i++) {
             searchedArtistButtons += `
-                <button class="selectedButton" id="${allArtists[i]._id}">
+                <button class="showByIdButton" id="${allArtists[i]._id}">
                     ${allArtists[i].name}
                     <img src="images/rightArrow.svg">
                 </button>
             `;
         }
-        //searchResults.innerHTML = searchedArtistButtons;
-        searchResults.insertAdjacentHTML('beforeend', searchedArtistButtons);
+        
+        mainOutput.insertAdjacentHTML('beforeend', searchedArtistButtons);
 
-        const selectedButton = document.
-        getElementsByClassName('selectedButton');
-        for (i = 0; i < selectedButton.length; i++) {
-            selectedButton[i].addEventListener('click', function() {
+        const showByIdButton = document.
+        getElementsByClassName('showByIdButton');
+        for (i = 0; i < showByIdButton.length; i++) {
+            showByIdButton[i].addEventListener('click', function() {
                 const newFetch = new FetchHandle();
                 newFetch.fetchArtistById(this.id);
             })
         }
+        
+        const everyOtherButton = new DOMHandle();
+        everyOtherButton.
+        everyOtherButton(mainOutput.children);
+        
     }
     displayPlaylists(allPlaylists) {
         let searchedPlaylistButtons = '';
         for (let i = 0; i < allPlaylists.length; i++) {
             searchedPlaylistButtons += `
-                <button class="selectedButton" id="${allPlaylists[i]._id}">
+                <button class="showByIdButton" id="${allPlaylists[i]._id}">
                     ${allPlaylists[i].title}
                     <img src="images/rightArrow.svg">
                 </button>
             `;
         }
-        //searchResults.innerHTML = searchedPlaylistButtons;
-        searchResults.insertAdjacentHTML('beforeend', searchedPlaylistButtons);
+        
+        mainOutput.insertAdjacentHTML('beforeend', searchedPlaylistButtons);
 
-        const selectedButton = document.
-        getElementsByClassName('selectedButton');
-        for (i = 0; i < selectedButton.length; i++) {
-            selectedButton[i].addEventListener('click', function() {
+        const showByIdButton = document.
+        getElementsByClassName('showByIdButton');
+        for (i = 0; i < showByIdButton.length; i++) {
+            showByIdButton[i].addEventListener('click', function() {
                 const newFetch = new FetchHandle();
                 newFetch.fetchPlaylistById(this.id);
             })
         }
+        
+        const everyOtherButton = new DOMHandle();
+        everyOtherButton.
+        everyOtherButton(mainOutput.children);
+        
     }
     displaySpecificAlbum(album, artist) {
         const fetchRating = new Logic();
@@ -383,7 +401,7 @@ class DOMHandle {
                 <div id="albumTracklist"></div>
             </div>
         `
-        searchResults.innerHTML = contentOfSpecificAlbum;
+        mainOutput.innerHTML = contentOfSpecificAlbum;
 
         let trackTitles = "";
         for (let i = 0; i < album.tracks.length; i++) {
@@ -430,10 +448,10 @@ class DOMHandle {
                 </button>
             </div>
         `
-        searchResults.innerHTML = contentOfSpecificTrack;
+        mainOutput.innerHTML = contentOfSpecificTrack;
     }
     displaySpecificArtist(artist, albums){
-        const searchResults = document.getElementById('searchResults');
+
         let contentOfSpecificArtist =`
             <div class="artistContent">
                 <img src="${artist.image}">
@@ -447,12 +465,12 @@ class DOMHandle {
                 <div id="artistAlbums"></div>
             </div>
         `
-        searchResults.innerHTML = contentOfSpecificArtist;
+        mainOutput.innerHTML = contentOfSpecificArtist;
 
         let artistAlbum = "";
         for(let i = 0; i < albums.length; i++){
             artistAlbum +=`
-                <button class="selectedButton" id="${albums[i]._id}">
+                <button class="showByIdButton" id="${albums[i]._id}">
                     ${albums[i].title} -
                     ${albums[i].releaseDate}
                     <img src="images/rightArrow.svg">
@@ -465,8 +483,6 @@ class DOMHandle {
 
     }
     displaySpecificPlaylist(playlist, comments){
-
-        const searchResults = document.getElementById('searchResults');
 
         let contentOfSpecificPlaylist =`
             <div class="playlistContent">
@@ -492,7 +508,7 @@ class DOMHandle {
 
             </div>
         `
-        searchResults.innerHTML=contentOfSpecificPlaylist
+        mainOutput.innerHTML=contentOfSpecificPlaylist
 
         const playlistTracklist = document.getElementById('playlistTracklist');
 
@@ -557,10 +573,10 @@ class DOMHandle {
         }
 
     }
-
+    
     filterSearch() {
         const filter = searchField.value.toUpperCase();
-        const buttons = searchResults.getElementsByTagName('button');
+        const buttons = mainOutput.getElementsByTagName('button');
         for (let i = 0; i < buttons.length; i++) {
             if (buttons[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
              buttons[i].style.display = 'flex';
@@ -572,6 +588,12 @@ class DOMHandle {
             for (let i = 0; i < buttons.length; i++) {
                 buttons[i].style.display = 'none';
             }
+        }
+    }
+    everyOtherButton(page){
+        for(let i = 0; i < page.length; i++){
+            let sum = i++;
+             page[sum].classList.add('lightButton');
         }
     }
 
