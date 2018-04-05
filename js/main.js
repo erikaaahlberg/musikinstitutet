@@ -215,18 +215,7 @@ class FetchHandle {
         }
        console.log(comment)
         fetch(`https://folksa.ga/api/playlists/${playlistId}/comments?key=flat_eric`,{
-<<<<<<< HEAD
-       method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(comment)
-    })
-    .then((response) => response.json())
-    .then((playlist) => {
-    
-=======
+
       method: 'POST',
       headers: {
           'Accept': 'application/json',
@@ -237,9 +226,9 @@ class FetchHandle {
   .then((response) => response.json())
   .then((playlist) => {
 
->>>>>>> c5871ebc0fb8ca46db7989e0c8268ac9e0cfcdcb
     const displayPlaylistComments = new DOMHandle();
     displayPlaylistComments.displayPlaylistComments(comments);
+            
 });
 
     }
