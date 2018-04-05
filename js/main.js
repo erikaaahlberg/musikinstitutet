@@ -189,70 +189,58 @@ class FetchHandle {
         fetch(`https://folksa.ga/api/playlists/${playlistId}?key=flat_eric`)
             .then((response) => response.json())
             .then((playlist) => {
-
-             let commentArray = [];
-             for(let i = 0; i < playlist.comments.length; i++){
-
-                 const commentPromise = fetch(`https://folksa.ga/api/playlists/${playlistId}/comments?key=flat_eric`)
-
-                 .then((response) => response.json())
-                commentArray.push(commentPromise);
-
-            }
-             Promise.all(commentArray)
-            .then((comments) => {
-
-             const displaySpecificPlaylist = new DOMHandle();
-            displaySpecificPlaylist.displaySpecificPlaylist(playlist, comments);
-         });
-    });
-}
-
-    addPlayListComment(body, user, playlistId, comments){
-
+                let commentArray = [];
+                for (let i = 0; i < playlist.comments.length; i++) {
+                    const commentPromise = fetch(`https://folksa.ga/api/playlists/${playlistId}/comments?key=flat_eric`)
+                    .then((response) => response.json())
+                        commentArray.push(commentPromise);
+                }
+                Promise.all(commentArray)
+                    .then((comments) => {
+                        const displaySpecificPlaylist = new DOMHandle();
+                        displaySpecificPlaylist.displaySpecificPlaylist(playlist, comments);
+                    });
+            });
+    }
+    addPlayListComment(body, user, playlistId, comments) {
         let comment = {
-            playlist: playlistId,
-            body: body,
-            username: user
+          playlist: playlistId,
+          body: body,
+          username: user
         }
-       console.log(comment)
-        fetch(`https://folksa.ga/api/playlists/${playlistId}/comments?key=flat_eric`,{
+        fetch(`https://folksa.ga/api/playlists/${playlistId}/comments?key=flat_eric`, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(comment)
+          })
+          .then((response) => response.json())
+          .then((playlist) => {
 
-      method: 'POST',
-      headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(comment)
-  })
-  .then((response) => response.json())
-  .then((newComment) => {
-
-    const displayPlaylistComments = new DOMHandle();
-    displayPlaylistComments.displayPlaylistComments(comments, newComment);
-            
-});
+            const displayPlaylistComments = new DOMHandle();
+            displayPlaylistComments.displayPlaylistComments(comments);
+          });
 
     }
-    rateStuff(apiPath, id, rating){
-
-        console.log(apiPath)
-        console.log(id)
-        console.log(rating)
-        /*fetch(`https://folksa.ga/api/${apiPath}/${id}/vote?key=flat_eric`, {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ rating: rating });
-    })
-    .then((response) => response.json())
-    .then((track) => {
-        console.log(track);
-    });*/
+    rateStuff(apiPath, id, rating) {
+        fetch(`https://folksa.ga/api/${apiPath}/${id}/vote?key=flat_eric`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ rating: rating })
+        })
+        .then((response) => response.json())
+        .then((vote) => {
+            console.log(vote);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     }
-
 }
 /* Handles the DOM. */
 class DOMHandle {
@@ -372,6 +360,7 @@ class DOMHandle {
         }
     }
     displaySpecificAlbum(album, artist) {
+        const fetchRating = new Logic();
         let contentOfSpecificAlbum = `
             <div class="contentOfSpecificAlbum">
                 <div id="albumTopContent">
@@ -379,9 +368,10 @@ class DOMHandle {
                     <div id="albumInfo">
                         <h2>${album.title}</h2>
                         <p>By ${artist.name}</p>
-                        <p>Rating: ${album.rating}</p>
+                        <p>Rating: ${fetchRating.calculateRating(album)}</p>
                     </div>
                 </div>
+                <input type="number" id="ratingNumber" placeholder="1-10" min="1" max="10">
                 <button id="rateAlbum">
                     RATE ALBUM
                 </button>
@@ -408,6 +398,15 @@ class DOMHandle {
         const albumTracklist = document.getElementById('albumTracklist');
 
         albumTracklist.innerHTML = trackTitles;
+
+        const rateAlbum = document.getElementById('rateAlbum');
+        rateAlbum.addEventListener('click', () => {
+            const ratingNumber = document.getElementById('ratingNumber').value;
+            const thisArtistId = album._id;
+            const rateThisAlbum = new FetchHandle();
+            rateThisAlbum.rateStuff('albums', thisArtistId, ratingNumber);
+            rateThisAlbum.fetchAlbumById(thisArtistId);
+        });
 
     }
     displaySpecificTrack(track, artist) {
@@ -591,6 +590,21 @@ class Controller {
         }
     }
 
+}
+
+class Logic {
+    calculateRating(object) {
+        if (object.ratings === undefined || object.ratings.length == 0) {
+            return 'No votes.'
+        }
+        let number = 0;
+        for (let n of object.ratings) {
+            number += n;
+        }
+        const rating = (number / object.ratings.length);
+        const roundedRating = Math.round( rating * 10 ) / 10;
+        return roundedRating;
+    }
 }
 
 const startFetch = new FetchHandle();
