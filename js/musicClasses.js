@@ -46,6 +46,7 @@ class HttpRequest {
 }
 const request = new HttpRequest('POST', 'blablaa', {id: '15', name: 'erika'});
 console.log(request);
+
 class Controller {
     getInputValue (elementId) {
         const element = document.getElementById(elementId);
@@ -96,6 +97,7 @@ const postTrackButton = document.getElementById('postTrackButton');
 
 postArtistButton.addEventListener('click', function() {
     event.preventDefault();
+    // Gets the input values
     const artistName = Controller.getInputValue('inputArtistName');
     var artistGenres = Controller.getInputValue('inputArtistGenres');
     const artistCoverImageUrl = Controller.getInputValue('inputArtistCoverImage');
@@ -138,11 +140,34 @@ postArtistButton.addEventListener('click', function() {
     }
 });
 
+function fetchArtistByName(artistName){
+    fetch(`https://folksa.ga/api/artists?name=${artistName}&key=flat_eric`)
+        .then((response) => response.json())
+            .then((artist) => {
+                console.log(artist);
+                /*fetch(`https://folksa.ga/api/albums/${artist.albums}&key=flat_eric`)
+                .then((response) => response.json())
+                .then((albumTitle) => {
+                            /*const displaySpecificArtist = new DOMHandle();
+                            displaySpecificArtist.displaySpecificArtist(artist, albums);
+                            console.log(albumTitle);
+                     
+                });   */
+            });
+}
+
 postAlbumButton.addEventListener('click', function() {
     event.preventDefault();
-    const albumName = Controller.getInputValue('inputAlbumName');
+    // Gets the input values
+    const album = new Controller;
+    const albumArtist = album.getInputValue('inputAlbumArtist');
+    
+    /*const albumArtistId = */
+    fetchArtistByName(albumArtist);
+    /*const albumTitle = Controller.getInputValue('inputAlbumTitle');
     var albumGenres = Controller.getInputValue('inputAlbumGenres');
-    const artistCoverImageUrl = Controller.getInputValue('inputAlbumCoverImage');
+    const albumReleaseDate = Controller.getInputValue('inputAlbumReleaseDate');
+    const albumCoverImageUrl = Controller.getInputValue('inputAlbumCoverImage');
     const isNameEmpty = Controller.isEmpty(albumName);
 
     // Checking the imported values before creating a new artist. This can also be a string because there is not gonna be more than one error message so far, but in case we want to expand 
@@ -179,5 +204,5 @@ postAlbumButton.addEventListener('click', function() {
     else {
         const albumToPost = new Artist(albumName, albumGenres, albumCoverImageUrl);
         console.log(albumToPost);
-    }
+    }*/
 });
