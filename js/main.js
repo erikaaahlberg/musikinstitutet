@@ -33,6 +33,21 @@ searchField.addEventListener('keyup', () => {
     filterRequest.filterSearch();
 });
 
+const createAlbumButton = document.
+getElementById('createAlbumButton');
+
+createAlbumButton.addEventListener('click', function(){
+    const createAlbum = new DOMHandle();
+    createAlbum.createAlbumContent();
+})
+
+const createArtistButton = document.getElementById('createArtistButton');
+
+createArtistButton.addEventListener('click', function(){
+    const createArtist = new DOMHandle();
+    createArtist.createArtistContent();
+})
+
 /* Handles all fetch queries. */
 class FetchHandle {
     fetchAll() {
@@ -378,9 +393,11 @@ class DOMHandle {
         
     }
     displaySpecificAlbum(album, artist) {
+        
         const fetchRating = new Logic();
+        
         let contentOfSpecificAlbum = `
-            <div class="contentOfSpecificAlbum">
+            <div id="contentOfSpecificAlbum">
                 <div id="albumTopContent">
                     <img src="${album.coverImage}">
                     <div id="albumInfo">
@@ -595,6 +612,89 @@ class DOMHandle {
             let sum = i++;
              page[sum].classList.add('lightButton');
         }
+    }
+    
+    createAlbumContent(){
+        const addDiv = document.getElementById('addDiv');
+        
+        let createAlbumContent =`
+            <p>ADD AN ALBUM</p>
+            <form id="importAlbum">
+                <input type="text" id="inputAlbumArtist" placeholder="ARTIST..">
+                <input type="text" id="inputAlbumTitle" placeholder="ALBUM TITLE..">
+                <input type="text" id="inputAlbumGenres" placeholder="ALBUM GENRE..">
+                <input type="text" id="inputAlbumReleaseDate" placeholder="RELEASE YEAR..">
+                <input type="text" id="inputAlbumCoverImage" placeholder="COVER IMAGE URL..">
+                <button type ="button" id="postAlbumButton">
+                    ADD ALBUM
+                </button>
+            </form>
+            <form id="postTrack">
+                <input text="text" id="inputTrackArtist" placeholder="ARTIST..">
+                <input text="text" id="inputTrackTitle" placeholder="TRACK TITLE..">
+                <button type="button" id="addTrackButton">
+                    <i class="far fa-plus-square"></i>
+                </button>
+            </form>
+            <div id="addTrackTracklist"></div>
+        `;
+        
+        addDiv.innerHTML=createAlbumContent;
+        
+        setTimeout(function(){
+            addDiv.classList.remove('fadeOut');
+        })
+        
+        const addAlbumButton = document.
+        getElementById('postAlbumButton');
+        
+        addAlbumButton.addEventListener('click', function(){
+            console.log("hej")
+        })
+        
+        const addTrackButton = document.
+        getElementById('addTrackButton');
+        
+        addTrackButton.addEventListener('click', function(){
+            
+        const inputTrackTitle = document.
+        getElementById('inputTrackTitle')
+        
+        const inputTrackArtist = document.
+        getElementById('inputTrackArtist')
+        
+        const addTrackTracklist = document.
+        getElementById('addTrackTracklist')
+        
+            const p = document.createElement('p');
+            const newTrack = document.createTextNode(inputTrackArtist.value + ' - ' + inputTrackTitle.value)
+            p.appendChild(newTrack);
+            addTrackTracklist.appendChild(p)
+            
+            
+        })
+        
+    }
+    
+    createArtistContent(){
+        const addDiv = document.getElementById('addDiv');
+
+        let createArtistContent =`
+            <p>ADD AN ARTIST</p>
+                <form id = "importArtist">
+                    <input type="text" id="inputArtistName" placeholder="ARTIST NAME..">
+                    <input type="text" id="inputArtistGenres" placeholder="GENRES..">
+                    <input type="text" id="inputArtistCoverImage" placeholder="COVER IMAGE..">
+                    <button id="postArtistButton">Add artist</button>
+                </form>
+            `;
+        
+        addDiv.innerHTML=createArtistContent;
+        
+        setTimeout(function(){
+            addDiv.classList.remove('fadeOut');
+        })
+        
     }
 
 }

@@ -24,7 +24,7 @@ body{
             margin: 0 20px;
             #messageBox{
                 letter-spacing: 2px;
-                font-weight: 600;
+                font-weight: 700;
                 color: $accentColor;
             }
             #searchField{
@@ -60,7 +60,7 @@ body{
         #mainOutput{
             display: flex;
             flex-direction: column;
-            max-width: 700px;
+            max-width: 800px;
             margin: auto;
             padding: 0 10px;
             .showByIdButton{
@@ -77,22 +77,25 @@ body{
                 letter-spacing: 1px;
                 transition: 200ms;
             }
-            button:hover{
+            .showByIdButton:hover{
                 background: rgba(255, 255, 255, 0.07);
+            }
+            .filtred{
+                display: none;
             }
             .lightButton{
                     background: rgba(255, 255, 255, 0.03);
             }
             
-            .contentOfSpecificAlbum{
-                width: 500px;
+            #contentOfSpecificAlbum{
+                width: 100%;
                 #albumTopContent{
                     display: flex;
                     justify-content: center;
                     align-items: center;
                     img{
-                        width: 150px;
-                        height: 150px;
+                        width: 230px;
+                        height: 230px;
                     }
                     #albumInfo{
                         padding-left: 100px;
@@ -112,6 +115,45 @@ body{
                     flex-direction: column;
                 }
             }
+        }
+        #addDiv{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 400px;
+            border-radius: 10px;
+            margin: auto;
+            padding: 40px;
+            font-size: 1.6em;
+            font-weight: 700;
+            letter-spacing: 3px;
+            background: rgba(0, 0, 0, 0.7);
+            transition: 1500ms;
+            p{
+                margin: 0;
+            }
+            form{
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-top: 30px;
+                input{
+                    font-size: 0.7em;
+                    width: 40%;
+                    border-radius: 3px;
+                    letter-spacing: 1px;
+                    padding: 8px;
+                    border: none;
+                    margin: 10px;
+                }   
+                button{
+                    width: 40%;
+                    padding: 8px;
+                }
+            }
+        }
+        .fadeOut{
+            opacity: 0;
         }
     }
     footer{
