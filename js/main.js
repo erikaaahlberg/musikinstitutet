@@ -303,11 +303,11 @@ class DOMHandle {
                 newFetch.fetchAlbumById(this.id);
             })
         }
-        
+
         const everyOtherButton = new DOMHandle();
         everyOtherButton.
         everyOtherButton(mainOutput.children);
-              
+
     }
     displayTracks(allTracks) {
         let searchedTrackButtons = '';
@@ -320,7 +320,7 @@ class DOMHandle {
                 </button>
             `;
         }
-        
+
         mainOutput.insertAdjacentHTML('beforeend', searchedTrackButtons);
 
         const showByIdButton = document.
@@ -332,11 +332,11 @@ class DOMHandle {
                 newFetch.fetchTrackById(this.id);
             })
         }
-        
+
         const everyOtherButton = new DOMHandle();
         everyOtherButton.
         everyOtherButton(mainOutput.children);
-        
+
     }
     displayArtists(allArtists) {
         let searchedArtistButtons = '';
@@ -348,7 +348,7 @@ class DOMHandle {
                 </button>
             `;
         }
-        
+
         mainOutput.insertAdjacentHTML('beforeend', searchedArtistButtons);
 
         const showByIdButton = document.
@@ -359,11 +359,11 @@ class DOMHandle {
                 newFetch.fetchArtistById(this.id);
             })
         }
-        
+
         const everyOtherButton = new DOMHandle();
         everyOtherButton.
         everyOtherButton(mainOutput.children);
-        
+
     }
     displayPlaylists(allPlaylists) {
         let searchedPlaylistButtons = '';
@@ -375,7 +375,7 @@ class DOMHandle {
                 </button>
             `;
         }
-        
+
         mainOutput.insertAdjacentHTML('beforeend', searchedPlaylistButtons);
 
         const showByIdButton = document.
@@ -386,11 +386,11 @@ class DOMHandle {
                 newFetch.fetchPlaylistById(this.id);
             })
         }
-        
+
         const everyOtherButton = new DOMHandle();
         everyOtherButton.
         everyOtherButton(mainOutput.children);
-        
+
     }
     displaySpecificAlbum(album, artist) {
         
@@ -541,12 +541,12 @@ class DOMHandle {
         }
 
         playlistTracklist.innerHTML=trackButton;
-        
+
         if(!playlist.comments.length == 0){
         const displayPlaylistComments = new DOMHandle();
         displayPlaylistComments.displayPlaylistComments(comments);
         }
-        
+
         const addCommentButton = document.getElementById('addCommentButton');
         const commentField = document.getElementById('commentField');
         const commentUser = document.getElementById('commentUser');
@@ -574,9 +574,9 @@ class DOMHandle {
                 </div>
             `
         }
-        
+
         playlistComments.innerHTML=commentContent;
-        
+
         if(newComment){
             const newCommentDiv = document.createElement('div');
             newCommentDiv.classList.add('playlistComment');
@@ -590,7 +590,7 @@ class DOMHandle {
         }
 
     }
-    
+
     filterSearch() {
         const filter = searchField.value.toUpperCase();
         const buttons = mainOutput.getElementsByTagName('button');
