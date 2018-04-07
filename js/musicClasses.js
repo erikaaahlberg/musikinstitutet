@@ -88,7 +88,7 @@ class Controller {
                 }
             }
         return isValid;
-    }
+        }
 };
 
 const postArtistButton = document.getElementById('postArtistButton');
@@ -144,31 +144,33 @@ function fetchArtistByName(artistName){
     fetch(`https://folksa.ga/api/artists?name=${artistName}&key=flat_eric`)
         .then((response) => response.json())
             .then((artist) => {
-                console.log(artist);
-                /*fetch(`https://folksa.ga/api/albums/${artist.albums}&key=flat_eric`)
-                .then((response) => response.json())
-                .then((albumTitle) => {
-                            /*const displaySpecificArtist = new DOMHandle();
-                            displaySpecificArtist.displaySpecificArtist(artist, albums);
-                            console.log(albumTitle);
-                     
-                });   */
+                const album = new Album(artist[0]._id);
+                console.log(artist[0]._id);
             });
+}
+/*async function fetchArtistByName(artistName) {
+    const response = await fetch(`https://folksa.ga/api/artists?name=${artistName}&key=flat_eric`, {});
+    const json = await response.json();
+    console.log(json);
+    return json;
+}*/
+async function returnPromiseValue (functionName, promise) {
+    const value = await functionName(promise);
+    return value;
 }
 
 postAlbumButton.addEventListener('click', function() {
     event.preventDefault();
     /* Gets the input values */
-    const album = new Controller;
-    const albumArtist = album.getInputValue('inputAlbumArtist');
+    const albumController = new Controller;
+    const albumArtist = albumController.getInputValue('inputAlbumArtist');
     
-    /*const albumArtistId = */
     fetchArtistByName(albumArtist);
-    /*const albumTitle = Controller.getInputValue('inputAlbumTitle');
-    var albumGenres = Controller.getInputValue('inputAlbumGenres');
-    const albumReleaseDate = Controller.getInputValue('inputAlbumReleaseDate');
-    const albumCoverImageUrl = Controller.getInputValue('inputAlbumCoverImage');
-    const isNameEmpty = Controller.isEmpty(albumName);
+    const albumTitle = albumController.getInputValue('inputAlbumTitle');
+    var albumGenres = albumController.getInputValue('inputAlbumGenres');
+    const albumReleaseDate = albumController.getInputValue('inputAlbumReleaseDate');
+    const albumCoverImageUrl = albumController.getInputValue('inputAlbumCoverImage');
+    const isNameEmpty = albumController.isEmpty(albumTitle);
 
     /* Checking the imported values before creating a new artist. This can also be a string because there is not gonna be more than one error message so far, but in case we want to expand */
     const errorMessages = [];
@@ -205,4 +207,18 @@ postAlbumButton.addEventListener('click', function() {
         const albumToPost = new Artist(albumName, albumGenres, albumCoverImageUrl);
         console.log(albumToPost);
     }
+});
+
+postTrackButton.addEventListener('click', function(){
+    event.preventDefault();
+    /* Gets the input values */
+    const trackController = new Controller;
+    const trackArtist = albumController.getInputValue('inputAlbumArtist');
+    
+    fetchArtistByName(albumArtist);
+    const albumTitle = albumController.getInputValue('inputAlbumTitle');
+    var albumGenres = albumController.getInputValue('inputAlbumGenres');
+    const albumReleaseDate = albumController.getInputValue('inputAlbumReleaseDate');
+    const albumCoverImageUrl = albumController.getInputValue('inputAlbumCoverImage');
+    const isNameEmpty = albumController.isEmpty(albumTitle);
 });
