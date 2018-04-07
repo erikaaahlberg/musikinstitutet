@@ -20,60 +20,83 @@ body{
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            max-width: 600px;
+            margin: 0 20px;
+            #messageBox{
+                letter-spacing: 2px;
+                font-weight: 700;
+                color: $accentColor;
+            }
             #searchField{
                 border-radius: 5px;
                 border: none;
                 font-size: 1.1em;
-                width: 400px;
-                padding: 8px;
-                margin: 10px;
+                letter-spacing: 1px;
+                width: 100%;
+                padding: 10px;
             }
-            button{
-                padding: 5px 10px;
-                border-radius: 5px;
-                border: none;
-                margin: 8px;
-                letter-spacing: 2px;
-                color: $textColor;
-                background: none;
-                transition: 250ms;
-            }
-            .activeButton{
-                background: rgba(255, 255, 255, 0.9);
-                color: black;
+            #searchButtonWrapper{
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                margin: 20px 0;
+                width: 100%;
+                button{
+                    padding: 5px 10px;
+                    border-radius: 5px;
+                    border: none;
+                    margin: 5px;
+                    letter-spacing: 2px;
+                    color: $textColor;
+                    background: none;
+                    transition: 250ms;
+                    cursor: pointer;
+                }
+                .activeButton{
+                    background: rgba(255, 255, 255, 0.9);
+                    color: black;
+                }
             }
         }
-        #searchResults{
+        #mainOutput{
             display: flex;
             flex-direction: column;
-            align-items: center;
-            button{
-                display: none;
+            max-width: 800px;
+            margin: auto;
+            padding: 0 10px;
+            .showByIdButton{
+                display: flex;
                 justify-content: space-between;
                 align-items: center;
-                font-size: 1.1em;
-                letter-spacing: 2px;
-                border: none;
-                background: none;
-                padding: 15px 20px;
-                border-radius: 5px;
-                width: 500px;
                 color: $textColor;
+                background: none;
+                border: none;
+                border-radius: 5px;
+                width: 100%;
+                padding: 15px 20px;
+                font-size: 1.1em;
+                letter-spacing: 1px;
                 transition: 200ms;
+                cursor: pointer;
             }
-            button:hover{
+            .showByIdButton:hover{
                 background: rgba(255, 255, 255, 0.07);
             }
-            .contentOfSpecificAlbum{
-                width: 500px;
+            .filtred{
+                display: none;
+            }
+            .lightButton{
+                    background: rgba(255, 255, 255, 0.03);
+            }
+            #contentOfSpecificAlbum{
+                width: 100%;
                 #albumTopContent{
                     display: flex;
                     justify-content: center;
                     align-items: center;
                     img{
-                        width: 150px;
-                        height: 150px;
+                        width: 230px;
+                        height: 230px;
                     }
                     #albumInfo{
                         padding-left: 100px;
@@ -93,6 +116,45 @@ body{
                     flex-direction: column;
                 }
             }
+        }
+        #addDiv{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 400px;
+            border-radius: 10px;
+            margin: auto;
+            padding: 40px;
+            font-size: 1.6em;
+            font-weight: 700;
+            letter-spacing: 3px;
+            background: rgba(0, 0, 0, 0.7);
+            transition: 1500ms;
+            p{
+                margin: 0;
+            }
+            form{
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-top: 30px;
+                input{
+                    font-size: 0.7em;
+                    width: 40%;
+                    border-radius: 3px;
+                    letter-spacing: 1px;
+                    padding: 8px;
+                    border: none;
+                    margin: 10px;
+                }   
+                button{
+                    width: 40%;
+                    padding: 8px;
+                }
+            }
+        }
+        .fadeOut{
+            opacity: 0;
         }
     }
     footer{

@@ -4,30 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Musikinstitutet</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700,900" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
 </head>
 <body>
-   
+
     <header>
-    
+
     </header>
-   
+
     <main>
         <form id="searchForm">
-           
+            <div id="messageBox"><p>THIS IS A MESSAGEBOX WITH MESSAGE</p></div>
             <input type="text" id="searchField">
-           
-            <div class="buttonWrapper">
+
+            <div id="searchButtonWrapper">
+                <button type="button" value="all" class="searchButton activeButton">All</button>
                 <button type="button" value="albums" class="searchButton">Albums</button>
                 <button type="button" value="tracks" class="searchButton">Tracks</button>
                 <button type="button" value="artists" class="searchButton">Artists</button>
                 <button type="button" value="playlists" class="searchButton">Playlists</button>
             </div>
-            
-        </form>
-        
-        <div id="searchResults"></div>
 
+        </form>
+
+        <div id="mainOutput"></div>
+                <button id="createArtistButton">ADD ARTIST</button>
+        <button id="createAlbumButton">ADD ALBUM/SINGLE</button>
+        <button id="createPlaylistButton">CREATE PLAYLIST</button>
+        <div id="addDiv" class="fadeOut">
+        </div>
+        
+        <!-- 
         <form id = "importArtist">
             <label for = "inputArtistName">
                 Name:
@@ -93,10 +102,12 @@
             <input type = "text" id = "inputTrackSpotifyURL">
             <button type = "button" id = "postTrackButton">Add</button>
         </form>
+        -->
+        
     </main>
-   
+
     <footer>
-       
+
     </footer>
     <script src="js/musicClasses.js"></script>
 </body>

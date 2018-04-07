@@ -3,7 +3,27 @@ body{
         
     }
     main{
-        
+        #searchForm{
+            margin: auto;
+            #searchField{
+                font-size: 1.25em;
+                padding: 12px;
+            }
+            #searchButtonWrapper{
+                button{
+                    padding: 8px 14px;
+                    font-size: 1.1em; 
+                    letter-spacing: 3px;
+                    margin: 10px;
+                }
+            }
+        }
+        #mainOutput{
+            .showByIdButton{
+                font-size: 1.2em;
+                letter-spacing: 2px;
+            }
+        }    
     }
     footer{
         
