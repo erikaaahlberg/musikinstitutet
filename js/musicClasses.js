@@ -60,7 +60,7 @@ class Controller {
             return true;
         }
     }
-    // If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres. This does not yet support if the user types in 'hip hop' instead of 'hiphop' f.e 
+    /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres. This does not yet support if the user types in 'hip hop' instead of 'hiphop' f.e */
     editGenresParameter (genresParameter) {
         var editedGenresParameter = '';
         if (genresParameter.includes(', ')) {
@@ -97,30 +97,30 @@ const postTrackButton = document.getElementById('postTrackButton');
 
 postArtistButton.addEventListener('click', function() {
     event.preventDefault();
-    // Gets the input values
+    /* Gets the input values */
     const artistName = Controller.getInputValue('inputArtistName');
     var artistGenres = Controller.getInputValue('inputArtistGenres');
     const artistCoverImageUrl = Controller.getInputValue('inputArtistCoverImage');
     const isNameEmpty = Controller.isEmpty(artistName);
 
-    // Checking the imported values before creating a new artist. This can also be a string because there is not gonna be more than one error message so far, but in case we want to expand 
+    /* Checking the imported values before creating a new artist. This can also   be a string because there is not gonna be more than one error message so far, but in case we want to expand */
     const errorMessages = [];
 
-    // Name is the only one required so checking that first
+    /* Name is the only one required so checking that first */
     if (isNameEmpty) {
         errorMessages.push('Please enter a name!');
     }
-    // Checking which other input fields are filled in to see which parameters we have to check if valid
+    /* Checking which other input fields are filled in to see which parameters we have to check if valid */
     else {
         const isGenresEmpty = Controller.isEmpty(artistGenres);
         const isCoverImageEmpty = Controller.isEmpty(artistCoverImageUrl);
         
-        // If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres
+        /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
         if (!isGenresEmpty) {
             const editedGenresParameter = Controller.editGenresParameter(artistGenres);
             artistGenres = editedGenresParameter;
         }
-        // If cover image is filled in the URL must be checked
+        /* If cover image is filled in the URL must be checked */
         if (!isCoverImageEmpty) {
             const isValidUrl = Controller.checkUrl(artistCoverImageUrl);
             if (!isValidUrl) {
@@ -128,7 +128,7 @@ postArtistButton.addEventListener('click', function() {
             }
         }
     }
-    // A DOM-function to print error-messages should be called for here
+    /* A DOM-function to print error-messages should be called for here */
     if (errorMessages.length > 0) {
         for (let errorMessage of errorMessages) {
             console.log(errorMessage);
@@ -158,7 +158,7 @@ function fetchArtistByName(artistName){
 
 postAlbumButton.addEventListener('click', function() {
     event.preventDefault();
-    // Gets the input values
+    /* Gets the input values */
     const album = new Controller;
     const albumArtist = album.getInputValue('inputAlbumArtist');
     
@@ -170,24 +170,24 @@ postAlbumButton.addEventListener('click', function() {
     const albumCoverImageUrl = Controller.getInputValue('inputAlbumCoverImage');
     const isNameEmpty = Controller.isEmpty(albumName);
 
-    // Checking the imported values before creating a new artist. This can also be a string because there is not gonna be more than one error message so far, but in case we want to expand 
+    /* Checking the imported values before creating a new artist. This can also be a string because there is not gonna be more than one error message so far, but in case we want to expand */
     const errorMessages = [];
 
-    // Name is the only one required so checking that first
+    /* Name is the only one required so checking that first */
     if (isNameEmpty) {
         errorMessages.push('Please enter a name!');
     }
-    // Checking which other input fields are filled in to see which parameters we have to check if valid
+    /* Checking which other input fields are filled in to see which parameters we have to check if valid */
     else {
         const isGenresEmpty = Controller.isEmpty(albumGenres);
         const isCoverImageEmpty = Controller.isEmpty(albumCoverImageUrl);
         
-        // If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres
+        /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
         if (!isGenresEmpty) {
             const editedGenresParameter = Controller.editGenresParameter(albumGenres);
             albumGenres = editedGenresParameter;
         }
-        // If cover image is filled in the URL must be checked
+        /* If cover image is filled in the URL must be checked */
         if (!isCoverImageEmpty) {
             const isValidUrl = Controller.checkUrl(albumCoverImageUrl);
             if (!isValidUrl) {
@@ -195,7 +195,7 @@ postAlbumButton.addEventListener('click', function() {
             }
         }
     }
-    // A DOM-function to print error-messages should be called for here
+    /* A DOM-function to print error-messages should be called for here */
     if (errorMessages.length > 0) {
         for (let errorMessage of errorMessages) {
             console.log(errorMessage);
@@ -204,5 +204,5 @@ postAlbumButton.addEventListener('click', function() {
     else {
         const albumToPost = new Artist(albumName, albumGenres, albumCoverImageUrl);
         console.log(albumToPost);
-    }*/
+    }
 });
