@@ -670,17 +670,17 @@ class DOMHandle {
             }
             /* Checking which other input fields are filled in to see which parameters we have to check if valid */
             else {
-                const isGenresEmpty = Controller.isEmpty(albumGenres);
-                const isCoverImageEmpty = Controller.isEmpty(albumCoverImageUrl);
+                const isGenresEmpty = albumController.isEmpty(albumGenres);
+                const isCoverImageEmpty = albumController.isEmpty(albumCoverImageUrl);
                 
                 /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
                 if (!isGenresEmpty) {
-                    const editedGenresParameter = Controller.editGenresParameter(albumGenres);
+                    const editedGenresParameter = albumController.editGenresParameter(albumGenres);
                     albumGenres = editedGenresParameter;
                 }
                 /* If cover image is filled in the URL must be checked */
                 if (!isCoverImageEmpty) {
-                    const isValidUrl = Controller.checkUrl(albumCoverImageUrl);
+                    const isValidUrl = albumController.checkUrl(albumCoverImageUrl);
                     if (!isValidUrl) {
                         errorMessages.push('The URL is not valid, please enter another one.');
                     }

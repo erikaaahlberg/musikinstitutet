@@ -98,10 +98,11 @@ const postTrackButton = document.getElementById('postTrackButton');
 postArtistButton.addEventListener('click', function() {
     event.preventDefault();
     /* Gets the input values */
-    const artistName = Controller.getInputValue('inputArtistName');
-    var artistGenres = Controller.getInputValue('inputArtistGenres');
-    const artistCoverImageUrl = Controller.getInputValue('inputArtistCoverImage');
-    const isNameEmpty = Controller.isEmpty(artistName);
+    const artistController = new Controller;
+    const artistName = artistController.getInputValue('inputArtistName');
+    var artistGenres = artistController.getInputValue('inputArtistGenres');
+    const artistCoverImageUrl = artistController.getInputValue('inputArtistCoverImage');
+    const isNameEmpty = artistController.isEmpty(artistName);
 
     /* Checking the imported values before creating a new artist. This can also   be a string because there is not gonna be more than one error message so far, but in case we want to expand */
     const errorMessages = [];
@@ -112,17 +113,17 @@ postArtistButton.addEventListener('click', function() {
     }
     /* Checking which other input fields are filled in to see which parameters we have to check if valid */
     else {
-        const isGenresEmpty = Controller.isEmpty(artistGenres);
-        const isCoverImageEmpty = Controller.isEmpty(artistCoverImageUrl);
+        const isGenresEmpty = artistController.isEmpty(artistGenres);
+        const isCoverImageEmpty = artistController.isEmpty(artistCoverImageUrl);
         
         /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
         if (!isGenresEmpty) {
-            const editedGenresParameter = Controller.editGenresParameter(artistGenres);
+            const editedGenresParameter = artistController.editGenresParameter(artistGenres);
             artistGenres = editedGenresParameter;
         }
         /* If cover image is filled in the URL must be checked */
         if (!isCoverImageEmpty) {
-            const isValidUrl = Controller.checkUrl(artistCoverImageUrl);
+            const isValidUrl = artistController.checkUrl(artistCoverImageUrl);
             if (!isValidUrl) {
                 errorMessages.push('The URL is not valid, please enter another one.');
             }
@@ -215,12 +216,12 @@ postTrackButton.addEventListener('click', function(){
     event.preventDefault();
     /* Gets the input values */
     const trackController = new Controller;
-    const trackArtist = albumController.getInputValue('inputAlbumArtist');
+    const trackArtist = trackController.getInputValue('inputAlbumArtist');
     
     fetchArtistByName(albumArtist);
-    const albumTitle = albumController.getInputValue('inputAlbumTitle');
-    var albumGenres = albumController.getInputValue('inputAlbumGenres');
-    const albumReleaseDate = albumController.getInputValue('inputAlbumReleaseDate');
-    const albumCoverImageUrl = albumController.getInputValue('inputAlbumCoverImage');
-    const isNameEmpty = albumController.isEmpty(albumTitle);
+    const albumTitle = trackController.getInputValue('inputAlbumTitle');
+    var albumGenres = trackController.getInputValue('inputAlbumGenres');
+    const albumReleaseDate = trackController.getInputValue('inputAlbumReleaseDate');
+    const albumCoverImageUrl = trackController.getInputValue('inputAlbumCoverImage');
+    const isNameEmpty = trackController.isEmpty(albumTitle);
 });
