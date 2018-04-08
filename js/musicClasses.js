@@ -75,7 +75,7 @@ class Controller {
             }
             return editedGenresParameter;
         }
-        checkUrl(urlAddress) {
+        checkUrl (urlAddress) {
             var isValid = false;
             const notAllowedCharacters = ['å', 'ä', 'ö', ' '];
             if (urlAddress.includes('http://') || urlAddress.includes('https://')) {
@@ -88,6 +88,16 @@ class Controller {
                 }
             }
         return isValid;
+        }
+        checkYear (year) {
+            const currentTime = new Date();
+            const currentYear = currentTime.getFullYear();
+            console.log(currentYear);
+            if (year > 1500 && year <= currentYear) {
+                return true;
+            } else {
+                return false;
+            }
         }
 };
 
@@ -166,38 +176,52 @@ postAlbumButton.addEventListener('click', function() {
     /* Gets the input values */
     const albumController = new Controller;
     const albumArtist = albumController.getInputValue('inputAlbumArtist');
+
+    /* Still not working */
     var albumArtistId = '';
     fetchArtistByName(albumArtist);
     console.log(albumArtistId);
+    /* ------------------ */
+
     const albumTitle = albumController.getInputValue('inputAlbumTitle');
     var albumGenres = albumController.getInputValue('inputAlbumGenres');
     const albumReleaseDate = albumController.getInputValue('inputAlbumReleaseDate');
     const albumCoverImageUrl = albumController.getInputValue('inputAlbumCoverImage');
-    const isNameEmpty = albumController.isEmpty(albumTitle);
 
-    /* Checking the imported values before creating a new artist. This can also be a string because there is not gonna be more than one error message so far, but in case we want to expand */
+    /* Title and artist are required to create a new album */
+    const isTitleEmpty = albumController.isEmpty(albumTitle);
+    const isArtistEmpty = albumController.isEmpty(albumArtist);
+
+    /* Checking the imported values before creating a new artist. */
     const errorMessages = [];
 
-    /* Name is the only one required so checking that first */
-    if (isNameEmpty) {
-        errorMessages.push('Please enter a name!');
+    /* Title and artist is the only required so checking that first */
+    if (isTitleEmpty) {
+        errorMessages.push('Please enter a title!');
+    }
+    if (isArtistEmpty) {
+        errorMessages.push('Please enter artist name!');
     }
     /* Checking which other input fields are filled in to see which parameters we have to check if valid */
-    else {
-        const isGenresEmpty = Controller.isEmpty(albumGenres);
-        const isCoverImageEmpty = Controller.isEmpty(albumCoverImageUrl);
+    if (!isTitleEmpty && !isArtistEmpty) {
+        const isGenresEmpty = albumController.isEmpty(albumGenres);
+        const isCoverImageEmpty = albumController.isEmpty(albumCoverImageUrl);
+        const isReleaseDateEmpty = albumController.isEmpty(albumReleaseDate);
         
         /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
         if (!isGenresEmpty) {
-            const editedGenresParameter = Controller.editGenresParameter(albumGenres);
+            const editedGenresParameter = albumController.editGenresParameter(albumGenres);
             albumGenres = editedGenresParameter;
         }
         /* If cover image is filled in the URL must be checked */
         if (!isCoverImageEmpty) {
-            const isValidUrl = Controller.checkUrl(albumCoverImageUrl);
-            if (!isValidUrl) {
+            const isUrlValid = albumController.checkUrl(albumCoverImageUrl);
+            if (!isUrlValid) {
                 errorMessages.push('The URL is not valid, please enter another one.');
             }
+        }
+        if (!isReleaseDateEmpty) {
+            const isReleaseDateValid = albumController.checkYear(albumReleaseDate);
         }
     }
     /* A DOM-function to print error-messages should be called for here */
@@ -207,7 +231,7 @@ postAlbumButton.addEventListener('click', function() {
         }
     }
     else {
-        const albumToPost = new Artist(albumName, albumGenres, albumCoverImageUrl);
+        const albumToPost = new Album(albumName, albumGenres, albumCoverImageUrl);
         console.log(albumToPost);
     }
 });

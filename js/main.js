@@ -622,15 +622,15 @@ class DOMHandle {
                 <input type="text" id="inputAlbumArtist" placeholder="ARTIST..">
                 <input type="text" id="inputAlbumTitle" placeholder="ALBUM TITLE..">
                 <input type="text" id="inputAlbumGenres" placeholder="ALBUM GENRE..">
-                <input type="text" id="inputAlbumReleaseDate" placeholder="RELEASE YEAR..">
+                <input type="number" id="inputAlbumReleaseDate" placeholder="RELEASE YEAR..">
                 <input type="text" id="inputAlbumCoverImage" placeholder="COVER IMAGE URL..">
                 <button type ="button" id="postAlbumButton">
                     ADD ALBUM
                 </button>
             </form>
             <form id="postTrack">
-                <input text="text" id="inputTrackArtist" placeholder="ARTIST..">
-                <input text="text" id="inputTrackTitle" placeholder="TRACK TITLE..">
+                <input type="text" id="inputTrackArtist" placeholder="ARTIST..">
+                <input type="text" id="inputTrackTitle" placeholder="TRACK TITLE..">
                 <button type="button" id="addTrackButton">
                     <i class="far fa-plus-square"></i>
                 </button>
