@@ -642,14 +642,26 @@ class DOMHandle {
         
         setTimeout(function(){
             addDiv.classList.remove('fadeOut');
-        })
-        
-        const addAlbumButton = document.
+        });
+
+        function fetchArtistByName(artistName){
+            var albumArtistId = [];
+            fetch(`https://folksa.ga/api/artists?name=${artistName}&key=flat_eric`)
+                .then((response) => response.json())
+                    .then((artist) => {
+                        //console.log(artist[0]._id);
+                        albumArtistId.push(artist[0]._id);
+                    });
+                    return albumArtistId;
+        }
+
+        const postAlbumButton = document.
         getElementById('postAlbumButton');
         
         /* -----------ADDED BY ERIKA------------- */
-        addAlbumButton.addEventListener('click', function() {
+        postAlbumButton.addEventListener('click', function() {
             event.preventDefault();
+            console.log('hej');
             /* Gets the input values */
             const albumController = new Controller;
             const albumArtist = albumController.getInputValue('inputAlbumArtist');
@@ -818,40 +830,48 @@ class Controller {
 };
 
 class Artist {
-    constructor(name, genres, coverImage) {
-        this.name =       name;
-        this.genres =     genres;	
-        this.coverImage = coverImage;
+    constructor(name, genres, coverImageUrl) {
+        if (name != '') {
+            this.name =       name;
+            this.genres =     genres;	
+            this.coverImageUrl = coverImage;
+        }
+    }
+    setGenres (genres) {
+        if (genres != '') {
+            this.genres = genres;
+        }
+    }
+    setCoverImage (coverImageUrl) {
+        if (coverImageUrl != '') {
+            this.coverImageUrl = coverImage;
+        }
     }
 }
+
 class Album {
-    constructor(title, artists, genres, releaseDate, coverImage) {
-        this._title =      title;	
-        this.artists =     artists;	
-        this.genres	=      genres;
-        this.releaseDate = releaseDate;	
-        this.coverImage =  coverImage;
-    }
-    get title() {
-        return this._title;
-    }
-    set title(title) {
-        if(title === '') {
-            console.log('no way');
-        } else {
-            this._title = title;
+    constructor(title, artists, genres, releaseDate, spotifyURL, coverImage) {
+        if (title != '' && artist != '') {
+            this.title =      title;	
+            this.artists =     artists;	
+            this.genres	=      genres;
+            this.releaseDate = releaseDate;
+            this.spotifyURL =  spotifyURL;
+            this.coverImage =  coverImage;
         }
     }
 }
 
 class Tracks {
-    constructor(title, artists, album, genres, coverImage, spotifyURL) {
-        this.title = title;	
-        this.artists = artists;	
-        this.album	= album;
-        this.genres	= genres;
-        this.coverImage = coverImage;
-        this.spotifyURL = spotifyURL;
+    constructor (title, artists, album, genres, coverImage, spotifyURL) {
+        if (title != '' && artists != '' && album != '') {
+            this.title = title;	
+            this.artists = artists;	
+            this.album	= album;
+            this.genres	= genres;
+            this.coverImage = coverImage;
+            this.spotifyURL = spotifyURL;
+        }
     }
 }
 

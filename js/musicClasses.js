@@ -1,39 +1,57 @@
 class Artist {
     constructor(name, genres, coverImage) {
-        this.name =       name;
-        this.genres =     genres;	
-        this.coverImage = coverImage;
+        if (name != '') {
+            this.name =       name;
+            this.genres =     genres;	
+            this.coverImage = coverImage;
+        }
     }
-}
-class Album {
-    constructor(title, artists, genres, releaseDate, coverImage) {
-        this._title =      title;	
-        this.artists =     artists;	
-        this.genres	=      genres;
-        this.releaseDate = releaseDate;	
-        this.coverImage =  coverImage;
+    setGenres (genres) {
+        if (genres != '') {
+            this.genres = genres;
+        }
     }
-    get title() {
-        return this._title;
-    }
-    set title(title) {
-        if(title === '') {
-            console.log('no way');
-        } else {
-            this._title = title;
+    setCoverImage (coverImage) {
+        if (coverImageUrl != '') {
+            this.coverImage = coverImage;
         }
     }
 }
+class Album {
+    constructor(title, artists, genres, releaseDate, spotifyURL, coverImage) {
+        if (title != '' && artist != '') {
+            this.title =      title;	
+            this.artists =     artists;	
+            this.genres	=      genres;
+            this.releaseDate = releaseDate;
+            this.spotifyURL =  spotifyURL;
+            this.coverImage =  coverImage;
+        }
+    }
+    setGenres (genres) {
+        if (genres != '') {
+            this.genres = genres;
+        }
+    }
+    setCoverImage (coverImage) {
+        if (coverImageUrl != '') {
+            this.coverImage = coverImage;
+        }
+    }    
+}
 const album = new Album('', 'bob marley', 'reggae', 'igår', 'http://');
 console.log(album);
+
 class Tracks {
     constructor(title, artists, album, genres, coverImage, spotifyURL) {
-        this.title = title;	
-        this.artists = artists;	
-        this.album	= album;
-        this.genres	= genres;
-        this.coverImage = coverImage;
-        this.spotifyURL = spotifyURL;
+        if (title != '' && artists != '' && album != '') {
+            this.title = title;	
+            this.artists = artists;	
+            this.album	= album;
+            this.genres	= genres;
+            this.coverImage = coverImage;
+            this.spotifyURL = spotifyURL;
+        }
     }
 }
 
@@ -151,14 +169,16 @@ postArtistButton.addEventListener('click', function() {
     }
 });
 
+
 function fetchArtistByName(artistName){
+    var albumArtistId = [];
     fetch(`https://folksa.ga/api/artists?name=${artistName}&key=flat_eric`)
         .then((response) => response.json())
             .then((artist) => {
-                const album = new Album(artist[0]._id);
-                console.log(artist[0]._id);
-                albumArtistId = artist[0]._id;
+                //console.log(artist[0]._id);
+                albumArtistId.push(artist[0]._id);
             });
+            return albumArtistId;
 }
 /*async function fetchArtistByName(artistName) {
     const response = await fetch(`https://folksa.ga/api/artists?name=${artistName}&key=flat_eric`, {});
@@ -173,13 +193,13 @@ async function returnPromiseValue (functionName, promise) {
 
 postAlbumButton.addEventListener('click', function() {
     event.preventDefault();
+    console.log('hej');
     /* Gets the input values */
     const albumController = new Controller;
     const albumArtist = albumController.getInputValue('inputAlbumArtist');
 
     /* Still not working */
-    var albumArtistId = '';
-    fetchArtistByName(albumArtist);
+    const albumArtistId = fetchArtistByName(albumArtist);
     console.log(albumArtistId);
     /* ------------------ */
 
