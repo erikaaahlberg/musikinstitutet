@@ -146,6 +146,7 @@ function fetchArtistByName(artistName){
             .then((artist) => {
                 const album = new Album(artist[0]._id);
                 console.log(artist[0]._id);
+                albumArtistId = artist[0]._id;
             });
 }
 /*async function fetchArtistByName(artistName) {
@@ -164,8 +165,9 @@ postAlbumButton.addEventListener('click', function() {
     /* Gets the input values */
     const albumController = new Controller;
     const albumArtist = albumController.getInputValue('inputAlbumArtist');
-    
+    var albumArtistId = '';
     fetchArtistByName(albumArtist);
+    console.log(albumArtistId);
     const albumTitle = albumController.getInputValue('inputAlbumTitle');
     var albumGenres = albumController.getInputValue('inputAlbumGenres');
     const albumReleaseDate = albumController.getInputValue('inputAlbumReleaseDate');
