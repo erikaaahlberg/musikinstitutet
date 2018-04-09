@@ -429,35 +429,40 @@ class DOMHandle {
     displaySpecificAlbum(album, artist) {
         
         const fetchRating = new Logic();
-        
+        console.log(album)
         let contentOfSpecificAlbum = `
             <div id="contentOfSpecificAlbum">
                 <div id="albumTopContent">
                     <img src="${album.coverImage}">
                     <div id="albumInfo">
                         <h2>${album.title}</h2>
-                        <p>By ${artist.name}</p>
-                        <p>Rating: ${fetchRating.calculateRating(album)}</p>
+                        <p id="artistName"> ${artist.name}</p>
+                        <p id="genres">Genres: ${album.genres}</p>
+                        <p id="releaseDate">Released: ${album.releaseDate}</p>
+                        <p id="rating">Rating: ${fetchRating.calculateRating(album)}</p>
+                        <div id="buttonWrapper">
+                            <input type="number" id="ratingNumber" placeholder="+/-" min="1" max="10">
+                            <button id="rateAlbum">
+                                RATE ALBUM
+                            </button>
+                            <button id="deleteAlbum">
+                                DELETE ALBUM
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <input type="number" id="ratingNumber" placeholder="1-10" min="1" max="10">
-                <button id="rateAlbum">
-                    RATE ALBUM
-                </button>
-                <button id="deleteAlbum">
-                    DELETE ALBUM
-                </button>
                 <div class="underline"></div>
-                <h3>Tracklist:</h3>
+                <h3>TRACKLIST</h3>
                 <div id="albumTracklist"></div>
             </div>
         `
         mainOutput.innerHTML = contentOfSpecificAlbum;
 
         let trackTitles = "";
+        console.log(album.tracks)
         for (let i = 0; i < album.tracks.length; i++) {
             trackTitles += `
-                <button class="albumTrack">
+                <button class="albumTrackButton" id="5ac4a81c1170fc09f6a69bd4">
                     ${album.tracks[i].title}
                     <img src="images/rightArrow.svg">
                 </button>
@@ -467,6 +472,16 @@ class DOMHandle {
         const albumTracklist = document.getElementById('albumTracklist');
 
         albumTracklist.innerHTML = trackTitles;
+        
+        const albumTrack = document.
+        getElementsByClassName('albumTrack');
+
+        for (i = 0; i < albumTrack.length; i++) {
+            albumTrack[i].addEventListener('click', function() {
+                const newFetch = new FetchHandle();
+                newFetch.fetchTrackById(this.id);
+            })
+        }
 
         const rateAlbum = document.getElementById('rateAlbum');
         rateAlbum.addEventListener('click', () => {
@@ -476,6 +491,10 @@ class DOMHandle {
             rateThisAlbum.rateStuff('albums', thisArtistId, ratingNumber);
             rateThisAlbum.fetchAlbumById(thisArtistId);
         });
+        
+        const everyOtherButton = new DOMHandle();
+        everyOtherButton.
+        everyOtherButton(albumTracklist.children);
 
     }
     displaySpecificTrack(track, artist) {
