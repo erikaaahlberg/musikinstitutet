@@ -304,7 +304,7 @@ class DOMHandle {
         for (let i = 0; i < allAlbums.length; i++) {
             /* Storing the albums in a button */
             searchedAlbumButtons += `
-                <button class="showByIdButton" id="${allAlbums[i]._id}">
+                <button class="showByIdButton" id="${allAlbums[i]._id}" data-genre="${this.displayGenres(allAlbums[i])}">
                     ${allArtists[i].name} -
                     ${allAlbums[i].title} -
                     ${allAlbums[i].releaseDate}
@@ -334,7 +334,7 @@ class DOMHandle {
         let searchedTrackButtons = '';
         for (let i = 0; i < allTracks.length; i++) {
             searchedTrackButtons += `
-                <button class="showByIdButton" id="${allTracks[i]._id}">
+                <button class="showByIdButton" id="${allTracks[i]._id}" data-genre="${this.displayGenres(allTracks[i])}">
                     ${allTracks[i].title} -
                     ${allTracks[i].artists[0].name}
                     <img src="images/rightArrow.svg">
@@ -363,7 +363,7 @@ class DOMHandle {
         let searchedArtistButtons = '';
         for (let i = 0; i < allArtists.length; i++) {
             searchedArtistButtons += `
-                <button class="showByIdButton" id="${allArtists[i]._id}">
+                <button class="showByIdButton" id="${allArtists[i]._id}" data-genre="${this.displayGenres(allArtists[i])}">
                     ${allArtists[i].name}
                     <img src="images/rightArrow.svg">
                 </button>
@@ -390,7 +390,7 @@ class DOMHandle {
         let searchedPlaylistButtons = '';
         for (let i = 0; i < allPlaylists.length; i++) {
             searchedPlaylistButtons += `
-                <button class="showByIdButton" id="${allPlaylists[i]._id}">
+                <button class="showByIdButton" id="${allPlaylists[i]._id}" data-genre="${this.displayGenres(allPlaylists[i])}">
                     ${allPlaylists[i].title}
                     <img src="images/rightArrow.svg">
                 </button>
@@ -615,7 +615,8 @@ class DOMHandle {
         const filter = searchField.value.toUpperCase();
         const buttons = mainOutput.getElementsByTagName('button');
         for (let i = 0; i < buttons.length; i++) {
-            if (buttons[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            let dataGenre = buttons[i].getAttribute('data-genre').toUpperCase();
+            if (buttons[i].innerHTML.toUpperCase().indexOf(filter) > -1 || dataGenre.indexOf(filter) > -1 && dataGenre != 'NONE') {
              buttons[i].style.display = 'flex';
             } else {
              buttons[i].style.display = 'none';
@@ -827,6 +828,17 @@ class DOMHandle {
         setTimeout(function(){
             addDiv.classList.remove('fadeOut');
         })
+    }
+    displayGenres(object) {
+        let genres = '';
+        if (object.genres.length != 0) {
+            object.genres.forEach((element) => {
+                genres += element + ' ';
+            })
+            return genres;
+        }
+        genres += 'none';
+        return genres;
     }
 
 }
