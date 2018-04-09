@@ -1,12 +1,13 @@
 const searchButton = document.getElementsByClassName('searchButton');
 const mainOutput = document.getElementById('mainOutput');
+const searchResults = document.getElementById('searchResults')
 /* Loops thru the searchRadioButtons then runs Fetch class. */
 for (i = 0; i < searchButton.length; i++) {
     searchButton[i].addEventListener('click', function() {
         const activateButton = new DOMHandle();
         activateButton.activateSearchButton(this);
         const newFetch = new FetchHandle(this.value);
-        mainOutput.innerHTML = '';
+        searchResults.innerHTML = '';
         switch (this.value) {
             case 'all':
                 newFetch.fetchAll();
@@ -302,7 +303,7 @@ class DOMHandle {
         let searchedAlbumButtons = '';
         /* Loops json object */
 
-        mainOutput.innerHTML=`<div id="searchResults"></div>`;
+
 
         const searchResult = document.getElementById('searchResults')
 
@@ -338,6 +339,7 @@ class DOMHandle {
     }
     displayTracks(allTracks) {
 
+
         const searchResult = document.getElementById('searchResults')
 
         let searchedTrackButtons = '';
@@ -370,6 +372,7 @@ class DOMHandle {
     }
     displayArtists(allArtists) {
 
+
         const searchResult = document.getElementById('searchResults')
 
         let searchedArtistButtons = '';
@@ -399,6 +402,7 @@ class DOMHandle {
 
     }
     displayPlaylists(allPlaylists) {
+
 
         const searchResult = document.getElementById('searchResults')
 
