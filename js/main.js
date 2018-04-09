@@ -429,7 +429,7 @@ class DOMHandle {
     displaySpecificAlbum(album, artist) {
         
         const fetchRating = new Logic();
-        console.log(album)
+        
         let contentOfSpecificAlbum = `
             <div id="contentOfSpecificAlbum">
                 <div id="albumTopContent">
@@ -437,8 +437,8 @@ class DOMHandle {
                     <div id="albumInfo">
                         <h2>${album.title}</h2>
                         <p id="artistName"> ${artist.name}</p>
-                        <p id="genres">Genres: ${album.genres}</p>
-                        <p id="releaseDate">Released: ${album.releaseDate}</p>
+                        <p id="genres"><span>Genres:</span> ${album.genres}</p>
+                        <p id="releaseDate"><span>Released:</span> ${album.releaseDate}</p>
                         <p id="rating">Rating: ${fetchRating.calculateRating(album)}</p>
                         <div id="buttonWrapper">
                             <input type="number" id="ratingNumber" placeholder="+/-" min="1" max="10">
@@ -522,16 +522,22 @@ class DOMHandle {
     }
     displaySpecificArtist(artist, albums){
 
-        let contentOfSpecificArtist =`
-            <div class="artistContent">
-                <img src="${artist.image}">
-                ${artist.name}
-                ${artist.genres}
-                ${artist.countryBorn}
-                ${artist.born}
-                <button id="deleteArtist">
-                    DELETE ARTIST
-                </button>
+        let contentOfSpecificArtist = `
+            <div id="contentOfSpecificArtist">
+                <div id="artistTopContent">
+                    <img src="${artist.image}">
+                    <div id="artistInfo">
+                        <h2>${artist.name}</h2>
+                        <p id="genres"><span>Genres:</span> ${artist.genres}</p>
+                        <p id="countryBorn"><span>Country:</span> ${artist.countryBorn}</p>
+                        <p id="born"><span>Born:</span> ${artist.born}</p>
+                        <button id="deleteArtist">
+                            DELETE ARTIST
+                        </button>
+                    </div>
+                </div>
+                <div class="underline"></div>
+                <h3>ALBUMS</h3>
                 <div id="artistAlbums"></div>
             </div>
         `
@@ -540,7 +546,7 @@ class DOMHandle {
         let artistAlbum = "";
         for(let i = 0; i < albums.length; i++){
             artistAlbum +=`
-                <button class="showByIdButton" id="${albums[i]._id}">
+                <button class="artistAlbumButton" id="${albums[i]._id}">
                     ${albums[i].title} -
                     ${albums[i].releaseDate}
                     <img src="images/rightArrow.svg">
@@ -550,6 +556,10 @@ class DOMHandle {
 
         const albumList = document.getElementById('artistAlbums');
         albumList.innerHTML=artistAlbum;
+        
+        const everyOtherButton = new DOMHandle();
+        everyOtherButton.
+        everyOtherButton(albumList.children);
 
     }
     displaySpecificPlaylist(playlist, comments){

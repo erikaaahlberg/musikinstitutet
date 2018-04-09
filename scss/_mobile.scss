@@ -92,11 +92,16 @@ body{
                         padding-left: 80px;
                         letter-spacing: 2px;
                         h2{
+                            text-transform: uppercase;
+                            letter-spacing: 3px;
                             font-size: 2.2em;
                             margin: 0;
                         }
                         p{
                             margin: 10px 0px;
+                            span{
+                                font-weight: 700;
+                            }
                         }
                         #artistName{
                             font-size: 1.4em;
@@ -143,6 +148,7 @@ body{
                 h3{
                     font-size: 1.8em;
                     text-align: center;
+                    letter-spacing: 3px;
                     padding: 20px;
                     margin: 0;
                 }
@@ -159,6 +165,76 @@ body{
                     .lightButton{
                             background: rgba(255, 255, 255, 0.03);
                     }
+                }
+            }
+            #contentOfSpecificArtist{
+                width: 100%;
+                #artistTopContent{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 1.1em;
+                    padding: 20px 0 60px 0;
+                    img{
+                        height: 260px;
+                    }
+                    #artistInfo{
+                        padding-left: 80px;
+                        letter-spacing: 2px;
+                        h2{
+                            text-transform: uppercase;
+                            letter-spacing: 3px;
+                            font-size: 2.2em;
+                            color: $accentColor;
+                            margin: 0;
+                            margin-bottom: 30px;
+                        }
+                        p{
+                            font-size: 1em;
+                            margin: 10px 0px;
+                            span{
+                                font-weight: 700;
+                            }
+                        }
+                        button{
+                            background: $accentColor;
+                            color: $backgroundColor;
+                            padding: 10px 15px;
+                            font-size: 1em;
+                            font-weight: 700;
+                            letter-spacing: 2px;
+                            border-radius: 20px;
+                            border: none;
+                            cursor: pointer; 
+                            margin-top: 30px;
+                        }
+                    }
+                 }
+                .underline{
+                    border-bottom: 1px solid $textColor;
+                    width: 95%;
+                    margin: auto;
+                }
+                h3{
+                    text-align: center;
+                    font-size: 2.2em;
+                    letter-spacing: 3px;
+                    padding: 30px;
+                    margin: 0;
+                }
+                #artistAlbums{
+                    display: flex;
+                    flex-direction: column;
+                    padding: 0 10px;
+                    .artistAlbumButton{
+                        @include listButtons;
+                    }
+                    .artistAlbumButton:hover{
+                        background: rgba(255, 255, 255, 0.07);
+                    }
+                    .lightButton{
+                        background: rgba(255, 255, 255, 0.03);
+                    }    
                 }
             }
         }
