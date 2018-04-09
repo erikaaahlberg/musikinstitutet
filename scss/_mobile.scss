@@ -63,30 +63,31 @@ body{
             flex-direction: column;
             max-width: 800px;
             margin: auto;
-            padding: 0 10px;
-            .showByIdButton{
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                color: $textColor;
-                background: none;
-                border: none;
-                border-radius: 5px;
-                width: 100%;
-                padding: 15px 20px;
-                font-size: 1.1em;
-                letter-spacing: 1px;
-                transition: 200ms;
-                cursor: pointer;
-            }
-            .showByIdButton:hover{
-                background: rgba(255, 255, 255, 0.07);
-            }
-            .filtred{
-                display: none;
-            }
-            .lightButton{
-                    background: rgba(255, 255, 255, 0.03);
+            #searchResults{
+                padding: 0 10px;
+                max-height: 300px;
+                overflow: scroll;   
+                .showByIdButton{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    color: $textColor;
+                    background: none;
+                    border: none;
+                    border-radius: 5px;
+                    width: 100%;
+                    padding: 10px 15px;
+                    font-size: 1em;
+                    letter-spacing: 1px;
+                    transition: 200ms;
+                    cursor: pointer;
+                }
+                .showByIdButton:hover{
+                    background: rgba(255, 255, 255, 0.07);
+                }
+                .lightButton{
+                        background: rgba(255, 255, 255, 0.03);
+                }
             }
             #contentOfSpecificAlbum{
                 width: 100%;
@@ -124,7 +125,6 @@ body{
             width: 400px;
             border-radius: 10px;
             margin: auto;
-            padding: 40px;
             font-size: 1.6em;
             font-weight: 700;
             letter-spacing: 3px;
@@ -158,6 +158,27 @@ body{
         }
     }
     footer{
-
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        button{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.5em;
+            border: none;
+            background: none;
+            color: $accentColor;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin: 20px;
+            cursor: pointer;
+            img{
+                height: 60px;
+                margin-bottom: 10px;
+            }
+        }
     }
 }

@@ -293,6 +293,11 @@ class DOMHandle {
     displayAlbums(allAlbums, allArtists) {
         let searchedAlbumButtons = '';
         /* Loops json object */
+        
+        mainOutput.innerHTML=`<div id="searchResults"></div>`;
+        
+        const searchResult = document.getElementById('searchResults')
+        
         for (let i = 0; i < allAlbums.length; i++) {
             /* Storing the albums in a button */
             searchedAlbumButtons += `
@@ -304,8 +309,9 @@ class DOMHandle {
                 </button>
             `;
         }
+        
         /* Prints the search results for Albums */
-        mainOutput.insertAdjacentHTML('beforeend', searchedAlbumButtons);
+        searchResult.insertAdjacentHTML('beforeend', searchedAlbumButtons);
 
         const showByIdButton = document.
         getElementsByClassName('showByIdButton');
@@ -319,10 +325,15 @@ class DOMHandle {
 
         const everyOtherButton = new DOMHandle();
         everyOtherButton.
-        everyOtherButton(mainOutput.children);
+        everyOtherButton(mainOutput.firstElementChild.children);
 
     }
     displayTracks(allTracks) {
+        
+        mainOutput.innerHTML=`<div id="searchResults"></div>`;
+        
+        const searchResult = document.getElementById('searchResults')
+        
         let searchedTrackButtons = '';
         for (let i = 0; i < allTracks.length; i++) {
             searchedTrackButtons += `
@@ -334,7 +345,7 @@ class DOMHandle {
             `;
         }
 
-        mainOutput.insertAdjacentHTML('beforeend', searchedTrackButtons);
+        searchResult.insertAdjacentHTML('beforeend', searchedTrackButtons);
 
         const showByIdButton = document.
         getElementsByClassName('showByIdButton');
@@ -348,10 +359,15 @@ class DOMHandle {
 
         const everyOtherButton = new DOMHandle();
         everyOtherButton.
-        everyOtherButton(mainOutput.children);
+        everyOtherButton(mainOutput.firstElementChild.children);
 
     }
     displayArtists(allArtists) {
+        
+        mainOutput.innerHTML=`<div id="searchResults"></div>`;
+        
+        const searchResult = document.getElementById('searchResults')
+        
         let searchedArtistButtons = '';
         for (let i = 0; i < allArtists.length; i++) {
             searchedArtistButtons += `
@@ -362,7 +378,7 @@ class DOMHandle {
             `;
         }
 
-        mainOutput.insertAdjacentHTML('beforeend', searchedArtistButtons);
+        searchResult.insertAdjacentHTML('beforeend', searchedArtistButtons);
 
         const showByIdButton = document.
         getElementsByClassName('showByIdButton');
@@ -375,10 +391,15 @@ class DOMHandle {
 
         const everyOtherButton = new DOMHandle();
         everyOtherButton.
-        everyOtherButton(mainOutput.children);
+        everyOtherButton(mainOutput.firstElementChild.children);
 
     }
     displayPlaylists(allPlaylists) {
+        
+        mainOutput.innerHTML=`<div id="searchResults"></div>`;
+        
+        const searchResult = document.getElementById('searchResults')
+        
         let searchedPlaylistButtons = '';
         for (let i = 0; i < allPlaylists.length; i++) {
             searchedPlaylistButtons += `
@@ -389,7 +410,7 @@ class DOMHandle {
             `;
         }
 
-        mainOutput.insertAdjacentHTML('beforeend', searchedPlaylistButtons);
+        searchResult.insertAdjacentHTML('beforeend', searchedPlaylistButtons);
 
         const showByIdButton = document.
         getElementsByClassName('showByIdButton');
@@ -402,7 +423,7 @@ class DOMHandle {
 
         const everyOtherButton = new DOMHandle();
         everyOtherButton.
-        everyOtherButton(mainOutput.children);
+        everyOtherButton(mainOutput.firstElementChild.children);
 
     }
     displaySpecificAlbum(album, artist) {
@@ -838,7 +859,7 @@ class DOMHandle {
         setTimeout(function(){
             addDiv.classList.remove('fadeOut');
         })
-<<<<<<< HEAD
+
         
                 importCloseButton.addEventListener('click', function(){
         let createAlbumContent =``;
@@ -848,14 +869,11 @@ class DOMHandle {
         }, 1000) 
         
     });
-=======
+
     }
->>>>>>> a751e34398186969795dc338887ca516e5fbaeb1
 
 }
     
-}
-
 /* -----------ADDED BY ERIKA------------- */
 class Controller {
     getInputValue (elementId) {
