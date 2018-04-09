@@ -1,12 +1,13 @@
 const searchButton = document.getElementsByClassName('searchButton');
 const mainOutput = document.getElementById('mainOutput');
+const searchResults = document.getElementById('searchResults')
 /* Loops thru the searchRadioButtons then runs Fetch class. */
 for (i = 0; i < searchButton.length; i++) {
     searchButton[i].addEventListener('click', function() {
         const activateButton = new DOMHandle();
         activateButton.activateSearchButton(this);
         const newFetch = new FetchHandle(this.value);
-        mainOutput.innerHTML = '';
+        searchResults.innerHTML = '';
         switch (this.value) {
             case 'all':
                 newFetch.fetchAll();
@@ -147,6 +148,14 @@ class FetchHandle {
                 const displayPlaylist = new DOMHandle();
                 displayPlaylist.displayPlaylists(playlists);
                 displayPlaylist.filterSearch();
+            });
+    }
+    fetchTopPlaylists() {
+        fetch(`https://folksa.ga/api/playlists?key=flat_eric`)
+            .then((response) => response.json())
+            .then((playlists) => {
+                const topPlaylists = new Logic();
+                console.log(topPlaylists.determineTopPlaylists(playlists));
             });
     }
     fetchAlbumById(albumId) {
@@ -290,10 +299,15 @@ class DOMHandle {
     displayAlbums(allAlbums, allArtists) {
         let searchedAlbumButtons = '';
         /* Loops json object */
+
+
+
+        const searchResult = document.getElementById('searchResults')
+
         for (let i = 0; i < allAlbums.length; i++) {
             /* Storing the albums in a button */
             searchedAlbumButtons += `
-                <button class="showByIdButton" id="${allAlbums[i]._id}">
+                <button class="showByIdButton" id="${allAlbums[i]._id}" data-genre="${this.displayGenres(allAlbums[i])}">
                     ${allArtists[i].name} -
                     ${allAlbums[i].title} -
                     ${allAlbums[i].releaseDate}
@@ -301,8 +315,9 @@ class DOMHandle {
                 </button>
             `;
         }
+
         /* Prints the search results for Albums */
-        mainOutput.insertAdjacentHTML('beforeend', searchedAlbumButtons);
+        searchResult.insertAdjacentHTML('beforeend', searchedAlbumButtons);
 
         const showByIdButton = document.
         getElementsByClassName('showByIdButton');
@@ -316,14 +331,18 @@ class DOMHandle {
 
         const everyOtherButton = new DOMHandle();
         everyOtherButton.
-        everyOtherButton(mainOutput.children);
+        everyOtherButton(mainOutput.firstElementChild.children);
 
     }
     displayTracks(allTracks) {
+
+
+        const searchResult = document.getElementById('searchResults')
+
         let searchedTrackButtons = '';
         for (let i = 0; i < allTracks.length; i++) {
             searchedTrackButtons += `
-                <button class="showByIdButton" id="${allTracks[i]._id}">
+                <button class="showByIdButton" id="${allTracks[i]._id}" data-genre="${this.displayGenres(allTracks[i])}">
                     ${allTracks[i].title} -
                     ${allTracks[i].artists[0].name}
                     <img src="images/rightArrow.svg">
@@ -331,7 +350,7 @@ class DOMHandle {
             `;
         }
 
-        mainOutput.insertAdjacentHTML('beforeend', searchedTrackButtons);
+        searchResult.insertAdjacentHTML('beforeend', searchedTrackButtons);
 
         const showByIdButton = document.
         getElementsByClassName('showByIdButton');
@@ -345,21 +364,25 @@ class DOMHandle {
 
         const everyOtherButton = new DOMHandle();
         everyOtherButton.
-        everyOtherButton(mainOutput.children);
+        everyOtherButton(mainOutput.firstElementChild.children);
 
     }
     displayArtists(allArtists) {
+
+
+        const searchResult = document.getElementById('searchResults')
+
         let searchedArtistButtons = '';
         for (let i = 0; i < allArtists.length; i++) {
             searchedArtistButtons += `
-                <button class="showByIdButton" id="${allArtists[i]._id}">
+                <button class="showByIdButton" id="${allArtists[i]._id}" data-genre="${this.displayGenres(allArtists[i])}">
                     ${allArtists[i].name}
                     <img src="images/rightArrow.svg">
                 </button>
             `;
         }
 
-        mainOutput.insertAdjacentHTML('beforeend', searchedArtistButtons);
+        searchResult.insertAdjacentHTML('beforeend', searchedArtistButtons);
 
         const showByIdButton = document.
         getElementsByClassName('showByIdButton');
@@ -372,21 +395,25 @@ class DOMHandle {
 
         const everyOtherButton = new DOMHandle();
         everyOtherButton.
-        everyOtherButton(mainOutput.children);
+        everyOtherButton(mainOutput.firstElementChild.children);
 
     }
     displayPlaylists(allPlaylists) {
+
+
+        const searchResult = document.getElementById('searchResults')
+
         let searchedPlaylistButtons = '';
         for (let i = 0; i < allPlaylists.length; i++) {
             searchedPlaylistButtons += `
-                <button class="showByIdButton" id="${allPlaylists[i]._id}">
+                <button class="showByIdButton" id="${allPlaylists[i]._id}" data-genre="${this.displayGenres(allPlaylists[i])}">
                     ${allPlaylists[i].title}
                     <img src="images/rightArrow.svg">
                 </button>
             `;
         }
 
-        mainOutput.insertAdjacentHTML('beforeend', searchedPlaylistButtons);
+        searchResult.insertAdjacentHTML('beforeend', searchedPlaylistButtons);
 
         const showByIdButton = document.
         getElementsByClassName('showByIdButton');
@@ -399,41 +426,46 @@ class DOMHandle {
 
         const everyOtherButton = new DOMHandle();
         everyOtherButton.
-        everyOtherButton(mainOutput.children);
+        everyOtherButton(mainOutput.firstElementChild.children);
 
     }
     displaySpecificAlbum(album, artist) {
-        
+
         const fetchRating = new Logic();
-        
+
         let contentOfSpecificAlbum = `
             <div id="contentOfSpecificAlbum">
                 <div id="albumTopContent">
                     <img src="${album.coverImage}">
                     <div id="albumInfo">
                         <h2>${album.title}</h2>
-                        <p>By ${artist.name}</p>
-                        <p>Rating: ${fetchRating.calculateRating(album)}</p>
+                        <p id="artistName"> ${artist.name}</p>
+                        <p id="genres"><span>Genres:</span> ${album.genres}</p>
+                        <p id="releaseDate"><span>Released:</span> ${album.releaseDate}</p>
+                        <p id="rating">Rating: ${fetchRating.calculateRating(album)}</p>
+                        <div id="buttonWrapper">
+                            <input type="number" id="ratingNumber" placeholder="+/-" min="1" max="10">
+                            <button id="rateAlbum">
+                                RATE ALBUM
+                            </button>
+                            <button id="deleteAlbum">
+                                DELETE ALBUM
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <input type="number" id="ratingNumber" placeholder="1-10" min="1" max="10">
-                <button id="rateAlbum">
-                    RATE ALBUM
-                </button>
-                <button id="deleteAlbum">
-                    DELETE ALBUM
-                </button>
                 <div class="underline"></div>
-                <h3>Tracklist:</h3>
+                <h3>TRACKLIST</h3>
                 <div id="albumTracklist"></div>
             </div>
         `
         mainOutput.innerHTML = contentOfSpecificAlbum;
 
         let trackTitles = "";
+
         for (let i = 0; i < album.tracks.length; i++) {
             trackTitles += `
-                <button class="albumTrack">
+                <button class="albumTrackButton" id="${album.tracks[i]._id}">
                     ${album.tracks[i].title}
                     <img src="images/rightArrow.svg">
                 </button>
@@ -444,51 +476,79 @@ class DOMHandle {
 
         albumTracklist.innerHTML = trackTitles;
 
+        const albumTrackButton = document.
+        getElementsByClassName('albumTrackButton');
+
+        for (i = 0; i < albumTrackButton.length; i++) {
+            albumTrackButton[i].addEventListener('click', function() {
+                const newFetch = new FetchHandle();
+                newFetch.fetchTrackById(this.id);
+                console.log(this)
+            })
+        }
+
         const rateAlbum = document.getElementById('rateAlbum');
         rateAlbum.addEventListener('click', () => {
             const ratingNumber = document.getElementById('ratingNumber').value;
-            const thisArtistId = album._id;
+            const thisAlbumId = album._id;
             const rateThisAlbum = new FetchHandle();
-            rateThisAlbum.rateStuff('albums', thisArtistId, ratingNumber);
-            rateThisAlbum.fetchAlbumById(thisArtistId);
+            rateThisAlbum.rateStuff('albums', thisAlbumId, ratingNumber);
+            rateThisAlbum.fetchAlbumById(thisAlbumId);
         });
+
+        const everyOtherButton = new DOMHandle();
+        everyOtherButton.
+        everyOtherButton(albumTracklist.children);
 
     }
     displaySpecificTrack(track, artist) {
+
         let contentOfSpecificTrack = `
-            <div class="contentOfSpecificTrack">
-                <div id="trackTopContent">
+            <div id="contentOfSpecificTrack">
                     <div id="trackInfo">
                         <h2>${track.title}</h2>
-                        <p>By ${artist.name}</p>
-                        <p>In album: ${track.album.title}</p>
+                        <p>${artist.name}</p>
+                        <p>Rating: ${artist.rating}</p>
+                        <button class="trackAlbumButton" id="${track.album.title._id}">
+                            ${track.album.title}
+                            <img src="images/rightArrow.svg">
+                        </button>
                     </div>
+                    <div id="buttonWrapper">
+                    <input type="number" id="ratingNumber" placeholder="+/-" min="1" max="10">
+                    <button id="rateTrack">
+                        RATE TRACK
+                    </button>
+                    <button id="addToPlaylist">
+                        ADD TO PLAYLIST
+                    </button>
+                    <button id="deleteAlbum">
+                        DELETE TRACK
+                    </button>
                 </div>
-                <button id="addToPlaylist">
-                    ADD TO PLAYLIST
-                </button>
-                <button id="rateTrack">
-                    RATE TRACK
-                </button>
-                <button id="deleteTrack">
-                    DELETE TRACK
-                </button>
             </div>
         `
         mainOutput.innerHTML = contentOfSpecificTrack;
+
     }
     displaySpecificArtist(artist, albums){
 
-        let contentOfSpecificArtist =`
-            <div class="artistContent">
-                <img src="${artist.image}">
-                ${artist.name}
-                ${artist.genres}
-                ${artist.countryBorn}
-                ${artist.born}
-                <button id="deleteArtist">
-                    DELETE ARTIST
-                </button>
+        let contentOfSpecificArtist = `
+            <div id="contentOfSpecificArtist">
+                <div id="artistTopContent">
+                    <img src="${artist.image}">
+                    <div id="artistInfo">
+                        <h2>${artist.name}</h2>
+                        <p id="genres"><span>Genres:</span> ${artist.genres}</p>
+                        <p id="countryBorn"><span>Country:</span> ${artist.countryBorn}</p>
+                        <p id="born"><span>Born:</span> ${artist.born}</p>
+                        <button id="deleteArtist">
+                            DELETE ARTIST
+                        </button>
+                    </div>
+                </div>
+                <div class="underline"></div>
+                <h3>ALBUMS</h3>
                 <div id="artistAlbums"></div>
             </div>
         `
@@ -497,7 +557,7 @@ class DOMHandle {
         let artistAlbum = "";
         for(let i = 0; i < albums.length; i++){
             artistAlbum +=`
-                <button class="showByIdButton" id="${albums[i]._id}">
+                <button class="artistAlbumButton" id="${albums[i]._id}">
                     ${albums[i].title} -
                     ${albums[i].releaseDate}
                     <img src="images/rightArrow.svg">
@@ -507,6 +567,10 @@ class DOMHandle {
 
         const albumList = document.getElementById('artistAlbums');
         albumList.innerHTML=artistAlbum;
+
+        const everyOtherButton = new DOMHandle();
+        everyOtherButton.
+        everyOtherButton(albumList.children);
 
     }
     displaySpecificPlaylist(playlist, comments){
@@ -604,7 +668,8 @@ class DOMHandle {
         const filter = searchField.value.toUpperCase();
         const buttons = mainOutput.getElementsByTagName('button');
         for (let i = 0; i < buttons.length; i++) {
-            if (buttons[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            let dataGenre = buttons[i].getAttribute('data-genre').toUpperCase();
+            if (buttons[i].innerHTML.toUpperCase().indexOf(filter) > -1 || dataGenre.indexOf(filter) > -1 && dataGenre != 'NONE') {
              buttons[i].style.display = 'flex';
             } else {
              buttons[i].style.display = 'none';
@@ -622,10 +687,10 @@ class DOMHandle {
              page[sum].classList.add('lightButton');
         }
     }
-    
+
     createAlbumContent(){
         const addDiv = document.getElementById('addDiv');
-        
+
         let createAlbumContent =`
             <p>ADD AN ALBUM</p>
             <form id="importAlbum">
@@ -649,24 +714,39 @@ class DOMHandle {
                 </button>
             </form>
             <div id="addTrackTracklist"></div>
+            <button type="button" id="importCloseButton">
+                BACK
+            </button>
+
         `;
-        
+
         addDiv.innerHTML=createAlbumContent;
-        
+
         setTimeout(function(){
             addDiv.classList.remove('fadeOut');
         });
 
         const postAlbumButton = document.
         getElementById('postAlbumButton');
-        
+
         /* -----------ADDED BY ERIKA------------- */
         postAlbumButton.addEventListener('click', function() {
             event.preventDefault();
             console.log('hej');
             /* Gets the input values */
             const albumController = new Controller;
+<<<<<<< HEAD
             const albumArtistName = albumController.getInputValue('inputAlbumArtist');
+=======
+            const albumArtist = albumController.getInputValue('inputAlbumArtist');
+
+            /* Still not working */
+            var albumArtistId = '';
+            fetchArtistByName(albumArtist);
+            console.log(albumArtistId);
+            /* ------------------ */
+
+>>>>>>> 9ddce2f332f9d02e3b45a029cdda97bf39e313e8
             const albumTitle = albumController.getInputValue('inputAlbumTitle');
             var albumGenres = albumController.getInputValue('inputAlbumGenres');
             const albumReleaseDate = albumController.getInputValue('inputAlbumReleaseDate');
@@ -691,10 +771,14 @@ class DOMHandle {
             if (!isTitleEmpty && !isArtistEmpty) {
                 const isGenresEmpty = albumController.isEmpty(albumGenres);
                 const isReleaseDateEmpty = albumController.isEmpty(albumReleaseDate);
+<<<<<<< HEAD
                 const isSpotifyURLEmpty = albumController.isEmpty(albumSpotifyURL);
                 const isCoverImageEmpty = albumController.isEmpty(albumCoverImageURL);
                 
                 
+=======
+
+>>>>>>> 9ddce2f332f9d02e3b45a029cdda97bf39e313e8
                 /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
                 if (!isGenresEmpty) {
                     const editedGenresParameter = albumController.editGenresParameter(albumGenres);
@@ -737,33 +821,45 @@ class DOMHandle {
             /* ------------------ */
             }
         });
-        
+
         /* -----------ADDED BY ERIKA collapse------------- */
-        
+
         const addTrackButton = document.
         getElementById('addTrackButton');
-        
+
         addTrackButton.addEventListener('click', function(){
-            
+
         const inputTrackTitle = document.
         getElementById('inputTrackTitle')
-        
+
         const inputTrackArtist = document.
         getElementById('inputTrackArtist')
-        
+
         const addTrackTracklist = document.
         getElementById('addTrackTracklist')
-        
+
             const p = document.createElement('p');
             const newTrack = document.createTextNode(inputTrackArtist.value + ' - ' + inputTrackTitle.value)
             p.appendChild(newTrack);
             addTrackTracklist.appendChild(p)
-            
-            
+
+
         })
-        
+
+        const importCloseButton = document.getElementById('importCloseButton');
+
+        importCloseButton.addEventListener('click', function(){
+        let createAlbumContent =``;
+            addDiv.classList.add('fadeOut');
+        setTimeout(function(){
+            addDiv.innerHTML=createAlbumContent;
+        }, 1000)
+
+
+        })
+
     }
-    
+
     createArtistContent(){
         const addDiv = document.getElementById('addDiv');
 
@@ -775,8 +871,11 @@ class DOMHandle {
                     <input type="text" id="inputArtistCoverImage" placeholder="COVER IMAGE..">
                     <button id="postArtistButton">Add artist</button>
                 </form>
+            <button type="button" id="importCloseButton">
+                BACK
+            </button>
             `;
-        
+
         addDiv.innerHTML=createArtistContent;
 
         /* ---------ADDED BY ERIKA--------- */
@@ -788,10 +887,10 @@ class DOMHandle {
             var artistGenres = artistController.getInputValue('inputArtistGenres');
             const artistCoverImageURL = artistController.getInputValue('inputArtistCoverImage');
             const isNameEmpty = artistController.isEmpty(artistName);
-        
+
             /* Checking the imported values before creating a new artist. This can also   be a string because there is not gonna be more than one error message so far, but in case we want to expand */
             const errorMessages = [];
-        
+
             /* Name is the only one required so checking that first */
             if (isNameEmpty) {
                 errorMessages.push('Please enter a name!');
@@ -800,7 +899,7 @@ class DOMHandle {
             else {
                 const isGenresEmpty = artistController.isEmpty(artistGenres);
                 const isCoverImageEmpty = artistController.isEmpty(artistCoverImageURL);
-                
+
                 /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
                 if (!isGenresEmpty) {
                     const editedGenresParameter = artistController.editGenresParameter(artistGenres);
@@ -826,10 +925,30 @@ class DOMHandle {
             }
         });
         /* -----collapse------ */
-        
+
         setTimeout(function(){
             addDiv.classList.remove('fadeOut');
         })
+
+        importCloseButton.addEventListener('click', function(){
+        let createAlbumContent =``;
+            addDiv.classList.add('fadeOut');
+        setTimeout(function(){
+            addDiv.innerHTML=createAlbumContent;
+        }, 1000)
+
+        });
+    }
+    displayGenres(object) {
+        let genres = '';
+        if (object.genres.length != 0) {
+            object.genres.forEach((element) => {
+                genres += element + ' ';
+            })
+            return genres;
+        }
+        genres += 'none';
+        return genres;
     }
 
 }
@@ -893,7 +1012,7 @@ class Artist {
     constructor(name, genres, coverImageURL) {
         if (name != '') {
             this.name =       name;
-            this.genres =     genres;	
+            this.genres =     genres;
             this.coverImageURL = coverImage;
         }
     }
@@ -912,8 +1031,8 @@ class Artist {
 class Album {
     constructor(title, artists, genres, releaseDate, spotifyURL, coverImage) {
         if (title != '' && artist != '') {
-            this.title =      title;	
-            this.artists =     artists;	
+            this.title =      title;
+            this.artists =     artists;
             this.genres	=      genres;
             this.releaseDate = releaseDate;
             this.spotifyURL =  spotifyURL;
@@ -945,8 +1064,8 @@ class Album {
 class Tracks {
     constructor (title, artists, album, genres, coverImage, spotifyURL) {
         if (title != '' && artists != '' && album != '') {
-            this.title = title;	
-            this.artists = artists;	
+            this.title = title;
+            this.artists = artists;
             this.album	= album;
             this.genres	= genres;
             this.coverImage = coverImage;
@@ -989,9 +1108,39 @@ class Logic {
             number += n;
         }
         const rating = (number / object.ratings.length);
-        const roundedRating = Math.round( rating * 10 ) / 10;
+        const roundedRating = this.roundNumber(rating);
         return roundedRating;
     }
+    determineTopPlaylists(object) {
+        let allTopPlaylists = []
+        for (let playlists of object) {
+            if (!playlists.ratings.length == 0) {
+                let totalRating = 0;
+                for (let i = 0; i < playlists.ratings.length; i++) {
+                    totalRating += playlists.ratings[i];
+                }
+                let averageRating = totalRating / playlists.ratings.length;
+                let roundedRating = this.roundNumber(averageRating);
+                let playListInfo = { title: playlists.title, id: playlists._id, rating: roundedRating };
+                allTopPlaylists.push(playListInfo);
+            }
+        }
+        const sortedAllPlaylists = allTopPlaylists.sort(this.compareRatings);
+        return sortedAllPlaylists;
+    }
+    compareRatings(a, b) {
+        if (a.rating > b.rating) {
+            return -1;
+        }
+        if (a.rating < b.rating) {
+            return 1;
+        }
+        return 0;
+    }
+    roundNumber(number) {
+        return Math.round( number * 10 ) / 10;
+    }
+
 }
 
 const startFetch = new FetchHandle();
