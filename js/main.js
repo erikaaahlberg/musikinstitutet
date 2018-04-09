@@ -667,12 +667,17 @@ class DOMHandle {
     filterSearch() {
         const filter = searchField.value.toUpperCase();
         const buttons = mainOutput.getElementsByTagName('button');
+        let everyOtherCounter = 0;
         for (let i = 0; i < buttons.length; i++) {
             let dataGenre = buttons[i].getAttribute('data-genre').toUpperCase();
             if (buttons[i].innerHTML.toUpperCase().indexOf(filter) > -1 || dataGenre.indexOf(filter) > -1 && dataGenre != 'NONE') {
-             buttons[i].style.display = 'flex';
+                buttons[i].style.display = 'flex';
+                if (everyOtherCounter % 2 == 0) {
+                    buttons[i].classList.add('lightButton');
+                }
+                everyOtherCounter++;
             } else {
-             buttons[i].style.display = 'none';
+                buttons[i].style.display = 'none';
             }
         }
         if (filter == '') {
@@ -681,12 +686,12 @@ class DOMHandle {
             }
         }
     }
-    everyOtherButton(page){
+    /*everyOtherButton(page){
         for(let i = 0; i < page.length; i++){
             let sum = i++;
              page[sum].classList.add('lightButton');
         }
-    }
+    }*/
 
     createAlbumContent(){
         const addDiv = document.getElementById('addDiv');
