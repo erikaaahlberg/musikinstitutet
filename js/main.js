@@ -698,7 +698,7 @@ class DOMHandle {
                 <input type="text" id="inputAlbumTitle" placeholder="ALBUM TITLE..">
                 <input type="text" id="inputAlbumGenres" placeholder="ALBUM GENRE..">
                 <input type="text" id="inputAlbumReleaseDate" placeholder="RELEASE YEAR..">
-                <input type = "text" 
+                <input type = "text"
                 id = "inputAlbumSpotifyURL"
                 placeholder = "SPOTIFY URL..">
                 <input type="text" id="inputAlbumCoverImage" placeholder="COVER IMAGE URL..">
@@ -735,9 +735,7 @@ class DOMHandle {
             console.log('hej');
             /* Gets the input values */
             const albumController = new Controller;
-<<<<<<< HEAD
             const albumArtistName = albumController.getInputValue('inputAlbumArtist');
-=======
             const albumArtist = albumController.getInputValue('inputAlbumArtist');
 
             /* Still not working */
@@ -746,7 +744,6 @@ class DOMHandle {
             console.log(albumArtistId);
             /* ------------------ */
 
->>>>>>> 9ddce2f332f9d02e3b45a029cdda97bf39e313e8
             const albumTitle = albumController.getInputValue('inputAlbumTitle');
             var albumGenres = albumController.getInputValue('inputAlbumGenres');
             const albumReleaseDate = albumController.getInputValue('inputAlbumReleaseDate');
@@ -771,14 +768,9 @@ class DOMHandle {
             if (!isTitleEmpty && !isArtistEmpty) {
                 const isGenresEmpty = albumController.isEmpty(albumGenres);
                 const isReleaseDateEmpty = albumController.isEmpty(albumReleaseDate);
-<<<<<<< HEAD
                 const isSpotifyURLEmpty = albumController.isEmpty(albumSpotifyURL);
                 const isCoverImageEmpty = albumController.isEmpty(albumCoverImageURL);
-                
-                
-=======
 
->>>>>>> 9ddce2f332f9d02e3b45a029cdda97bf39e313e8
                 /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
                 if (!isGenresEmpty) {
                     const editedGenresParameter = albumController.editGenresParameter(albumGenres);
@@ -811,7 +803,7 @@ class DOMHandle {
             else {
                 /* Still not working */
                 const fetchId = new FetchHandle;
-                const albumArtistId = fetchId.fetchArtistByName(albumArtistName).then((artist) => { 
+                const albumArtistId = fetchId.fetchArtistByName(albumArtistName).then((artist) => {
                     console.log(artist[0]._id);
                     const artistId = artist[0]._id;
                     console.log(artistId);
