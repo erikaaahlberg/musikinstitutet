@@ -149,6 +149,14 @@ class FetchHandle {
                 displayPlaylist.filterSearch();
             });
     }
+    fetchTopPlaylists() {
+        fetch(`https://folksa.ga/api/playlists?key=flat_eric`)
+            .then((response) => response.json())
+            .then((playlists) => {
+                const topPlaylists = new Logic();
+                console.log(topPlaylists.determineTopPlaylists(playlists));
+            });
+    }
     fetchAlbumById(albumId) {
         fetch(`https://folksa.ga/api/albums/${albumId}?key=flat_eric`)
             .then((response) => response.json())
@@ -406,9 +414,9 @@ class DOMHandle {
 
     }
     displaySpecificAlbum(album, artist) {
-        
+
         const fetchRating = new Logic();
-        
+
         let contentOfSpecificAlbum = `
             <div id="contentOfSpecificAlbum">
                 <div id="albumTopContent">
@@ -625,10 +633,10 @@ class DOMHandle {
              page[sum].classList.add('lightButton');
         }
     }
-    
+
     createAlbumContent(){
         const addDiv = document.getElementById('addDiv');
-        
+
         let createAlbumContent =`
             <p>ADD AN ALBUM</p>
             <form id="importAlbum">
@@ -650,16 +658,16 @@ class DOMHandle {
             </form>
             <div id="addTrackTracklist"></div>
         `;
-        
+
         addDiv.innerHTML=createAlbumContent;
-        
+
         setTimeout(function(){
             addDiv.classList.remove('fadeOut');
         });
 
         const postAlbumButton = document.
         getElementById('postAlbumButton');
-        
+
         /* -----------ADDED BY ERIKA------------- */
         postAlbumButton.addEventListener('click', function() {
             event.preventDefault();
@@ -667,7 +675,7 @@ class DOMHandle {
             /* Gets the input values */
             const albumController = new Controller;
             const albumArtist = albumController.getInputValue('inputAlbumArtist');
-            
+
             /* Still not working */
             var albumArtistId = '';
             fetchArtistByName(albumArtist);
@@ -698,7 +706,7 @@ class DOMHandle {
                 const isGenresEmpty = albumController.isEmpty(albumGenres);
                 const isCoverImageEmpty = albumController.isEmpty(albumCoverImageURL);
                 const isReleaseDateEmpty = albumController.isEmpty(albumReleaseDate);
-                
+
                 /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
                 if (!isGenresEmpty) {
                     const editedGenresParameter = albumController.editGenresParameter(albumGenres);
@@ -726,33 +734,33 @@ class DOMHandle {
                 console.log(albumToPost);
             }
         });
-        
+
         /* -----------ADDED BY ERIKA collapse------------- */
-        
+
         const addTrackButton = document.
         getElementById('addTrackButton');
-        
+
         addTrackButton.addEventListener('click', function(){
-            
+
         const inputTrackTitle = document.
         getElementById('inputTrackTitle')
-        
+
         const inputTrackArtist = document.
         getElementById('inputTrackArtist')
-        
+
         const addTrackTracklist = document.
         getElementById('addTrackTracklist')
-        
+
             const p = document.createElement('p');
             const newTrack = document.createTextNode(inputTrackArtist.value + ' - ' + inputTrackTitle.value)
             p.appendChild(newTrack);
             addTrackTracklist.appendChild(p)
-            
-            
+
+
         })
-        
+
     }
-    
+
     createArtistContent(){
         const addDiv = document.getElementById('addDiv');
 
@@ -765,7 +773,7 @@ class DOMHandle {
                     <button id="postArtistButton">Add artist</button>
                 </form>
             `;
-        
+
         addDiv.innerHTML=createArtistContent;
 
         /* ---------ADDED BY ERIKA--------- */
@@ -777,10 +785,10 @@ class DOMHandle {
             var artistGenres = artistController.getInputValue('inputArtistGenres');
             const artistCoverImageURL = artistController.getInputValue('inputArtistCoverImage');
             const isNameEmpty = artistController.isEmpty(artistName);
-        
+
             /* Checking the imported values before creating a new artist. This can also   be a string because there is not gonna be more than one error message so far, but in case we want to expand */
             const errorMessages = [];
-        
+
             /* Name is the only one required so checking that first */
             if (isNameEmpty) {
                 errorMessages.push('Please enter a name!');
@@ -789,7 +797,7 @@ class DOMHandle {
             else {
                 const isGenresEmpty = artistController.isEmpty(artistGenres);
                 const isCoverImageEmpty = artistController.isEmpty(artistCoverImageURL);
-                
+
                 /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
                 if (!isGenresEmpty) {
                     const editedGenresParameter = artistController.editGenresParameter(artistGenres);
@@ -815,7 +823,7 @@ class DOMHandle {
             }
         });
         /* -----collapse------ */
-        
+
         setTimeout(function(){
             addDiv.classList.remove('fadeOut');
         })
@@ -882,7 +890,7 @@ class Artist {
     constructor(name, genres, coverImageURL) {
         if (name != '') {
             this.name =       name;
-            this.genres =     genres;	
+            this.genres =     genres;
             this.coverImageURL = coverImage;
         }
     }
@@ -901,8 +909,8 @@ class Artist {
 class Album {
     constructor(title, artists, genres, releaseDate, spotifyURL, coverImage) {
         if (title != '' && artist != '') {
-            this.title =      title;	
-            this.artists =     artists;	
+            this.title =      title;
+            this.artists =     artists;
             this.genres	=      genres;
             this.releaseDate = releaseDate;
             this.spotifyURL =  spotifyURL;
@@ -934,8 +942,8 @@ class Album {
 class Tracks {
     constructor (title, artists, album, genres, coverImage, spotifyURL) {
         if (title != '' && artists != '' && album != '') {
-            this.title = title;	
-            this.artists = artists;	
+            this.title = title;
+            this.artists = artists;
             this.album	= album;
             this.genres	= genres;
             this.coverImage = coverImage;
@@ -978,9 +986,39 @@ class Logic {
             number += n;
         }
         const rating = (number / object.ratings.length);
-        const roundedRating = Math.round( rating * 10 ) / 10;
+        const roundedRating = this.roundNumber(rating);
         return roundedRating;
     }
+    determineTopPlaylists(object) {
+        let allTopPlaylists = []
+        for (let playlists of object) {
+            if (!playlists.ratings.length == 0) {
+                let totalRating = 0;
+                for (let i = 0; i < playlists.ratings.length; i++) {
+                    totalRating += playlists.ratings[i];
+                }
+                let averageRating = totalRating / playlists.ratings.length;
+                let roundedRating = this.roundNumber(averageRating);
+                let playListInfo = { title: playlists.title, id: playlists._id, rating: roundedRating };
+                allTopPlaylists.push(playListInfo);
+            }
+        }
+        const sortedAllPlaylists = allTopPlaylists.sort(this.compareRatings);
+        return sortedAllPlaylists;
+    }
+    compareRatings(a, b) {
+        if (a.rating > b.rating) {
+            return -1;
+        }
+        if (a.rating < b.rating) {
+            return 1;
+        }
+        return 0;
+    }
+    roundNumber(number) {
+        return Math.round( number * 10 ) / 10;
+    }
+
 }
 
 const startFetch = new FetchHandle();
