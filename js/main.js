@@ -467,10 +467,10 @@ class DOMHandle {
         mainOutput.innerHTML = contentOfSpecificAlbum;
 
         let trackTitles = "";
-        console.log(album.tracks)
+ 
         for (let i = 0; i < album.tracks.length; i++) {
             trackTitles += `
-                <button class="albumTrackButton" id="5ac4a81c1170fc09f6a69bd4">
+                <button class="albumTrackButton" id="${album.tracks[i]._id}">
                     ${album.tracks[i].title}
                     <img src="images/rightArrow.svg">
                 </button>
@@ -481,23 +481,24 @@ class DOMHandle {
 
         albumTracklist.innerHTML = trackTitles;
         
-        const albumTrack = document.
-        getElementsByClassName('albumTrack');
+        const albumTrackButton = document.
+        getElementsByClassName('albumTrackButton');
 
-        for (i = 0; i < albumTrack.length; i++) {
-            albumTrack[i].addEventListener('click', function() {
+        for (i = 0; i < albumTrackButton.length; i++) {
+            albumTrackButton[i].addEventListener('click', function() {
                 const newFetch = new FetchHandle();
                 newFetch.fetchTrackById(this.id);
+                console.log(this)
             })
         }
 
         const rateAlbum = document.getElementById('rateAlbum');
         rateAlbum.addEventListener('click', () => {
             const ratingNumber = document.getElementById('ratingNumber').value;
-            const thisArtistId = album._id;
+            const thisAlbumId = album._id;
             const rateThisAlbum = new FetchHandle();
-            rateThisAlbum.rateStuff('albums', thisArtistId, ratingNumber);
-            rateThisAlbum.fetchAlbumById(thisArtistId);
+            rateThisAlbum.rateStuff('albums', thisAlbumId, ratingNumber);
+            rateThisAlbum.fetchAlbumById(thisAlbumId);
         });
         
         const everyOtherButton = new DOMHandle();
@@ -506,7 +507,6 @@ class DOMHandle {
 
     }
     displaySpecificTrack(track, artist) {
-        console.log(track)
         
         let contentOfSpecificTrack = `
             <div id="contentOfSpecificTrack">
@@ -521,19 +521,20 @@ class DOMHandle {
                     </div>
                     <div id="buttonWrapper">
                     <input type="number" id="ratingNumber" placeholder="+/-" min="1" max="10">
-                    <button id="rateAlbum">
-                        RATE ALBUM
+                    <button id="rateTrack">
+                        RATE TRACK
                     </button>
                     <button id="addToPlaylist">
                         ADD TO PLAYLIST
                     </button>
                     <button id="deleteAlbum">
-                        DELETE ALBUM
+                        DELETE TRACK
                     </button>
                 </div>
             </div>
         `
         mainOutput.innerHTML = contentOfSpecificTrack;
+        
     }
     displaySpecificArtist(artist, albums){
 
