@@ -498,24 +498,31 @@ class DOMHandle {
 
     }
     displaySpecificTrack(track, artist) {
+        console.log(track)
+        
         let contentOfSpecificTrack = `
-            <div class="contentOfSpecificTrack">
-                <div id="trackTopContent">
+            <div id="contentOfSpecificTrack">
                     <div id="trackInfo">
                         <h2>${track.title}</h2>
-                        <p>By ${artist.name}</p>
-                        <p>In album: ${track.album.title}</p>
+                        <p>${artist.name}</p>
+                        <p>Rating: ${artist.rating}</p>
+                        <button class="trackAlbumButton" id="${track.album.title._id}">
+                            ${track.album.title}
+                            <img src="images/rightArrow.svg">
+                        </button>
                     </div>
+                    <div id="buttonWrapper">
+                    <input type="number" id="ratingNumber" placeholder="+/-" min="1" max="10">
+                    <button id="rateAlbum">
+                        RATE ALBUM
+                    </button>
+                    <button id="addToPlaylist">
+                        ADD TO PLAYLIST
+                    </button>
+                    <button id="deleteAlbum">
+                        DELETE ALBUM
+                    </button>
                 </div>
-                <button id="addToPlaylist">
-                    ADD TO PLAYLIST
-                </button>
-                <button id="rateTrack">
-                    RATE TRACK
-                </button>
-                <button id="deleteTrack">
-                    DELETE TRACK
-                </button>
             </div>
         `
         mainOutput.innerHTML = contentOfSpecificTrack;
