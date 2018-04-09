@@ -301,11 +301,11 @@ class DOMHandle {
     displayAlbums(allAlbums, allArtists) {
         let searchedAlbumButtons = '';
         /* Loops json object */
-        
+
         mainOutput.innerHTML=`<div id="searchResults"></div>`;
-        
+
         const searchResult = document.getElementById('searchResults')
-        
+
         for (let i = 0; i < allAlbums.length; i++) {
             /* Storing the albums in a button */
             searchedAlbumButtons += `
@@ -317,7 +317,7 @@ class DOMHandle {
                 </button>
             `;
         }
-        
+
         /* Prints the search results for Albums */
         searchResult.insertAdjacentHTML('beforeend', searchedAlbumButtons);
 
@@ -337,11 +337,11 @@ class DOMHandle {
 
     }
     displayTracks(allTracks) {
-        
+
         mainOutput.innerHTML=`<div id="searchResults"></div>`;
-        
+
         const searchResult = document.getElementById('searchResults')
-        
+
         let searchedTrackButtons = '';
         for (let i = 0; i < allTracks.length; i++) {
             searchedTrackButtons += `
@@ -371,11 +371,11 @@ class DOMHandle {
 
     }
     displayArtists(allArtists) {
-        
+
         mainOutput.innerHTML=`<div id="searchResults"></div>`;
-        
+
         const searchResult = document.getElementById('searchResults')
-        
+
         let searchedArtistButtons = '';
         for (let i = 0; i < allArtists.length; i++) {
             searchedArtistButtons += `
@@ -403,11 +403,11 @@ class DOMHandle {
 
     }
     displayPlaylists(allPlaylists) {
-        
+
         mainOutput.innerHTML=`<div id="searchResults"></div>`;
-        
+
         const searchResult = document.getElementById('searchResults')
-        
+
         let searchedPlaylistButtons = '';
         for (let i = 0; i < allPlaylists.length; i++) {
             searchedPlaylistButtons += `
@@ -467,7 +467,7 @@ class DOMHandle {
         mainOutput.innerHTML = contentOfSpecificAlbum;
 
         let trackTitles = "";
- 
+
         for (let i = 0; i < album.tracks.length; i++) {
             trackTitles += `
                 <button class="albumTrackButton" id="${album.tracks[i]._id}">
@@ -480,7 +480,7 @@ class DOMHandle {
         const albumTracklist = document.getElementById('albumTracklist');
 
         albumTracklist.innerHTML = trackTitles;
-        
+
         const albumTrackButton = document.
         getElementsByClassName('albumTrackButton');
 
@@ -500,14 +500,14 @@ class DOMHandle {
             rateThisAlbum.rateStuff('albums', thisAlbumId, ratingNumber);
             rateThisAlbum.fetchAlbumById(thisAlbumId);
         });
-        
+
         const everyOtherButton = new DOMHandle();
         everyOtherButton.
         everyOtherButton(albumTracklist.children);
 
     }
     displaySpecificTrack(track, artist) {
-        
+
         let contentOfSpecificTrack = `
             <div id="contentOfSpecificTrack">
                     <div id="trackInfo">
@@ -534,7 +534,7 @@ class DOMHandle {
             </div>
         `
         mainOutput.innerHTML = contentOfSpecificTrack;
-        
+
     }
     displaySpecificArtist(artist, albums){
 
@@ -572,7 +572,7 @@ class DOMHandle {
 
         const albumList = document.getElementById('artistAlbums');
         albumList.innerHTML=artistAlbum;
-        
+
         const everyOtherButton = new DOMHandle();
         everyOtherButton.
         everyOtherButton(albumList.children);
@@ -719,7 +719,7 @@ class DOMHandle {
             <button type="button" id="importCloseButton">
                 BACK
             </button>
-            
+
         `;
 
         addDiv.innerHTML=createAlbumContent;
@@ -823,15 +823,15 @@ class DOMHandle {
         })
 
         const importCloseButton = document.getElementById('importCloseButton');
-        
+
         importCloseButton.addEventListener('click', function(){
         let createAlbumContent =``;
             addDiv.classList.add('fadeOut');
         setTimeout(function(){
             addDiv.innerHTML=createAlbumContent;
-        }, 1000) 
-            
-        
+        }, 1000)
+
+
         })
 
     }
@@ -905,14 +905,14 @@ class DOMHandle {
         setTimeout(function(){
             addDiv.classList.remove('fadeOut');
         })
-        
+
         importCloseButton.addEventListener('click', function(){
         let createAlbumContent =``;
             addDiv.classList.add('fadeOut');
         setTimeout(function(){
             addDiv.innerHTML=createAlbumContent;
-        }, 1000) 
-        
+        }, 1000)
+
         });
     }
     displayGenres(object) {
@@ -928,7 +928,7 @@ class DOMHandle {
     }
 
 }
-    
+
 /* -----------ADDED BY ERIKA------------- */
 class Controller {
     getInputValue (elementId) {
