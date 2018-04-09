@@ -645,15 +645,12 @@ class DOMHandle {
     filterSearch() {
         const filter = searchField.value.toUpperCase();
         const buttons = mainOutput.getElementsByTagName('button');
-        let everyOtherCounter = 0;
+        let visibleButtons = [];
         for (let i = 0; i < buttons.length; i++) {
             let dataGenre = buttons[i].getAttribute('data-genre').toUpperCase();
             if (buttons[i].innerHTML.toUpperCase().indexOf(filter) > -1 || dataGenre.indexOf(filter) > -1 && dataGenre != 'NONE') {
                 buttons[i].style.display = 'flex';
-                if (everyOtherCounter % 2 == 0) {
-                    buttons[i].classList.add('lightButton');
-                }
-                everyOtherCounter++;
+                visibleButtons.push(buttons[i]);
             } else {
                 buttons[i].style.display = 'none';
             }
@@ -663,6 +660,7 @@ class DOMHandle {
                 buttons[i].style.display = 'none';
             }
         }
+        this.everyOtherFunction(visibleButtons);
     }
     /*everyOtherButton(page){
         for(let i = 0; i < page.length; i++){
@@ -670,6 +668,17 @@ class DOMHandle {
              page[sum].classList.add('lightButton');
         }
     }*/
+    everyOtherFunction(buttons) {
+        for (let i = 0; i < buttons.length; i++) {
+            if (i % 2 == 0) {
+                console.log(buttons[i])
+                buttons[i].style.backgroundColor = 'blue';
+            }
+            else {
+                buttons[i].style.backgroundColor = 'black';
+            }
+        }
+    }
 
     createAlbumContent(){
         const addDiv = document.getElementById('addDiv');
