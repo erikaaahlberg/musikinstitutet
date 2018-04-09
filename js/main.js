@@ -200,6 +200,19 @@ class FetchHandle {
         });
     }
 
+    /* ----- Under construction ----- */
+    fetchArtistByName(artistName){
+        var albumArtistId = [];
+        fetch(`https://folksa.ga/api/artists?name=${artistName}&key=flat_eric`)
+            .then((response) => response.json())
+                .then((artist) => {
+                    //console.log(artist[0]._id);
+                    albumArtistId.push(artist[0]._id);
+                });
+                return albumArtistId;
+    }
+    /* -------------- */
+
     fetchPlaylistById(playlistId) {
         fetch(`https://folksa.ga/api/playlists/${playlistId}?key=flat_eric`)
             .then((response) => response.json())
@@ -642,14 +655,15 @@ class DOMHandle {
         
         setTimeout(function(){
             addDiv.classList.remove('fadeOut');
-        })
-        
-        const addAlbumButton = document.
+        });
+
+        const postAlbumButton = document.
         getElementById('postAlbumButton');
         
         /* -----------ADDED BY ERIKA------------- */
-        addAlbumButton.addEventListener('click', function() {
+        postAlbumButton.addEventListener('click', function() {
             event.preventDefault();
+            console.log('hej');
             /* Gets the input values */
             const albumController = new Controller;
             const albumArtist = albumController.getInputValue('inputAlbumArtist');
@@ -663,7 +677,7 @@ class DOMHandle {
             const albumTitle = albumController.getInputValue('inputAlbumTitle');
             var albumGenres = albumController.getInputValue('inputAlbumGenres');
             const albumReleaseDate = albumController.getInputValue('inputAlbumReleaseDate');
-            const albumCoverImageUrl = albumController.getInputValue('inputAlbumCoverImage');
+            const albumCoverImageURL = albumController.getInputValue('inputAlbumCoverImage');
 
             /* Title and artist are required to create a new album */
             const isTitleEmpty = albumController.isEmpty(albumTitle);
@@ -682,7 +696,7 @@ class DOMHandle {
             /* Checking which other input fields are filled in to see which parameters we have to check if valid */
             if (!isTitleEmpty && !isArtistEmpty) {
                 const isGenresEmpty = albumController.isEmpty(albumGenres);
-                const isCoverImageEmpty = albumController.isEmpty(albumCoverImageUrl);
+                const isCoverImageEmpty = albumController.isEmpty(albumCoverImageURL);
                 const isReleaseDateEmpty = albumController.isEmpty(albumReleaseDate);
                 
                 /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
@@ -692,8 +706,8 @@ class DOMHandle {
                 }
                 /* If cover image is filled in the URL must be checked */
                 if (!isCoverImageEmpty) {
-                    const isUrlValid = albumController.checkUrl(albumCoverImageUrl);
-                    if (!isUrlValid) {
+                    const isURLValid = albumController.checkURL(albumCoverImageURL);
+                    if (!isURLValid) {
                         errorMessages.push('The URL is not valid, please enter another one.');
                     }
                 }
@@ -708,7 +722,7 @@ class DOMHandle {
                 }
             }
             else {
-                const albumToPost = new Album(albumName, albumGenres, albumCoverImageUrl);
+                const albumToPost = new Album(albumName, albumGenres, albumCoverImageURL);
                 console.log(albumToPost);
             }
         });
@@ -753,11 +767,58 @@ class DOMHandle {
             `;
         
         addDiv.innerHTML=createArtistContent;
+
+        /* ---------ADDED BY ERIKA--------- */
+        postArtistButton.addEventListener('click', function() {
+            event.preventDefault();
+            /* Gets the input values */
+            const artistController = new Controller;
+            const artistName = artistController.getInputValue('inputArtistName');
+            var artistGenres = artistController.getInputValue('inputArtistGenres');
+            const artistCoverImageURL = artistController.getInputValue('inputArtistCoverImage');
+            const isNameEmpty = artistController.isEmpty(artistName);
+        
+            /* Checking the imported values before creating a new artist. This can also   be a string because there is not gonna be more than one error message so far, but in case we want to expand */
+            const errorMessages = [];
+        
+            /* Name is the only one required so checking that first */
+            if (isNameEmpty) {
+                errorMessages.push('Please enter a name!');
+            }
+            /* Checking which other input fields are filled in to see which parameters we have to check if valid */
+            else {
+                const isGenresEmpty = artistController.isEmpty(artistGenres);
+                const isCoverImageEmpty = artistController.isEmpty(artistCoverImageURL);
+                
+                /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
+                if (!isGenresEmpty) {
+                    const editedGenresParameter = artistController.editGenresParameter(artistGenres);
+                    artistGenres = editedGenresParameter;
+                }
+                /* If cover image is filled in the URL must be checked */
+                if (!isCoverImageEmpty) {
+                    const isValidURL = artistController.checkURL(artistCoverImageURL);
+                    if (!isValidURL) {
+                        errorMessages.push('The URL is not valid, please enter another one.');
+                    }
+                }
+            }
+            /* A DOM-function to print error-messages should be called for here */
+            if (errorMessages.length > 0) {
+                for (let errorMessage of errorMessages) {
+                    console.log(errorMessage);
+                }
+            }
+            else {
+                const artistToPost = new Artist(artistName, artistGenres, artistCoverImageURL);
+                console.log(artistToPost);
+            }
+        });
+        /* -----collapse------ */
         
         setTimeout(function(){
             addDiv.classList.remove('fadeOut');
         })
-        
     }
 
 }
@@ -791,12 +852,12 @@ class Controller {
             }
             return editedGenresParameter;
         }
-        checkUrl(urlAddress) {
+        checkURL(URLaddress) {
             var isValid = false;
             const notAllowedCharacters = ['å', 'ä', 'ö', ' '];
-            if (urlAddress.includes('http://') || urlAddress.includes('https://')) {
+            if (URLaddress.includes('http://') || URLaddress.includes('https://')) {
                 for (let character of notAllowedCharacters) {
-                    if (urlAddress.includes(character)) {
+                    if (URLaddress.includes(character)) {
                         isValid = false;
                     } else {
                         isValid = true;
@@ -818,40 +879,83 @@ class Controller {
 };
 
 class Artist {
-    constructor(name, genres, coverImage) {
-        this.name =       name;
-        this.genres =     genres;	
-        this.coverImage = coverImage;
+    constructor(name, genres, coverImageURL) {
+        if (name != '') {
+            this.name =       name;
+            this.genres =     genres;	
+            this.coverImageURL = coverImage;
+        }
+    }
+    setGenres (genres) {
+        if (genres != '') {
+            this.genres = genres;
+        }
+    }
+    setCoverImage (coverImageURL) {
+        if (coverImageURL != '') {
+            this.coverImageURL = coverImageURL;
+        }
     }
 }
+
 class Album {
-    constructor(title, artists, genres, releaseDate, coverImage) {
-        this._title =      title;	
-        this.artists =     artists;	
-        this.genres	=      genres;
-        this.releaseDate = releaseDate;	
-        this.coverImage =  coverImage;
+    constructor(title, artists, genres, releaseDate, spotifyURL, coverImage) {
+        if (title != '' && artist != '') {
+            this.title =      title;	
+            this.artists =     artists;	
+            this.genres	=      genres;
+            this.releaseDate = releaseDate;
+            this.spotifyURL =  spotifyURL;
+            this.coverImage =  coverImage;
+        }
     }
-    get title() {
-        return this._title;
+    setGenres (genres) {
+        if (genres != '') {
+            this.genres = genres;
+        }
     }
-    set title(title) {
-        if(title === '') {
-            console.log('no way');
-        } else {
-            this._title = title;
+    setReleaseDate (date) {
+        if (date != '') {
+            this.date = date;
+        }
+    }
+    setSpotifyURL (spotifyURL) {
+        if (URL != '') {
+            this.spotifyURL = spotifyURL;
+        }
+    }
+    setCoverImage (coverImageURL) {
+        if (coverImageURL != '') {
+            this.coverImageURL = coverImage;
         }
     }
 }
 
 class Tracks {
-    constructor(title, artists, album, genres, coverImage, spotifyURL) {
-        this.title = title;	
-        this.artists = artists;	
-        this.album	= album;
-        this.genres	= genres;
-        this.coverImage = coverImage;
-        this.spotifyURL = spotifyURL;
+    constructor (title, artists, album, genres, coverImage, spotifyURL) {
+        if (title != '' && artists != '' && album != '') {
+            this.title = title;	
+            this.artists = artists;	
+            this.album	= album;
+            this.genres	= genres;
+            this.coverImage = coverImage;
+            this.spotifyURL = spotifyURL;
+        }
+    }
+    setGenres (genres) {
+        if (genres != '') {
+            this.genres = genres;
+        }
+    }
+    setCoverImage (coverImageURL) {
+        if (coverImageURL != '') {
+            this.coverImageURL = coverImage;
+        }
+    }
+    setSpotifyURL (spotifyURL) {
+        if (URL != '') {
+            this.spotifyURL = spotifyURL;
+        }
     }
 }
 
