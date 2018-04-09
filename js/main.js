@@ -637,6 +637,10 @@ class DOMHandle {
                 </button>
             </form>
             <div id="addTrackTracklist"></div>
+            <button type="button" id="importCloseButton">
+                BACK
+            </button>
+            
         `;
         
         addDiv.innerHTML=createAlbumContent;
@@ -674,6 +678,18 @@ class DOMHandle {
             
         })
         
+        const importCloseButton = document.getElementById('importCloseButton');
+        
+        importCloseButton.addEventListener('click', function(){
+        let createAlbumContent =``;
+            addDiv.classList.add('fadeOut');
+        setTimeout(function(){
+            addDiv.innerHTML=createAlbumContent;
+        }, 1000) 
+            
+        
+        })
+        
     }
     
     createArtistContent(){
@@ -687,6 +703,9 @@ class DOMHandle {
                     <input type="text" id="inputArtistCoverImage" placeholder="COVER IMAGE..">
                     <button id="postArtistButton">Add artist</button>
                 </form>
+            <button type="button" id="importCloseButton">
+                BACK
+            </button>
             `;
         
         addDiv.innerHTML=createArtistContent;
@@ -695,8 +714,17 @@ class DOMHandle {
             addDiv.classList.remove('fadeOut');
         })
         
-    }
+                importCloseButton.addEventListener('click', function(){
+        let createAlbumContent =``;
+            addDiv.classList.add('fadeOut');
+        setTimeout(function(){
+            addDiv.innerHTML=createAlbumContent;
+        }, 1000) 
+        
+    });
 
+}
+    
 }
 
 class Controller {
