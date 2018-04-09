@@ -338,8 +338,6 @@ class DOMHandle {
     }
     displayTracks(allTracks) {
 
-        mainOutput.innerHTML=`<div id="searchResults"></div>`;
-
         const searchResult = document.getElementById('searchResults')
 
         let searchedTrackButtons = '';
@@ -372,8 +370,6 @@ class DOMHandle {
     }
     displayArtists(allArtists) {
 
-        mainOutput.innerHTML=`<div id="searchResults"></div>`;
-
         const searchResult = document.getElementById('searchResults')
 
         let searchedArtistButtons = '';
@@ -403,8 +399,6 @@ class DOMHandle {
 
     }
     displayPlaylists(allPlaylists) {
-
-        mainOutput.innerHTML=`<div id="searchResults"></div>`;
 
         const searchResult = document.getElementById('searchResults')
 
