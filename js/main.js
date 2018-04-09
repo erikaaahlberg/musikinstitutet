@@ -201,15 +201,12 @@ class FetchHandle {
     }
 
     /* ----- Under construction ----- */
-    fetchArtistByName(artistName){
-        var albumArtistId = [];
-        fetch(`https://folksa.ga/api/artists?name=${artistName}&key=flat_eric`)
+    fetchArtistByName(artistName) {
+        return fetch(`https://folksa.ga/api/artists?name=${artistName}&key=flat_eric`)
             .then((response) => response.json())
                 .then((artist) => {
-                    //console.log(artist[0]._id);
-                    albumArtistId.push(artist[0]._id);
+                    return artist;
                 });
-                return albumArtistId;
     }
     /* -------------- */
 
@@ -636,6 +633,9 @@ class DOMHandle {
                 <input type="text" id="inputAlbumTitle" placeholder="ALBUM TITLE..">
                 <input type="text" id="inputAlbumGenres" placeholder="ALBUM GENRE..">
                 <input type="text" id="inputAlbumReleaseDate" placeholder="RELEASE YEAR..">
+                <input type = "text" 
+                id = "inputAlbumSpotifyURL"
+                placeholder = "SPOTIFY URL..">
                 <input type="text" id="inputAlbumCoverImage" placeholder="COVER IMAGE URL..">
                 <button type ="button" id="postAlbumButton">
                     ADD ALBUM
@@ -666,22 +666,16 @@ class DOMHandle {
             console.log('hej');
             /* Gets the input values */
             const albumController = new Controller;
-            const albumArtist = albumController.getInputValue('inputAlbumArtist');
-            
-            /* Still not working */
-            var albumArtistId = '';
-            fetchArtistByName(albumArtist);
-            console.log(albumArtistId);
-            /* ------------------ */
-
+            const albumArtistName = albumController.getInputValue('inputAlbumArtist');
             const albumTitle = albumController.getInputValue('inputAlbumTitle');
             var albumGenres = albumController.getInputValue('inputAlbumGenres');
             const albumReleaseDate = albumController.getInputValue('inputAlbumReleaseDate');
+            const albumSpotifyURL = albumController.getInputValue('inputAlbumSpotifyURL');
             const albumCoverImageURL = albumController.getInputValue('inputAlbumCoverImage');
 
             /* Title and artist are required to create a new album */
             const isTitleEmpty = albumController.isEmpty(albumTitle);
-            const isArtistEmpty = albumController.isEmpty(albumArtist);
+            const isArtistEmpty = albumController.isEmpty(albumArtistName);
 
             /* Checking the imported values before creating a new artist. */
             const errorMessages = [];
@@ -696,23 +690,32 @@ class DOMHandle {
             /* Checking which other input fields are filled in to see which parameters we have to check if valid */
             if (!isTitleEmpty && !isArtistEmpty) {
                 const isGenresEmpty = albumController.isEmpty(albumGenres);
-                const isCoverImageEmpty = albumController.isEmpty(albumCoverImageURL);
                 const isReleaseDateEmpty = albumController.isEmpty(albumReleaseDate);
+                const isSpotifyURLEmpty = albumController.isEmpty(albumSpotifyURL);
+                const isCoverImageEmpty = albumController.isEmpty(albumCoverImageURL);
+                
                 
                 /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
                 if (!isGenresEmpty) {
                     const editedGenresParameter = albumController.editGenresParameter(albumGenres);
                     albumGenres = editedGenresParameter;
                 }
-                /* If cover image is filled in the URL must be checked */
-                if (!isCoverImageEmpty) {
-                    const isURLValid = albumController.checkURL(albumCoverImageURL);
-                    if (!isURLValid) {
-                        errorMessages.push('The URL is not valid, please enter another one.');
-                    }
-                }
                 if (!isReleaseDateEmpty) {
                     const isReleaseDateValid = albumController.checkYear(albumReleaseDate);
+                }
+                /* If spotify URL is filled in the URL must be checked */
+                if (!isSpotifyURLEmpty) {
+                    const isSpotifyURLValid = albumController.checkURL(albumSpotifyURL);
+                    if (!isSpotifyURLValid) {
+                        errorMessages.push('The spotify URL is not valid, please enter another one.');
+                    }
+                }
+                /* If cover image is filled in the URL must be checked */
+                if (!isCoverImageEmpty) {
+                    const isImageURLValid = albumController.checkURL(albumCoverImageURL);
+                    if (!isImageURLValid) {
+                        errorMessages.push('The image URL is not valid, please enter another one.');
+                    }
                 }
             }
             /* A DOM-function to print error-messages should be called for here */
@@ -722,8 +725,16 @@ class DOMHandle {
                 }
             }
             else {
-                const albumToPost = new Album(albumName, albumGenres, albumCoverImageURL);
-                console.log(albumToPost);
+                /* Still not working */
+                const fetchId = new FetchHandle;
+                const albumArtistId = fetchId.fetchArtistByName(albumArtistName).then((artist) => { 
+                    console.log(artist[0]._id);
+                    const artistId = artist[0]._id;
+                    console.log(artistId);
+                    const albumToPost = new Album(albumTitle, artistId, albumGenres, albumReleaseDate, albumSpotifyURL, albumCoverImageURL);
+                    console.log(albumToPost);
+                });
+            /* ------------------ */
             }
         });
         
