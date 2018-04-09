@@ -301,6 +301,11 @@ class DOMHandle {
     displayAlbums(allAlbums, allArtists) {
         let searchedAlbumButtons = '';
         /* Loops json object */
+        
+        mainOutput.innerHTML=`<div id="searchResults"></div>`;
+        
+        const searchResult = document.getElementById('searchResults')
+        
         for (let i = 0; i < allAlbums.length; i++) {
             /* Storing the albums in a button */
             searchedAlbumButtons += `
@@ -312,8 +317,9 @@ class DOMHandle {
                 </button>
             `;
         }
+        
         /* Prints the search results for Albums */
-        mainOutput.insertAdjacentHTML('beforeend', searchedAlbumButtons);
+        searchResult.insertAdjacentHTML('beforeend', searchedAlbumButtons);
 
         const showByIdButton = document.
         getElementsByClassName('showByIdButton');
@@ -327,10 +333,15 @@ class DOMHandle {
 
         const everyOtherButton = new DOMHandle();
         everyOtherButton.
-        everyOtherButton(mainOutput.children);
+        everyOtherButton(mainOutput.firstElementChild.children);
 
     }
     displayTracks(allTracks) {
+        
+        mainOutput.innerHTML=`<div id="searchResults"></div>`;
+        
+        const searchResult = document.getElementById('searchResults')
+        
         let searchedTrackButtons = '';
         for (let i = 0; i < allTracks.length; i++) {
             searchedTrackButtons += `
@@ -342,7 +353,7 @@ class DOMHandle {
             `;
         }
 
-        mainOutput.insertAdjacentHTML('beforeend', searchedTrackButtons);
+        searchResult.insertAdjacentHTML('beforeend', searchedTrackButtons);
 
         const showByIdButton = document.
         getElementsByClassName('showByIdButton');
@@ -356,10 +367,15 @@ class DOMHandle {
 
         const everyOtherButton = new DOMHandle();
         everyOtherButton.
-        everyOtherButton(mainOutput.children);
+        everyOtherButton(mainOutput.firstElementChild.children);
 
     }
     displayArtists(allArtists) {
+        
+        mainOutput.innerHTML=`<div id="searchResults"></div>`;
+        
+        const searchResult = document.getElementById('searchResults')
+        
         let searchedArtistButtons = '';
         for (let i = 0; i < allArtists.length; i++) {
             searchedArtistButtons += `
@@ -370,7 +386,7 @@ class DOMHandle {
             `;
         }
 
-        mainOutput.insertAdjacentHTML('beforeend', searchedArtistButtons);
+        searchResult.insertAdjacentHTML('beforeend', searchedArtistButtons);
 
         const showByIdButton = document.
         getElementsByClassName('showByIdButton');
@@ -383,10 +399,15 @@ class DOMHandle {
 
         const everyOtherButton = new DOMHandle();
         everyOtherButton.
-        everyOtherButton(mainOutput.children);
+        everyOtherButton(mainOutput.firstElementChild.children);
 
     }
     displayPlaylists(allPlaylists) {
+        
+        mainOutput.innerHTML=`<div id="searchResults"></div>`;
+        
+        const searchResult = document.getElementById('searchResults')
+        
         let searchedPlaylistButtons = '';
         for (let i = 0; i < allPlaylists.length; i++) {
             searchedPlaylistButtons += `
@@ -397,7 +418,7 @@ class DOMHandle {
             `;
         }
 
-        mainOutput.insertAdjacentHTML('beforeend', searchedPlaylistButtons);
+        searchResult.insertAdjacentHTML('beforeend', searchedPlaylistButtons);
 
         const showByIdButton = document.
         getElementsByClassName('showByIdButton');
@@ -410,7 +431,7 @@ class DOMHandle {
 
         const everyOtherButton = new DOMHandle();
         everyOtherButton.
-        everyOtherButton(mainOutput.children);
+        everyOtherButton(mainOutput.firstElementChild.children);
 
     }
     displaySpecificAlbum(album, artist) {
@@ -423,28 +444,33 @@ class DOMHandle {
                     <img src="${album.coverImage}">
                     <div id="albumInfo">
                         <h2>${album.title}</h2>
-                        <p>By ${artist.name}</p>
-                        <p>Rating: ${fetchRating.calculateRating(album)}</p>
+                        <p id="artistName"> ${artist.name}</p>
+                        <p id="genres"><span>Genres:</span> ${album.genres}</p>
+                        <p id="releaseDate"><span>Released:</span> ${album.releaseDate}</p>
+                        <p id="rating">Rating: ${fetchRating.calculateRating(album)}</p>
+                        <div id="buttonWrapper">
+                            <input type="number" id="ratingNumber" placeholder="+/-" min="1" max="10">
+                            <button id="rateAlbum">
+                                RATE ALBUM
+                            </button>
+                            <button id="deleteAlbum">
+                                DELETE ALBUM
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <input type="number" id="ratingNumber" placeholder="1-10" min="1" max="10">
-                <button id="rateAlbum">
-                    RATE ALBUM
-                </button>
-                <button id="deleteAlbum">
-                    DELETE ALBUM
-                </button>
                 <div class="underline"></div>
-                <h3>Tracklist:</h3>
+                <h3>TRACKLIST</h3>
                 <div id="albumTracklist"></div>
             </div>
         `
         mainOutput.innerHTML = contentOfSpecificAlbum;
 
         let trackTitles = "";
+        console.log(album.tracks)
         for (let i = 0; i < album.tracks.length; i++) {
             trackTitles += `
-                <button class="albumTrack">
+                <button class="albumTrackButton" id="5ac4a81c1170fc09f6a69bd4">
                     ${album.tracks[i].title}
                     <img src="images/rightArrow.svg">
                 </button>
@@ -454,6 +480,16 @@ class DOMHandle {
         const albumTracklist = document.getElementById('albumTracklist');
 
         albumTracklist.innerHTML = trackTitles;
+        
+        const albumTrack = document.
+        getElementsByClassName('albumTrack');
+
+        for (i = 0; i < albumTrack.length; i++) {
+            albumTrack[i].addEventListener('click', function() {
+                const newFetch = new FetchHandle();
+                newFetch.fetchTrackById(this.id);
+            })
+        }
 
         const rateAlbum = document.getElementById('rateAlbum');
         rateAlbum.addEventListener('click', () => {
@@ -463,43 +499,60 @@ class DOMHandle {
             rateThisAlbum.rateStuff('albums', thisArtistId, ratingNumber);
             rateThisAlbum.fetchAlbumById(thisArtistId);
         });
+        
+        const everyOtherButton = new DOMHandle();
+        everyOtherButton.
+        everyOtherButton(albumTracklist.children);
 
     }
     displaySpecificTrack(track, artist) {
+        console.log(track)
+        
         let contentOfSpecificTrack = `
-            <div class="contentOfSpecificTrack">
-                <div id="trackTopContent">
+            <div id="contentOfSpecificTrack">
                     <div id="trackInfo">
                         <h2>${track.title}</h2>
-                        <p>By ${artist.name}</p>
-                        <p>In album: ${track.album.title}</p>
+                        <p>${artist.name}</p>
+                        <p>Rating: ${artist.rating}</p>
+                        <button class="trackAlbumButton" id="${track.album.title._id}">
+                            ${track.album.title}
+                            <img src="images/rightArrow.svg">
+                        </button>
                     </div>
+                    <div id="buttonWrapper">
+                    <input type="number" id="ratingNumber" placeholder="+/-" min="1" max="10">
+                    <button id="rateAlbum">
+                        RATE ALBUM
+                    </button>
+                    <button id="addToPlaylist">
+                        ADD TO PLAYLIST
+                    </button>
+                    <button id="deleteAlbum">
+                        DELETE ALBUM
+                    </button>
                 </div>
-                <button id="addToPlaylist">
-                    ADD TO PLAYLIST
-                </button>
-                <button id="rateTrack">
-                    RATE TRACK
-                </button>
-                <button id="deleteTrack">
-                    DELETE TRACK
-                </button>
             </div>
         `
         mainOutput.innerHTML = contentOfSpecificTrack;
     }
     displaySpecificArtist(artist, albums){
 
-        let contentOfSpecificArtist =`
-            <div class="artistContent">
-                <img src="${artist.image}">
-                ${artist.name}
-                ${artist.genres}
-                ${artist.countryBorn}
-                ${artist.born}
-                <button id="deleteArtist">
-                    DELETE ARTIST
-                </button>
+        let contentOfSpecificArtist = `
+            <div id="contentOfSpecificArtist">
+                <div id="artistTopContent">
+                    <img src="${artist.image}">
+                    <div id="artistInfo">
+                        <h2>${artist.name}</h2>
+                        <p id="genres"><span>Genres:</span> ${artist.genres}</p>
+                        <p id="countryBorn"><span>Country:</span> ${artist.countryBorn}</p>
+                        <p id="born"><span>Born:</span> ${artist.born}</p>
+                        <button id="deleteArtist">
+                            DELETE ARTIST
+                        </button>
+                    </div>
+                </div>
+                <div class="underline"></div>
+                <h3>ALBUMS</h3>
                 <div id="artistAlbums"></div>
             </div>
         `
@@ -508,7 +561,7 @@ class DOMHandle {
         let artistAlbum = "";
         for(let i = 0; i < albums.length; i++){
             artistAlbum +=`
-                <button class="showByIdButton" id="${albums[i]._id}">
+                <button class="artistAlbumButton" id="${albums[i]._id}">
                     ${albums[i].title} -
                     ${albums[i].releaseDate}
                     <img src="images/rightArrow.svg">
@@ -518,6 +571,10 @@ class DOMHandle {
 
         const albumList = document.getElementById('artistAlbums');
         albumList.innerHTML=artistAlbum;
+        
+        const everyOtherButton = new DOMHandle();
+        everyOtherButton.
+        everyOtherButton(albumList.children);
 
     }
     displaySpecificPlaylist(playlist, comments){
@@ -858,7 +915,7 @@ class DOMHandle {
     }
 
 }
-
+    
 /* -----------ADDED BY ERIKA------------- */
 class Controller {
     getInputValue (elementId) {
