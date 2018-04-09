@@ -329,9 +329,6 @@ class DOMHandle {
             })
         }
 
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(mainOutput.firstElementChild.children);
 
     }
     displayTracks(allTracks) {
@@ -362,10 +359,6 @@ class DOMHandle {
             })
         }
 
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(mainOutput.firstElementChild.children);
-
     }
     displayArtists(allArtists) {
 
@@ -393,10 +386,6 @@ class DOMHandle {
             })
         }
 
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(mainOutput.firstElementChild.children);
-
     }
     displayPlaylists(allPlaylists) {
 
@@ -423,10 +412,6 @@ class DOMHandle {
                 newFetch.fetchPlaylistById(this.id);
             })
         }
-
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(mainOutput.firstElementChild.children);
 
     }
     displaySpecificAlbum(album, artist) {
@@ -496,10 +481,6 @@ class DOMHandle {
             rateThisAlbum.fetchAlbumById(thisAlbumId);
         });
 
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(albumTracklist.children);
-
     }
     displaySpecificTrack(track, artist) {
 
@@ -568,9 +549,6 @@ class DOMHandle {
         const albumList = document.getElementById('artistAlbums');
         albumList.innerHTML=artistAlbum;
 
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(albumList.children);
 
     }
     displaySpecificPlaylist(playlist, comments){
