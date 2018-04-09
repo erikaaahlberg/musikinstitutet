@@ -169,26 +169,16 @@ postArtistButton.addEventListener('click', function() {
 });
 
 
-function fetchArtistByName(artistName){
-    var albumArtistId = [];
-    fetch(`https://folksa.ga/api/artists?name=${artistName}&key=flat_eric`)
+function fetchArtistByName(artistName) {
+    return fetch(`https://folksa.ga/api/artists?name=${artistName}&key=flat_eric`)
         .then((response) => response.json())
             .then((artist) => {
-                //console.log(artist[0]._id);
-                albumArtistId.push(artist[0]._id);
+                return artist;
             });
-            return albumArtistId;
 }
-/*async function fetchArtistByName(artistName) {
-    const response = await fetch(`https://folksa.ga/api/artists?name=${artistName}&key=flat_eric`, {});
-    const json = await response.json();
-    console.log(json);
-    return json;
-}*/
-async function returnPromiseValue (functionName, promise) {
-    const value = await functionName(promise);
-    return value;
-}
+fetchArtistByName('tim buckley').then((artist) => { 
+    console.log(artist);
+});
 
 postAlbumButton.addEventListener('click', function() {
     event.preventDefault();
