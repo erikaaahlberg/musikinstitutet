@@ -270,6 +270,15 @@ class FetchHandle {
         .then((response) => response.json())
         .then((vote) => {
             console.log(vote);
+            if (apiPath == 'albums') {
+                this.fetchAlbumById(id);
+            }
+            if (apiPath == 'playlists') {
+                this.fetchPlaylistById(id);
+            }
+            if (apiPath == 'tracks') {
+                this.fetchTrackById(id);
+            }
         })
         .catch((error) => {
             console.log(error);
@@ -483,13 +492,14 @@ class DOMHandle {
 
     }
     displaySpecificTrack(track, artist) {
+        const fetchRating = new Logic();
 
         let contentOfSpecificTrack = `
             <div id="contentOfSpecificTrack">
                     <div id="trackInfo">
                         <h2>${track.title}</h2>
                         <p>${artist.name}</p>
-                        <p>Rating: ${artist.rating}</p>
+                        <p>Rating: ${fetchRating.calculateRating(track)}</p>
                         <button class="trackAlbumButton" id="${track.album.title._id}">
                             ${track.album.title}
                             <img src="images/rightArrow.svg">
@@ -511,7 +521,15 @@ class DOMHandle {
         `
         mainOutput.innerHTML = contentOfSpecificTrack;
 
-    }
+        const rateTrack = document.getElementById('rateTrack');
+        rateTrack.addEventListener('click', () => {
+            const ratingNumber = document.getElementById('ratingNumber').value;
+            const thisTrackId = track._id;
+            const rateThisTrack = new FetchHandle();
+            rateThisTrack.rateStuff('tracks', thisTrackId, ratingNumber);
+
+    });
+}
     displaySpecificArtist(artist, albums){
 
         let contentOfSpecificArtist = `
@@ -552,11 +570,12 @@ class DOMHandle {
 
     }
     displaySpecificPlaylist(playlist, comments){
+        const fetchRating = new Logic();
 
         let contentOfSpecificPlaylist =`
             <div class="playlistContent">
                 ${playlist.title}
-                ${playlist.ratings}
+                <p id="rating">Rating: ${fetchRating.calculateRating(playlist)}</p>
                 ${playlist.genres}
                 ${playlist.createdBy}
                 ${playlist.createdAt}
@@ -564,6 +583,7 @@ class DOMHandle {
                 <button id="deletePlaylist">
                     DELETE PLAYLIST
                 </button>
+                <input type="number" id="ratingNumber" placeholder="+/-" min="1" max="10">
                 <button id="ratePlaylist">
                     RATE PLAYLIST
                 </button>
@@ -608,6 +628,14 @@ class DOMHandle {
         addPlayListComment.addPlayListComment(commentField.value, commentUser.value, playlist._id, comments);
 
         })
+
+        const ratePlaylist = document.getElementById('ratePlaylist');
+        ratePlaylist.addEventListener('click', () => {
+            const ratingNumber = document.getElementById('ratingNumber').value;
+            const thisPlaylistId = playlist._id;
+            const rateThisPlaylist = new FetchHandle();
+            rateThisPlaylist.rateStuff('playlists', thisPlaylistId, ratingNumber);
+});
 
     }
 
@@ -1094,7 +1122,9 @@ class Logic {
         }
         let number = 0;
         for (let n of object.ratings) {
-            number += n;
+            if (n != 'null') {
+                number += n;
+            }
         }
         const rating = (number / object.ratings.length);
         const roundedRating = this.roundNumber(rating);
