@@ -573,22 +573,34 @@ class DOMHandle {
     }
     displaySpecificPlaylist(playlist, comments){
         const fetchRating = new Logic();
+        
+        const createdDate = playlist.createdAt.substring(0,10)
+        const createdTime = playlist.createdAt.substring(11,16)
 
+        const updatedDate = playlist.updatedAt.substring(0,10)
+        const updatedTime = playlist.updatedAt.substring(11,16)
+        
         let contentOfSpecificPlaylist =`
             <div id="contentOfSpecificPlaylist">
-                ${playlist.title}
-                <p id="rating">Rating: ${fetchRating.calculateRating(playlist)}</p>
-                ${playlist.genres}
-                ${playlist.createdBy}
-                ${playlist.createdAt}
-                ${playlist.updatedAt}
-                <button id="deletePlaylist">
-                    DELETE PLAYLIST
-                </button>
-                <input type="number" id="ratingNumber" placeholder="+/-" min="1" max="10">
-                <button id="ratePlaylist">
-                    RATE PLAYLIST
-                </button>
+                <div id="playlistTopContent">
+                    <h2>${playlist.title}</h2>
+                    <p><span>Genres: </span> ${playlist.genres}</p>
+                    <p><span>Rating:</span> ${fetchRating.calculateRating(playlist)}</p>
+                    <p id="createdBy"><span>Created by: </span>${playlist.createdBy}</p>
+                    <br>
+                    <p><span>Created:</span> ${createdDate} / ${createdTime}</p>
+                    <p><span>Last updated:</span> ${updatedDate} / ${updatedTime}</p>
+                </div>
+                <div id="buttonWrapper">
+                    <input type="number" id="ratingNumber" placeholder="+/-" min="1" max="10">
+                    <button id="ratePlaylist">
+                        RATE PLAYLIST
+                    </button>
+                    <button id="deletePlaylist">
+                        DELETE PLAYLIST
+                    </button>
+                </div>
+                <div class="underline"></div>
                 <h3>TRACKLIST</h3>
                 <div id="playlistTracklist"></div>
                 <form id="commentform">
@@ -700,21 +712,21 @@ class DOMHandle {
     everyOtherButton(buttons) {
         for (let i = 0; i < buttons.length; i++) {
             if (i % 2 == 0) {
-                buttons[i].style.backgroundColor = '#191919';
-                buttons[i].addEventListener('mouseover', () => {
-                    buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.07)';
-                });
-                buttons[i].addEventListener('mouseleave', () => {
-                    buttons[i].style.backgroundColor = '#191919';
-                });
-            }
-            else {
                 buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
                 buttons[i].addEventListener('mouseover', () => {
                     buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.07)';
                 });
                 buttons[i].addEventListener('mouseleave', () => {
                     buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
+                });
+            }
+            else {
+                buttons[i].style.backgroundColor = '#191919';
+                buttons[i].addEventListener('mouseover', () => {
+                    buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.07)';
+                });
+                buttons[i].addEventListener('mouseleave', () => {
+                    buttons[i].style.backgroundColor = '#191919';
                 });
             }
         }

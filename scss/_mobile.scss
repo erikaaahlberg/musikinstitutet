@@ -229,13 +229,7 @@ body{
                     padding: 0 10px;
                     .artistAlbumButton{
                         @include listButtons;
-                    }
-                    .artistAlbumButton:hover{
-                        background: rgba(255, 255, 255, 0.07);
-                    }
-                    .lightButton{
-                        background: rgba(255, 255, 255, 0.03);
-                    }    
+                    }   
                 }
             }
             #contentOfSpecificTrack{
@@ -267,25 +261,75 @@ body{
                     } 
                 }
             }
-        }
-        #contentOfSpecificPlaylist{
-            h3{
-                text-align: center;
-                font-size: 2.2em;
-                letter-spacing: 3px;
-                padding: 30px;
-                margin: 0;
-            }
-            #playlistTracklist{
-                .playlistTrackButton{
-                    @include listButtons;
+            #contentOfSpecificPlaylist{
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                #playlistTopContent{
+                    letter-spacing: 2px;
+                    font-size: 1em;
+                    padding: 20px 0 40px 0;
+                    h2{
+                        text-transform: uppercase;
+                        text-align: center;
+                        color: $accentColor;
+                        letter-spacing: 3px;
+                        font-size: 2.5em;
+                        margin: 0;
+                        margin-bottom: 40px;
+                    }
+                    p{
+                        margin: 10px 0px;
+                        span{
+                            font-weight: 700;
+                        }
+                    }
+                    #createdBy{
+                        font-size: 1.3em;
+                        color: $accentColor;
+                    }
                 }
-                .playlistTrackButton:hover{
-                    background: rgba(255, 255, 255, 0.07);
+                #buttonWrapper{
+                    margin-bottom: 60px;
+                    input{
+                        font-size: 0.9em;
+                        apperence: text;
+                        padding: 8px;
+                        border-radius: 5px;
+                        border: none;        
+                    }
+                    button{
+                        background: $accentColor;
+                        color: $backgroundColor;
+                        padding: 10px 15px;
+                        margin-left: 10px;
+                        font-size: 0.8em;
+                        font-weight: 700;
+                        letter-spacing: 2px;
+                        border-radius: 20px;
+                        border: none;
+                        cursor: pointer;
+                    }
                 }
-                .lightButton{
-                    background: rgba(255, 255, 255, 0.03);
-                } 
+                .underline{
+                    border-bottom: 1px solid $textColor;
+                    width: 95%;
+                    margin: auto;
+                }
+                h3{
+                    font-size: 1.8em;
+                    text-align: center;
+                    letter-spacing: 3px;
+                    padding: 20px;
+                    margin: 0;
+                }
+                #playlistTracklist{
+                    width: 100%;
+                    .playlistTrackButton{
+                        @include listButtons;
+                    }
+                }
             }
         }
         #addDiv{
