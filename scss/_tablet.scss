@@ -26,7 +26,29 @@ body{
                 }  
             }
             #contentOfSpecificAlbum{
-                
+                #albumTopContent{
+                    flex-direction: row;
+                    img{
+                        width: 280px;
+                    }
+                    #albumInfo{
+                        padding-left: 5%;
+                        h2{
+                            margin: 0;
+                        }
+                        #buttonWrapper{
+                            margin-top: 40px;
+                            input{
+                                font-size: 1.1em;
+                                
+                            }
+                            button{
+                                margin-left: 15px;
+                                font-size: 0.9em;
+                            }
+                        }
+                    }
+                }
                 h3{
                     font-size: 2.2em;
                     padding: 30px;
@@ -40,6 +62,33 @@ body{
                 }
             }
             #contentOfSpecificArtist{
+                #artistTopContent{
+                    flex-direction: row;
+                    img{
+                        width: 280px;
+                    }
+                    #artistInfo{
+                        padding-left: 5%;
+                        h2{
+                            margin: 0 0 25px 0;
+                        }
+                        #buttonWrapper{
+                            margin-top: 40px;
+                            input{
+                                font-size: 1.1em;
+                                
+                            }
+                            button{
+                                margin-left: 15px;
+                                font-size: 0.9em;
+                            }
+                        }
+                    }
+                }
+                h3{
+                    font-size: 2.2em;
+                    padding: 30px;
+                }
                 #artistAlbums{
                     .artistAlbumButton{
                         font-size: 1.2em;
@@ -54,6 +103,15 @@ body{
                         font-size: 1.2em;
                         letter-spacing: 2px;
                         padding: 20px 25px;           
+                    }
+                }
+            }
+            #contentOfSpecificPlaylist{
+                #playlistTracklist{
+                    .playlistTrackButton{
+                        font-size: 1.2em;
+                        letter-spacing: 2px;
+                        padding: 20px 25px; 
                     }
                 }
             }

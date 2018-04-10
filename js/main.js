@@ -532,7 +532,9 @@ class DOMHandle {
 
     }
     displaySpecificArtist(artist, albums){
-
+        
+        const convertedDated = artist.born.substring(0,4);
+        
         let contentOfSpecificArtist = `
             <div id="contentOfSpecificArtist">
                 <div id="artistTopContent">
@@ -541,7 +543,7 @@ class DOMHandle {
                         <h2>${artist.name}</h2>
                         <p id="genres"><span>Genres:</span> ${artist.genres}</p>
                         <p id="countryBorn"><span>Country:</span> ${artist.countryBorn}</p>
-                        <p id="born"><span>Born:</span> ${artist.born}</p>
+                        <p id="born"><span>Born:</span> ${convertedDated}</p>
                         <button id="deleteArtist">
                             DELETE ARTIST
                         </button>
@@ -576,7 +578,7 @@ class DOMHandle {
     displaySpecificPlaylist(playlist, comments){
 
         let contentOfSpecificPlaylist =`
-            <div class="playlistContent">
+            <div id="contentOfSpecificPlaylist">
                 ${playlist.title}
                 ${playlist.ratings}
                 ${playlist.genres}
@@ -589,6 +591,7 @@ class DOMHandle {
                 <button id="ratePlaylist">
                     RATE PLAYLIST
                 </button>
+                <h3>TRACKLIST</h3>
                 <div id="playlistTracklist"></div>
                 <form id="commentform">
                     <input type="text" id="commentField">
@@ -605,7 +608,7 @@ class DOMHandle {
         let trackButton = "";
         for (let i = 0; i < playlist.tracks.length; i++){
             trackButton +=`
-                <button class="playlistTrack">
+                <button class="playlistTrackButton">
                     ${playlist.tracks[i].artists[0].name} -
                     ${playlist.tracks[i].title}
                     <img src="images/rightArrow.svg">
@@ -630,6 +633,10 @@ class DOMHandle {
         addPlayListComment.addPlayListComment(commentField.value, commentUser.value, playlist._id, comments);
 
         })
+        
+        const everyOtherButton = new DOMHandle();
+        everyOtherButton.
+        everyOtherButton(playlistTracklist.children);
 
     }
 
