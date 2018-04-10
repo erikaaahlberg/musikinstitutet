@@ -329,9 +329,6 @@ class DOMHandle {
             })
         }
 
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(mainOutput.firstElementChild.children);
 
     }
     displayTracks(allTracks) {
@@ -362,10 +359,6 @@ class DOMHandle {
             })
         }
 
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(mainOutput.firstElementChild.children);
-
     }
     displayArtists(allArtists) {
 
@@ -393,10 +386,6 @@ class DOMHandle {
             })
         }
 
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(mainOutput.firstElementChild.children);
-
     }
     displayPlaylists(allPlaylists) {
 
@@ -423,10 +412,6 @@ class DOMHandle {
                 newFetch.fetchPlaylistById(this.id);
             })
         }
-
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(mainOutput.firstElementChild.children);
 
     }
     displaySpecificAlbum(album, artist) {
@@ -496,10 +481,6 @@ class DOMHandle {
             rateThisAlbum.fetchAlbumById(thisAlbumId);
         });
 
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(albumTracklist.children);
-
     }
     displaySpecificTrack(track, artist) {
 
@@ -568,9 +549,6 @@ class DOMHandle {
         const albumList = document.getElementById('artistAlbums');
         albumList.innerHTML=artistAlbum;
 
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(albumList.children);
 
     }
     displaySpecificPlaylist(playlist, comments){
@@ -667,12 +645,14 @@ class DOMHandle {
     filterSearch() {
         const filter = searchField.value.toUpperCase();
         const buttons = mainOutput.getElementsByTagName('button');
+        let visibleButtons = [];
         for (let i = 0; i < buttons.length; i++) {
             let dataGenre = buttons[i].getAttribute('data-genre').toUpperCase();
             if (buttons[i].innerHTML.toUpperCase().indexOf(filter) > -1 || dataGenre.indexOf(filter) > -1 && dataGenre != 'NONE') {
-             buttons[i].style.display = 'flex';
+                buttons[i].style.display = 'flex';
+                visibleButtons.push(buttons[i]);
             } else {
-             buttons[i].style.display = 'none';
+                buttons[i].style.display = 'none';
             }
         }
         if (filter == '') {
@@ -680,11 +660,28 @@ class DOMHandle {
                 buttons[i].style.display = 'none';
             }
         }
+        this.everyOtherButton(visibleButtons);
     }
-    everyOtherButton(page){
-        for(let i = 0; i < page.length; i++){
-            let sum = i++;
-             page[sum].classList.add('lightButton');
+    everyOtherButton(buttons) {
+        for (let i = 0; i < buttons.length; i++) {
+            if (i % 2 == 0) {
+                buttons[i].style.backgroundColor = '#191919';
+                buttons[i].addEventListener('mouseover', () => {
+                    buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.07)';
+                });
+                buttons[i].addEventListener('mouseleave', () => {
+                    buttons[i].style.backgroundColor = '#191919';
+                });
+            }
+            else {
+                buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
+                buttons[i].addEventListener('mouseover', () => {
+                    buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.07)';
+                });
+                buttons[i].addEventListener('mouseleave', () => {
+                    buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
+                });
+            }
         }
     }
 
