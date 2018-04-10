@@ -296,6 +296,11 @@ class DOMHandle {
         /* Adds the activeButton class to selected button */
         checkButton.classList.add('activeButton');
     }
+    deactivateSearchButtons() {
+        for (let sbutton of searchButton) {
+            sbutton.classList.remove('activeButton');
+        }
+    }
 
     displayAll(allAlbums, allTracks, allArtists, allPlaylists, allAlbumArtists) {
         this.displayAlbums(allAlbums, allAlbumArtists);
@@ -335,6 +340,8 @@ class DOMHandle {
             showByIdButton[i].addEventListener('click', function() {
                 const newFetch = new FetchHandle();
                 newFetch.fetchAlbumById(this.id);
+                const deActivate = new DOMHandle();
+                deActivate.deactivateSearchButtons();
             })
         }
 
@@ -365,10 +372,11 @@ class DOMHandle {
             showByIdButton[i].addEventListener('click', function() {
                 const newFetch = new FetchHandle();
                 newFetch.fetchTrackById(this.id);
-            })
+                const deActivate = new DOMHandle();
+                deActivate.deactivateSearchButtons();
+            });
         }
-
-    }
+   }
     displayArtists(allArtists) {
 
 
@@ -392,6 +400,8 @@ class DOMHandle {
             showByIdButton[i].addEventListener('click', function() {
                 const newFetch = new FetchHandle();
                 newFetch.fetchArtistById(this.id);
+                const deActivate = new DOMHandle();
+                deActivate.deactivateSearchButtons();
             })
         }
 
@@ -419,6 +429,8 @@ class DOMHandle {
             showByIdButton[i].addEventListener('click', function() {
                 const newFetch = new FetchHandle();
                 newFetch.fetchPlaylistById(this.id);
+                const deActivate = new DOMHandle();
+                deActivate.deactivateSearchButtons();
             })
         }
 
@@ -678,24 +690,28 @@ class DOMHandle {
     }
 
     filterSearch() {
-        const filter = searchField.value.toUpperCase();
-        const buttons = mainOutput.getElementsByTagName('button');
-        let visibleButtons = [];
-        for (let i = 0; i < buttons.length; i++) {
-            let dataGenre = buttons[i].getAttribute('data-genre').toUpperCase();
-            if (buttons[i].innerHTML.toUpperCase().indexOf(filter) > -1 || dataGenre.indexOf(filter) > -1 && dataGenre != 'NONE') {
-                buttons[i].style.display = 'flex';
-                visibleButtons.push(buttons[i]);
-            } else {
-                buttons[i].style.display = 'none';
+        for (let sbutton of searchButton) {
+            if (sbutton.classList.contains('activeButton')) {
+                const filter = searchField.value.toUpperCase();
+                const buttons = mainOutput.getElementsByTagName('button');
+                let visibleButtons = [];
+                for (let i = 0; i < buttons.length; i++) {
+                    let dataGenre = buttons[i].getAttribute('data-genre').toUpperCase();
+                    if (buttons[i].innerHTML.toUpperCase().indexOf(filter) > -1 || dataGenre.indexOf(filter) > -1 && dataGenre != 'NONE') {
+                        buttons[i].style.display = 'flex';
+                        visibleButtons.push(buttons[i]);
+                    } else {
+                        buttons[i].style.display = 'none';
+                    }
+                }
+                if (filter == '') {
+                    for (let i = 0; i < buttons.length; i++) {
+                        buttons[i].style.display = 'none';
+                    }
+                }
+                this.everyOtherButton(visibleButtons);
             }
         }
-        if (filter == '') {
-            for (let i = 0; i < buttons.length; i++) {
-                buttons[i].style.display = 'none';
-            }
-        }
-        this.everyOtherButton(visibleButtons);
     }
     everyOtherButton(buttons) {
         for (let i = 0; i < buttons.length; i++) {
