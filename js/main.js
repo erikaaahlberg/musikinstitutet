@@ -660,22 +660,27 @@ class DOMHandle {
                 buttons[i].style.display = 'none';
             }
         }
-        this.everyOtherFunction(visibleButtons);
+        this.everyOtherButton(visibleButtons);
     }
-    /*everyOtherButton(page){
-        for(let i = 0; i < page.length; i++){
-            let sum = i++;
-             page[sum].classList.add('lightButton');
-        }
-    }*/
-    everyOtherFunction(buttons) {
+    everyOtherButton(buttons) {
         for (let i = 0; i < buttons.length; i++) {
             if (i % 2 == 0) {
-                console.log(buttons[i])
-                buttons[i].style.backgroundColor = 'blue';
+                buttons[i].style.backgroundColor = '#191919';
+                buttons[i].addEventListener('mouseover', () => {
+                    buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.07)';
+                });
+                buttons[i].addEventListener('mouseleave', () => {
+                    buttons[i].style.backgroundColor = '#191919';
+                });
             }
             else {
-                buttons[i].style.backgroundColor = 'black';
+                buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
+                buttons[i].addEventListener('mouseover', () => {
+                    buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.07)';
+                });
+                buttons[i].addEventListener('mouseleave', () => {
+                    buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
+                });
             }
         }
     }
