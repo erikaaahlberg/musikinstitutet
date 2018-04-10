@@ -7,25 +7,21 @@ for (i = 0; i < searchButton.length; i++) {
         const activateButton = new DOMHandle();
         activateButton.activateSearchButton(this);
         const newFetch = new FetchHandle(this.value);
+        mainOutput.innerHTML = '<div id="searchResults"></div>'
         switch (this.value) {
             case 'all':
-                mainOutput.innerHTML = '<div id="searchResults"></div>'
                 newFetch.fetchAll();
                 break;
             case 'albums':
-                mainOutput.innerHTML = '<div id="searchResults"></div>'
                 newFetch.fetchAlbums();
                 break;
             case 'tracks':
-                mainOutput.innerHTML = '<div id="searchResults"></div>'
                 newFetch.fetchTracks();
                 break;
             case 'artists':
-                mainOutput.innerHTML = '<div id="searchResults"></div>'
                 newFetch.fetchArtists();
                 break;
             case 'playlists':
-                mainOutput.innerHTML = '<div id="searchResults"></div>'
                 newFetch.fetchPlaylists();
                 break;
         }
