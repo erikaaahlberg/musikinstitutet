@@ -270,6 +270,15 @@ class FetchHandle {
         .then((response) => response.json())
         .then((vote) => {
             console.log(vote);
+            if (apiPath == 'albums') {
+                this.fetchAlbumById(id);
+            }
+            if (apiPath == 'playlists') {
+                this.fetchPlaylistById(id);
+            }
+            if (apiPath == 'tracks') {
+                this.fetchTrackById(id);
+            }
         })
         .catch((error) => {
             console.log(error);
@@ -329,9 +338,6 @@ class DOMHandle {
             })
         }
 
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(mainOutput.firstElementChild.children);
 
     }
     displayTracks(allTracks) {
@@ -362,10 +368,6 @@ class DOMHandle {
             })
         }
 
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(mainOutput.firstElementChild.children);
-
     }
     displayArtists(allArtists) {
 
@@ -393,10 +395,6 @@ class DOMHandle {
             })
         }
 
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(mainOutput.firstElementChild.children);
-
     }
     displayPlaylists(allPlaylists) {
 
@@ -423,10 +421,6 @@ class DOMHandle {
                 newFetch.fetchPlaylistById(this.id);
             })
         }
-
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(mainOutput.firstElementChild.children);
 
     }
     displaySpecificAlbum(album, artist) {
@@ -496,19 +490,16 @@ class DOMHandle {
             rateThisAlbum.fetchAlbumById(thisAlbumId);
         });
 
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(albumTracklist.children);
-
     }
     displaySpecificTrack(track, artist) {
+        const fetchRating = new Logic();
 
         let contentOfSpecificTrack = `
             <div id="contentOfSpecificTrack">
                     <div id="trackInfo">
                         <h2>${track.title}</h2>
                         <p>${artist.name}</p>
-                        <p>Rating: ${artist.rating}</p>
+                        <p>Rating: ${fetchRating.calculateRating(track)}</p>
                         <button class="trackAlbumButton" id="${track.album.title._id}">
                             ${track.album.title}
                             <img src="images/rightArrow.svg">
@@ -530,7 +521,15 @@ class DOMHandle {
         `
         mainOutput.innerHTML = contentOfSpecificTrack;
 
-    }
+        const rateTrack = document.getElementById('rateTrack');
+        rateTrack.addEventListener('click', () => {
+            const ratingNumber = document.getElementById('ratingNumber').value;
+            const thisTrackId = track._id;
+            const rateThisTrack = new FetchHandle();
+            rateThisTrack.rateStuff('tracks', thisTrackId, ratingNumber);
+
+    });
+}
     displaySpecificArtist(artist, albums){
         
         const convertedDated = artist.born.substring(0,4);
@@ -570,17 +569,15 @@ class DOMHandle {
         const albumList = document.getElementById('artistAlbums');
         albumList.innerHTML=artistAlbum;
 
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(albumList.children);
 
     }
     displaySpecificPlaylist(playlist, comments){
+        const fetchRating = new Logic();
 
         let contentOfSpecificPlaylist =`
             <div id="contentOfSpecificPlaylist">
                 ${playlist.title}
-                ${playlist.ratings}
+                <p id="rating">Rating: ${fetchRating.calculateRating(playlist)}</p>
                 ${playlist.genres}
                 ${playlist.createdBy}
                 ${playlist.createdAt}
@@ -588,6 +585,7 @@ class DOMHandle {
                 <button id="deletePlaylist">
                     DELETE PLAYLIST
                 </button>
+                <input type="number" id="ratingNumber" placeholder="+/-" min="1" max="10">
                 <button id="ratePlaylist">
                     RATE PLAYLIST
                 </button>
@@ -638,6 +636,14 @@ class DOMHandle {
         everyOtherButton.
         everyOtherButton(playlistTracklist.children);
 
+        const ratePlaylist = document.getElementById('ratePlaylist');
+        ratePlaylist.addEventListener('click', () => {
+            const ratingNumber = document.getElementById('ratingNumber').value;
+            const thisPlaylistId = playlist._id;
+            const rateThisPlaylist = new FetchHandle();
+            rateThisPlaylist.rateStuff('playlists', thisPlaylistId, ratingNumber);
+});
+
     }
 
     displayPlaylistComments(comments, newComment){
@@ -674,12 +680,14 @@ class DOMHandle {
     filterSearch() {
         const filter = searchField.value.toUpperCase();
         const buttons = mainOutput.getElementsByTagName('button');
+        let visibleButtons = [];
         for (let i = 0; i < buttons.length; i++) {
             let dataGenre = buttons[i].getAttribute('data-genre').toUpperCase();
             if (buttons[i].innerHTML.toUpperCase().indexOf(filter) > -1 || dataGenre.indexOf(filter) > -1 && dataGenre != 'NONE') {
-             buttons[i].style.display = 'flex';
+                buttons[i].style.display = 'flex';
+                visibleButtons.push(buttons[i]);
             } else {
-             buttons[i].style.display = 'none';
+                buttons[i].style.display = 'none';
             }
         }
         if (filter == '') {
@@ -687,11 +695,28 @@ class DOMHandle {
                 buttons[i].style.display = 'none';
             }
         }
+        this.everyOtherButton(visibleButtons);
     }
-    everyOtherButton(page){
-        for(let i = 0; i < page.length; i++){
-            let sum = i++;
-             page[sum].classList.add('lightButton');
+    everyOtherButton(buttons) {
+        for (let i = 0; i < buttons.length; i++) {
+            if (i % 2 == 0) {
+                buttons[i].style.backgroundColor = '#191919';
+                buttons[i].addEventListener('mouseover', () => {
+                    buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.07)';
+                });
+                buttons[i].addEventListener('mouseleave', () => {
+                    buttons[i].style.backgroundColor = '#191919';
+                });
+            }
+            else {
+                buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
+                buttons[i].addEventListener('mouseover', () => {
+                    buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.07)';
+                });
+                buttons[i].addEventListener('mouseleave', () => {
+                    buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
+                });
+            }
         }
     }
 
@@ -1104,7 +1129,9 @@ class Logic {
         }
         let number = 0;
         for (let n of object.ratings) {
-            number += n;
+            if (n != 'null') {
+                number += n;
+            }
         }
         const rating = (number / object.ratings.length);
         const roundedRating = this.roundNumber(rating);
