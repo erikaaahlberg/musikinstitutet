@@ -735,18 +735,7 @@ class DOMHandle {
             console.log('hej');
             /* Gets the input values */
             const albumController = new Controller;
-<<<<<<< HEAD
             const albumArtistName = albumController.getInputValue('inputAlbumArtist');
-=======
-            const albumArtist = albumController.getInputValue('inputAlbumArtist');
-
-            /* Still not working */
-            var albumArtistId = '';
-            fetchArtistByName(albumArtist);
-            console.log(albumArtistId);
-            /* ------------------ */
-
->>>>>>> 9ddce2f332f9d02e3b45a029cdda97bf39e313e8
             const albumTitle = albumController.getInputValue('inputAlbumTitle');
             var albumGenres = albumController.getInputValue('inputAlbumGenres');
             const albumReleaseDate = albumController.getInputValue('inputAlbumReleaseDate');
@@ -771,14 +760,10 @@ class DOMHandle {
             if (!isTitleEmpty && !isArtistEmpty) {
                 const isGenresEmpty = albumController.isEmpty(albumGenres);
                 const isReleaseDateEmpty = albumController.isEmpty(albumReleaseDate);
-<<<<<<< HEAD
                 const isSpotifyURLEmpty = albumController.isEmpty(albumSpotifyURL);
                 const isCoverImageEmpty = albumController.isEmpty(albumCoverImageURL);
                 
                 
-=======
-
->>>>>>> 9ddce2f332f9d02e3b45a029cdda97bf39e313e8
                 /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
                 if (!isGenresEmpty) {
                     const editedGenresParameter = albumController.editGenresParameter(albumGenres);
@@ -812,11 +797,7 @@ class DOMHandle {
                 /* Still not working */
                 const fetchId = new FetchHandle;
                 const albumArtistId = fetchId.fetchArtistByName(albumArtistName).then((artist) => { 
-                    console.log(artist[0]._id);
-                    const artistId = artist[0]._id;
-                    console.log(artistId);
-                    const albumToPost = new Album(albumTitle, artistId, albumGenres, albumReleaseDate, albumSpotifyURL, albumCoverImageURL);
-                    console.log(albumToPost);
+                    const albumToPost = new Album(albumTitle, artist[0]._id, albumGenres, albumReleaseDate, albumSpotifyURL, albumCoverImageURL);
                 });
             /* ------------------ */
             }
@@ -1030,7 +1011,7 @@ class Artist {
 
 class Album {
     constructor(title, artists, genres, releaseDate, spotifyURL, coverImage) {
-        if (title != '' && artist != '') {
+        if (title != '' && artists != '') {
             this.title =      title;
             this.artists =     artists;
             this.genres	=      genres;
