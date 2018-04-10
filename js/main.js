@@ -679,8 +679,13 @@ class DOMHandle {
 
             commentContent +=`
                 <div class="playlistComment">
-                    ${comments[0][i].username}
-                    ${comments[0][i].body}
+                    <p class="commenter">
+                        ${comments[0][i].username}
+                    </p>
+                    <div class="underline"></div>
+                    <p class="comment">
+                        ${comments[0][i].body}
+                    </p>
                 </div>
             `
         }

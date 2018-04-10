@@ -330,8 +330,31 @@ body{
                         @include listButtons;
                     }
                 }
+                #playlistComments{
+                    .playlistComment{
+                        letter-spacing: 2px;
+                        padding: 10px 20px;
+                        border-radius: 5px;
+                        margin: 5px 0 0 5px;
+                        background: rgba(255, 255, 255, 0.1);
+                        .commenter{
+                            font-weight: 700;
+                        }
+                        .underline{
+                            border-bottom: 1px solid white;
+                            width: 100%;
+                        }
+                        .comment{
+                            
+                        }
+                    }
+                }
             }
         }
+        .fadeOut{
+            opacity: 0;
+        }
+    }
         #addDiv{
             display: flex;
             flex-direction: column;
@@ -367,10 +390,6 @@ body{
                 }
             }
         }
-        .fadeOut{
-            opacity: 0;
-        }
-    }
     footer{
         display: flex;
         justify-content: center;
