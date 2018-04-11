@@ -13,7 +13,49 @@ body{
     }
 
     header{
-
+        #slideShowBanner{
+            #slideShow{
+                width: 100%;
+                height: 300px;
+                overflow: hidden;
+                background: black;
+                position: relative;
+                margin: auto;
+                .slideWrapper{
+                    transition: 700ms;
+                    img{
+                        position: absolute;
+                        width: 100%;
+                        bottom: 0;
+                        left: 0;
+                    }
+                }
+                .fadeSlide{
+                    opacity: 0.5;
+                }
+            }
+            #slideDotsWrapper{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 50px;
+                width: 100%;
+                margin-top: -50px;
+                position: absolute;
+                .slideDot{
+                    width: 10px;
+                    height: 10px;
+                    margin: 5px;
+                    border-radius: 20px;
+                    border: 1px solid white;
+                    transition: 700ms;
+                }
+                .activeDot{
+                        background: white;
+                }
+            }
+        }
+        
     }
     main{
         #searchForm{
@@ -23,6 +65,7 @@ body{
             max-width: 600px;
             margin: 0 20px;
             #messageBox{
+                padding: 20px 0;
                 letter-spacing: 2px;
                 font-weight: 700;
                 color: $accentColor;

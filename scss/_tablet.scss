@@ -1,5 +1,16 @@
 body{
     header{
+        #slideShowBanner{
+            #slideShow{
+                height: 500px;
+            }
+            #slideDotsWrapper{
+                .slideDot{
+                    width: 15px;
+                    height: 15px;
+                }
+            }
+        }
     }
     main{
         #searchForm{

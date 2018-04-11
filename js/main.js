@@ -1019,10 +1019,11 @@ class DOMHandle {
     getElementById('slideShow');
     
     const bannerImages = [
-        "cafeInterior.jpg", 
-        "perestrianStreet.jpg",
-        "masseHall.jpg",
-        "bridge.jpg"
+        "image1.jpg", 
+        "image2.jpg",
+        "image3.jpg",
+        "image4.jpg",
+        "image5.jpg",
     ];
     
     const dotWrapper = document.
@@ -1037,7 +1038,7 @@ class DOMHandle {
 
     function startSlide(i){
         if(i <= bannerImages.length-1){
-             addSlide = `
+             let addSlide = `
                 <div class="slideWrapper fadeSlide">
                     <img src="images/${bannerImages[i]}">
                 </div>
