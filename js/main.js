@@ -51,6 +51,13 @@ createArtistButton.addEventListener('click', function(){
 
 /* Handles all fetch queries. */
 class FetchHandle {
+    /* ----ADDED BY ERIKA----- */
+    constructor (method, body) {
+        this.method = method;
+        this.headers = { 'Accept': 'application/json', 'Content-Type': 'application/json' };
+        this.body = JSON.stringify(body);
+    }
+    /*---------- */
     fetchAll() {
         /* Contains promises and objects */
         let promiseArray = [];
@@ -210,11 +217,11 @@ class FetchHandle {
     }
 
     /* ----- Under construction ----- */
-    fetchArtistByName(artistName) {
-        return fetch(`https://folksa.ga/api/artists?name=${artistName}&key=flat_eric`)
+    fetchItemByName(item, itemName) {
+        return fetch(`https://folksa.ga/api/${item}?name=${itemName}&key=flat_eric`)
             .then((response) => response.json())
-                .then((artist) => {
-                    return artist;
+                .then((fetchedItem) => {
+                    return fetchedItem;
                 });
     }
     /* -------------- */
@@ -284,6 +291,33 @@ class FetchHandle {
             console.log(error);
         });
     }
+    /*--------ADDED BY ERIKA----------- */
+    postItem (itemToPost, HttpRequest) {
+        console.log(HttpRequest);
+        fetch(`https://folksa.ga/api/${itemToPost}?&key=flat_eric`, HttpRequest)
+            .then((response) => response.json())
+                .then((album) => {
+                    console.log(album)
+                })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+    }
+    deleteItem (itemToDelete, idToDelete) {
+        fetch(`https://folksa.ga/api/${itemToDelete}/${idToDelete}?&key=flat_eric`, 
+        {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) => response.json())
+                .then((deletedItem) => {
+                    console.log(deletedItem);
+                });
+    }
+    /*---------------- */
 }
 /* Handles the DOM. */
 class DOMHandle {
@@ -796,17 +830,6 @@ class DOMHandle {
             /* Gets the input values */
             const albumController = new Controller;
             const albumArtistName = albumController.getInputValue('inputAlbumArtist');
-<<<<<<< HEAD
-=======
-            const albumArtist = albumController.getInputValue('inputAlbumArtist');
-
-            /* Still not working */
-            var albumArtistId = '';
-            fetchArtistByName(albumArtist);
-            console.log(albumArtistId);
-            /* ------------------ */
-
->>>>>>> 79e49a32335769fe0c3d1de6bf9313c272306b80
             const albumTitle = albumController.getInputValue('inputAlbumTitle');
             var albumGenres = albumController.getInputValue('inputAlbumGenres');
             const albumReleaseDate = albumController.getInputValue('inputAlbumReleaseDate');
@@ -833,12 +856,8 @@ class DOMHandle {
                 const isReleaseDateEmpty = albumController.isEmpty(albumReleaseDate);
                 const isSpotifyURLEmpty = albumController.isEmpty(albumSpotifyURL);
                 const isCoverImageEmpty = albumController.isEmpty(albumCoverImageURL);
-<<<<<<< HEAD
                 
                 
-=======
-
->>>>>>> 79e49a32335769fe0c3d1de6bf9313c272306b80
                 /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
                 if (!isGenresEmpty) {
                     const editedGenresParameter = albumController.editGenresParameter(albumGenres);
@@ -871,17 +890,8 @@ class DOMHandle {
             else {
                 /* Still not working */
                 const fetchId = new FetchHandle;
-<<<<<<< HEAD
-                const albumArtistId = fetchId.fetchArtistByName(albumArtistName).then((artist) => { 
+                const albumArtistId = fetchId.fetchItemByName('albums', albumArtistName).then((artist) => { 
                     const albumToPost = new Album(albumTitle, artist[0]._id, albumGenres, albumReleaseDate, albumSpotifyURL, albumCoverImageURL);
-=======
-                const albumArtistId = fetchId.fetchArtistByName(albumArtistName).then((artist) => {
-                    console.log(artist[0]._id);
-                    const artistId = artist[0]._id;
-                    console.log(artistId);
-                    const albumToPost = new Album(albumTitle, artistId, albumGenres, albumReleaseDate, albumSpotifyURL, albumCoverImageURL);
-                    console.log(albumToPost);
->>>>>>> 79e49a32335769fe0c3d1de6bf9313c272306b80
                 });
             /* ------------------ */
             }
