@@ -7,7 +7,7 @@ for (i = 0; i < searchButton.length; i++) {
         const activateButton = new DOMHandle();
         activateButton.activateSearchButton(this);
         const newFetch = new FetchHandle(this.value);
-        searchResults.innerHTML = '';
+        mainOutput.innerHTML = '<div id="searchResults"></div>'
         switch (this.value) {
             case 'all':
                 newFetch.fetchAll();
@@ -270,6 +270,15 @@ class FetchHandle {
         .then((response) => response.json())
         .then((vote) => {
             console.log(vote);
+            if (apiPath == 'albums') {
+                this.fetchAlbumById(id);
+            }
+            if (apiPath == 'playlists') {
+                this.fetchPlaylistById(id);
+            }
+            if (apiPath == 'tracks') {
+                this.fetchTrackById(id);
+            }
         })
         .catch((error) => {
             console.log(error);
@@ -286,6 +295,11 @@ class DOMHandle {
         }
         /* Adds the activeButton class to selected button */
         checkButton.classList.add('activeButton');
+    }
+    deactivateSearchButtons() {
+        for (let sbutton of searchButton) {
+            sbutton.classList.remove('activeButton');
+        }
     }
 
     displayAll(allAlbums, allTracks, allArtists, allPlaylists, allAlbumArtists) {
@@ -326,12 +340,11 @@ class DOMHandle {
             showByIdButton[i].addEventListener('click', function() {
                 const newFetch = new FetchHandle();
                 newFetch.fetchAlbumById(this.id);
+                const deActivate = new DOMHandle();
+                deActivate.deactivateSearchButtons();
             })
         }
 
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(mainOutput.firstElementChild.children);
 
     }
     displayTracks(allTracks) {
@@ -359,14 +372,11 @@ class DOMHandle {
             showByIdButton[i].addEventListener('click', function() {
                 const newFetch = new FetchHandle();
                 newFetch.fetchTrackById(this.id);
-            })
+                const deActivate = new DOMHandle();
+                deActivate.deactivateSearchButtons();
+            });
         }
-
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(mainOutput.firstElementChild.children);
-
-    }
+   }
     displayArtists(allArtists) {
 
 
@@ -390,12 +400,10 @@ class DOMHandle {
             showByIdButton[i].addEventListener('click', function() {
                 const newFetch = new FetchHandle();
                 newFetch.fetchArtistById(this.id);
+                const deActivate = new DOMHandle();
+                deActivate.deactivateSearchButtons();
             })
         }
-
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(mainOutput.firstElementChild.children);
 
     }
     displayPlaylists(allPlaylists) {
@@ -421,12 +429,10 @@ class DOMHandle {
             showByIdButton[i].addEventListener('click', function() {
                 const newFetch = new FetchHandle();
                 newFetch.fetchPlaylistById(this.id);
+                const deActivate = new DOMHandle();
+                deActivate.deactivateSearchButtons();
             })
         }
-
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(mainOutput.firstElementChild.children);
 
     }
     displaySpecificAlbum(album, artist) {
@@ -496,19 +502,16 @@ class DOMHandle {
             rateThisAlbum.fetchAlbumById(thisAlbumId);
         });
 
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(albumTracklist.children);
-
     }
     displaySpecificTrack(track, artist) {
+        const fetchRating = new Logic();
 
         let contentOfSpecificTrack = `
             <div id="contentOfSpecificTrack">
                     <div id="trackInfo">
                         <h2>${track.title}</h2>
                         <p>${artist.name}</p>
-                        <p>Rating: ${artist.rating}</p>
+                        <p>Rating: ${fetchRating.calculateRating(track)}</p>
                         <button class="trackAlbumButton" id="${track.album.title._id}">
                             ${track.album.title}
                             <img src="images/rightArrow.svg">
@@ -530,9 +533,19 @@ class DOMHandle {
         `
         mainOutput.innerHTML = contentOfSpecificTrack;
 
-    }
-    displaySpecificArtist(artist, albums){
+        const rateTrack = document.getElementById('rateTrack');
+        rateTrack.addEventListener('click', () => {
+            const ratingNumber = document.getElementById('ratingNumber').value;
+            const thisTrackId = track._id;
+            const rateThisTrack = new FetchHandle();
+            rateThisTrack.rateStuff('tracks', thisTrackId, ratingNumber);
 
+    });
+}
+    displaySpecificArtist(artist, albums){
+        
+        const convertedDated = artist.born.substring(0,4);
+        
         let contentOfSpecificArtist = `
             <div id="contentOfSpecificArtist">
                 <div id="artistTopContent">
@@ -541,7 +554,7 @@ class DOMHandle {
                         <h2>${artist.name}</h2>
                         <p id="genres"><span>Genres:</span> ${artist.genres}</p>
                         <p id="countryBorn"><span>Country:</span> ${artist.countryBorn}</p>
-                        <p id="born"><span>Born:</span> ${artist.born}</p>
+                        <p id="born"><span>Born:</span> ${convertedDated}</p>
                         <button id="deleteArtist">
                             DELETE ARTIST
                         </button>
@@ -568,27 +581,39 @@ class DOMHandle {
         const albumList = document.getElementById('artistAlbums');
         albumList.innerHTML=artistAlbum;
 
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(albumList.children);
 
     }
     displaySpecificPlaylist(playlist, comments){
+        const fetchRating = new Logic();
+        
+        const createdDate = playlist.createdAt.substring(0,10)
+        const createdTime = playlist.createdAt.substring(11,16)
 
+        const updatedDate = playlist.updatedAt.substring(0,10)
+        const updatedTime = playlist.updatedAt.substring(11,16)
+        
         let contentOfSpecificPlaylist =`
-            <div class="playlistContent">
-                ${playlist.title}
-                ${playlist.ratings}
-                ${playlist.genres}
-                ${playlist.createdBy}
-                ${playlist.createdAt}
-                ${playlist.updatedAt}
-                <button id="deletePlaylist">
-                    DELETE PLAYLIST
-                </button>
-                <button id="ratePlaylist">
-                    RATE PLAYLIST
-                </button>
+            <div id="contentOfSpecificPlaylist">
+                <div id="playlistTopContent">
+                    <h2>${playlist.title}</h2>
+                    <p><span>Genres: </span> ${playlist.genres}</p>
+                    <p><span>Rating:</span> ${fetchRating.calculateRating(playlist)}</p>
+                    <p id="createdBy"><span>Created by: </span>${playlist.createdBy}</p>
+                    <br>
+                    <p><span>Created:</span> ${createdDate} / ${createdTime}</p>
+                    <p><span>Last updated:</span> ${updatedDate} / ${updatedTime}</p>
+                </div>
+                <div id="buttonWrapper">
+                    <input type="number" id="ratingNumber" placeholder="+/-" min="1" max="10">
+                    <button id="ratePlaylist">
+                        RATE PLAYLIST
+                    </button>
+                    <button id="deletePlaylist">
+                        DELETE PLAYLIST
+                    </button>
+                </div>
+                <div class="underline"></div>
+                <h3>TRACKLIST</h3>
                 <div id="playlistTracklist"></div>
                 <form id="commentform">
                     <input type="text" id="commentField">
@@ -605,7 +630,7 @@ class DOMHandle {
         let trackButton = "";
         for (let i = 0; i < playlist.tracks.length; i++){
             trackButton +=`
-                <button class="playlistTrack">
+                <button class="playlistTrackButton">
                     ${playlist.tracks[i].artists[0].name} -
                     ${playlist.tracks[i].title}
                     <img src="images/rightArrow.svg">
@@ -630,6 +655,18 @@ class DOMHandle {
         addPlayListComment.addPlayListComment(commentField.value, commentUser.value, playlist._id, comments);
 
         })
+        
+        const everyOtherButton = new DOMHandle();
+        everyOtherButton.
+        everyOtherButton(playlistTracklist.children);
+
+        const ratePlaylist = document.getElementById('ratePlaylist');
+        ratePlaylist.addEventListener('click', () => {
+            const ratingNumber = document.getElementById('ratingNumber').value;
+            const thisPlaylistId = playlist._id;
+            const rateThisPlaylist = new FetchHandle();
+            rateThisPlaylist.rateStuff('playlists', thisPlaylistId, ratingNumber);
+});
 
     }
 
@@ -665,26 +702,49 @@ class DOMHandle {
     }
 
     filterSearch() {
-        const filter = searchField.value.toUpperCase();
-        const buttons = mainOutput.getElementsByTagName('button');
-        for (let i = 0; i < buttons.length; i++) {
-            let dataGenre = buttons[i].getAttribute('data-genre').toUpperCase();
-            if (buttons[i].innerHTML.toUpperCase().indexOf(filter) > -1 || dataGenre.indexOf(filter) > -1 && dataGenre != 'NONE') {
-             buttons[i].style.display = 'flex';
-            } else {
-             buttons[i].style.display = 'none';
-            }
-        }
-        if (filter == '') {
-            for (let i = 0; i < buttons.length; i++) {
-                buttons[i].style.display = 'none';
+        for (let sbutton of searchButton) {
+            if (sbutton.classList.contains('activeButton')) {
+                const filter = searchField.value.toUpperCase();
+                const buttons = mainOutput.getElementsByTagName('button');
+                let visibleButtons = [];
+                for (let i = 0; i < buttons.length; i++) {
+                    let dataGenre = buttons[i].getAttribute('data-genre').toUpperCase();
+                    if (buttons[i].innerHTML.toUpperCase().indexOf(filter) > -1 || dataGenre.indexOf(filter) > -1 && dataGenre != 'NONE') {
+                        buttons[i].style.display = 'flex';
+                        visibleButtons.push(buttons[i]);
+                    } else {
+                        buttons[i].style.display = 'none';
+                    }
+                }
+                if (filter == '') {
+                    for (let i = 0; i < buttons.length; i++) {
+                        buttons[i].style.display = 'none';
+                    }
+                }
+                this.everyOtherButton(visibleButtons);
             }
         }
     }
-    everyOtherButton(page){
-        for(let i = 0; i < page.length; i++){
-            let sum = i++;
-             page[sum].classList.add('lightButton');
+    everyOtherButton(buttons) {
+        for (let i = 0; i < buttons.length; i++) {
+            if (i % 2 == 0) {
+                buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
+                buttons[i].addEventListener('mouseover', () => {
+                    buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.07)';
+                });
+                buttons[i].addEventListener('mouseleave', () => {
+                    buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
+                });
+            }
+            else {
+                buttons[i].style.backgroundColor = '#191919';
+                buttons[i].addEventListener('mouseover', () => {
+                    buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.07)';
+                });
+                buttons[i].addEventListener('mouseleave', () => {
+                    buttons[i].style.backgroundColor = '#191919';
+                });
+            }
         }
     }
 
@@ -698,7 +758,7 @@ class DOMHandle {
                 <input type="text" id="inputAlbumTitle" placeholder="ALBUM TITLE..">
                 <input type="text" id="inputAlbumGenres" placeholder="ALBUM GENRE..">
                 <input type="text" id="inputAlbumReleaseDate" placeholder="RELEASE YEAR..">
-                <input type = "text" 
+                <input type = "text"
                 id = "inputAlbumSpotifyURL"
                 placeholder = "SPOTIFY URL..">
                 <input type="text" id="inputAlbumCoverImage" placeholder="COVER IMAGE URL..">
@@ -736,6 +796,17 @@ class DOMHandle {
             /* Gets the input values */
             const albumController = new Controller;
             const albumArtistName = albumController.getInputValue('inputAlbumArtist');
+<<<<<<< HEAD
+=======
+            const albumArtist = albumController.getInputValue('inputAlbumArtist');
+
+            /* Still not working */
+            var albumArtistId = '';
+            fetchArtistByName(albumArtist);
+            console.log(albumArtistId);
+            /* ------------------ */
+
+>>>>>>> 79e49a32335769fe0c3d1de6bf9313c272306b80
             const albumTitle = albumController.getInputValue('inputAlbumTitle');
             var albumGenres = albumController.getInputValue('inputAlbumGenres');
             const albumReleaseDate = albumController.getInputValue('inputAlbumReleaseDate');
@@ -762,8 +833,12 @@ class DOMHandle {
                 const isReleaseDateEmpty = albumController.isEmpty(albumReleaseDate);
                 const isSpotifyURLEmpty = albumController.isEmpty(albumSpotifyURL);
                 const isCoverImageEmpty = albumController.isEmpty(albumCoverImageURL);
+<<<<<<< HEAD
                 
                 
+=======
+
+>>>>>>> 79e49a32335769fe0c3d1de6bf9313c272306b80
                 /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
                 if (!isGenresEmpty) {
                     const editedGenresParameter = albumController.editGenresParameter(albumGenres);
@@ -796,8 +871,17 @@ class DOMHandle {
             else {
                 /* Still not working */
                 const fetchId = new FetchHandle;
+<<<<<<< HEAD
                 const albumArtistId = fetchId.fetchArtistByName(albumArtistName).then((artist) => { 
                     const albumToPost = new Album(albumTitle, artist[0]._id, albumGenres, albumReleaseDate, albumSpotifyURL, albumCoverImageURL);
+=======
+                const albumArtistId = fetchId.fetchArtistByName(albumArtistName).then((artist) => {
+                    console.log(artist[0]._id);
+                    const artistId = artist[0]._id;
+                    console.log(artistId);
+                    const albumToPost = new Album(albumTitle, artistId, albumGenres, albumReleaseDate, albumSpotifyURL, albumCoverImageURL);
+                    console.log(albumToPost);
+>>>>>>> 79e49a32335769fe0c3d1de6bf9313c272306b80
                 });
             /* ------------------ */
             }
@@ -1086,7 +1170,9 @@ class Logic {
         }
         let number = 0;
         for (let n of object.ratings) {
-            number += n;
+            if (n != 'null') {
+                number += n;
+            }
         }
         const rating = (number / object.ratings.length);
         const roundedRating = this.roundNumber(rating);
