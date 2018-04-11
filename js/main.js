@@ -757,32 +757,34 @@ class DOMHandle {
         const addDiv = document.getElementById('addDiv');
 
         let createAlbumContent =`
-            <p>ADD AN ALBUM</p>
-            <form id="importAlbum">
-                <input type="text" id="inputAlbumArtist" placeholder="ARTIST..">
-                <input type="text" id="inputAlbumTitle" placeholder="ALBUM TITLE..">
-                <input type="text" id="inputAlbumGenres" placeholder="ALBUM GENRE..">
-                <input type="text" id="inputAlbumReleaseDate" placeholder="RELEASE YEAR..">
-                <input type = "text"
-                id = "inputAlbumSpotifyURL"
-                placeholder = "SPOTIFY URL..">
-                <input type="text" id="inputAlbumCoverImage" placeholder="COVER IMAGE URL..">
-                <button type ="button" id="postAlbumButton">
-                    ADD ALBUM
+            <div id="addWrapper">
+                <p>ADD AN ALBUM</p>
+                <form id="importAlbum">
+                    <input type="text" id="inputAlbumArtist" placeholder="ARTIST..">
+                    <input type="text" id="inputAlbumTitle" placeholder="ALBUM TITLE..">
+                    <input type="text" id="inputAlbumGenres" placeholder="ALBUM GENRE..">
+                    <input type="text" id="inputAlbumReleaseDate" placeholder="RELEASE YEAR..">
+                    <input type = "text"
+                    id = "inputAlbumSpotifyURL"
+                    placeholder = "SPOTIFY URL..">
+                    <input type="text" id="inputAlbumCoverImage" placeholder="COVER IMAGE URL..">
+                    <button type ="button" id="postAlbumButton">
+                        ADD ALBUM
+                    </button>
+                </form>
+                <form id="postTrack">
+                    <input text="text" id="inputTrackArtist" placeholder="ARTIST..">
+                    <input text="text" id="inputTrackTitle" placeholder="TRACK TITLE..">
+                    <button type="button" id="addTrackButton">
+                        <i class="far fa-plus-square"></i>
+                    </button>
+                </form>
+                <div id="addTrackTracklist"></div>
+                <button type="button" id="importCloseButton">
+                    <img src="images/x-circle.svg">
+                    BACK
                 </button>
-            </form>
-            <form id="postTrack">
-                <input text="text" id="inputTrackArtist" placeholder="ARTIST..">
-                <input text="text" id="inputTrackTitle" placeholder="TRACK TITLE..">
-                <button type="button" id="addTrackButton">
-                    <i class="far fa-plus-square"></i>
-                </button>
-            </form>
-            <div id="addTrackTracklist"></div>
-            <button type="button" id="importCloseButton">
-                BACK
-            </button>
-
+            </div>
         `;
 
         addDiv.innerHTML=createAlbumContent;
@@ -921,16 +923,19 @@ class DOMHandle {
         const addDiv = document.getElementById('addDiv');
 
         let createArtistContent =`
-            <p>ADD AN ARTIST</p>
+            <div id="addWrapper">
+                <p>ADD ARTIST</p>
                 <form id = "importArtist">
                     <input type="text" id="inputArtistName" placeholder="ARTIST NAME..">
                     <input type="text" id="inputArtistGenres" placeholder="GENRES..">
-                    <input type="text" id="inputArtistCoverImage" placeholder="COVER IMAGE..">
-                    <button id="postArtistButton">Add artist</button>
+                    <input type="text" id="inputArtistCoverImage" placeholder="COVER IMAGE URL..">
+                    <button id="postArtistButton">ADD ARTIST</button>
                 </form>
-            <button type="button" id="importCloseButton">
-                BACK
-            </button>
+                <button type="button" id="importCloseButton">
+                    <img src="images/x-circle.svg">
+                    BACK
+                </button>
+            </div>
             `;
 
         addDiv.innerHTML=createArtistContent;
@@ -1007,6 +1012,71 @@ class DOMHandle {
         genres += 'none';
         return genres;
     }
+    
+    slideShowBanner(){
+    
+    const slideShowBannerDiv = document.
+    getElementById('slideShow');
+    
+    const bannerImages = [
+        "cafeInterior.jpg", 
+        "perestrianStreet.jpg",
+        "masseHall.jpg",
+        "bridge.jpg"
+    ];
+    
+    const dotWrapper = document.
+    getElementById('slideDotsWrapper')
+        
+    let dots = "";
+    for(i = 0; i < bannerImages.length; i++){
+        dots +=`<div class="slideDot"></div>`;
+    }
+        
+    dotWrapper.innerHTML=dots;
+
+    function startSlide(i){
+        if(i <= bannerImages.length-1){
+             addSlide = `
+                <div class="slideWrapper fadeSlide">
+                    <img src="images/${bannerImages[i]}">
+                </div>
+            `;
+            const dot = `<div id="slideDotsWrapper"></div>`
+
+            slideShowBannerDiv.innerHTML=addSlide+dot
+
+            slideShowBannerDiv.
+            nextElementSibling.children[i].
+            classList.add('activeDot');
+            
+            setTimeout(function(){
+            slideShowBannerDiv.
+            nextElementSibling.children[i].
+            classList.remove('activeDot'); 
+            }, 2500)
+            
+            setTimeout(function(){
+                slideShowBannerDiv.firstElementChild.
+                classList.remove('fadeSlide');
+            })
+            
+            setTimeout(function(){
+                
+                if(i === bannerImages.length-1){ 
+                    i = 0;
+                } else {
+                    i++
+                }
+                
+                startSlide(i) 
+            }, 2500)
+        }
+    }
+    
+    i = 0;
+    startSlide(i)
+}
 
 }
 
@@ -1201,6 +1271,9 @@ class Logic {
     }
 
 }
+
+const runSlideShow = new DOMHandle();
+runSlideShow.slideShowBanner();
 
 const startFetch = new FetchHandle();
 startFetch.fetchAll();
