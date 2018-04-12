@@ -13,7 +13,49 @@ body{
     }
 
     header{
-
+        #slideShowBanner{
+            #slideShow{
+                width: 100%;
+                height: 300px;
+                overflow: hidden;
+                background: black;
+                position: relative;
+                margin: auto;
+                .slideWrapper{
+                    transition: 700ms;
+                    img{
+                        position: absolute;
+                        width: 100%;
+                        bottom: 0;
+                        left: 0;
+                    }
+                }
+                .fadeSlide{
+                    opacity: 0.5;
+                }
+            }
+            #slideDotsWrapper{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 50px;
+                width: 100%;
+                margin-top: -50px;
+                position: absolute;
+                .slideDot{
+                    width: 10px;
+                    height: 10px;
+                    margin: 5px;
+                    border-radius: 20px;
+                    border: 1px solid white;
+                    transition: 700ms;
+                }
+                .activeDot{
+                        background: white;
+                }
+            }
+        }
+        
     }
     main{
         #searchForm{
@@ -23,6 +65,7 @@ body{
             max-width: 600px;
             margin: 0 20px;
             #messageBox{
+                padding: 20px 0;
                 letter-spacing: 2px;
                 font-weight: 700;
                 color: $accentColor;
@@ -242,13 +285,7 @@ body{
                     padding: 0 10px;
                     .artistAlbumButton{
                         @include listButtons;
-                    }
-                    .artistAlbumButton:hover{
-                        background: rgba(255, 255, 255, 0.07);
-                    }
-                    .lightButton{
-                        background: rgba(255, 255, 255, 0.03);
-                    }
+                    }   
                 }
             }
             #contentOfSpecificTrack{
@@ -280,64 +317,174 @@ body{
                     }
                 }
             }
+            #contentOfSpecificPlaylist{
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                #playlistTopContent{
+                    letter-spacing: 2px;
+                    font-size: 1em;
+                    padding: 20px 0 40px 0;
+                    h2{
+                        text-transform: uppercase;
+                        text-align: center;
+                        color: $accentColor;
+                        letter-spacing: 3px;
+                        font-size: 2.5em;
+                        margin: 0;
+                        margin-bottom: 40px;
+                    }
+                    p{
+                        margin: 10px 0px;
+                        span{
+                            font-weight: 700;
+                        }
+                    }
+                    #createdBy{
+                        font-size: 1.3em;
+                        color: $accentColor;
+                    }
+                }
+                #buttonWrapper{
+                    margin-bottom: 60px;
+                    input{
+                        font-size: 0.9em;
+                        apperence: text;
+                        padding: 8px;
+                        border-radius: 5px;
+                        border: none;        
+                    }
+                    button{
+                        background: $accentColor;
+                        color: $backgroundColor;
+                        padding: 10px 15px;
+                        margin-left: 10px;
+                        font-size: 0.8em;
+                        font-weight: 700;
+                        letter-spacing: 2px;
+                        border-radius: 20px;
+                        border: none;
+                        cursor: pointer;
+                    }
+                }
+                .underline{
+                    border-bottom: 1px solid $textColor;
+                    width: 95%;
+                    margin: auto;
+                }
+                h3{
+                    font-size: 1.8em;
+                    text-align: center;
+                    letter-spacing: 3px;
+                    padding: 20px;
+                    margin: 0;
+                }
+                #playlistTracklist{
+                    width: 100%;
+                    .playlistTrackButton{
+                        @include listButtons;
+                    }
+                }
+                #playlistComments{
+                    .playlistComment{
+                        letter-spacing: 2px;
+                        padding: 10px 20px;
+                        border-radius: 5px;
+                        margin: 5px 0 0 5px;
+                        background: rgba(255, 255, 255, 0.1);
+                        .commenter{
+                            font-weight: 700;
+                        }
+                        .underline{
+                            border-bottom: 1px solid white;
+                            width: 100%;
+                        }
+                        .comment{
+                            
+                        }
+                    }
+                }
+            }
         }
-        #contentOfSpecificPlaylist{
-            h3{
-                text-align: center;
-                font-size: 2.2em;
-                letter-spacing: 3px;
-                padding: 30px;
-                margin: 0;
-            }
-            #playlistTracklist{
-                .playlistTrackButton{
-                    @include listButtons;
-                }
-                .playlistTrackButton:hover{
-                    background: rgba(255, 255, 255, 0.07);
-                }
-                .lightButton{
-                    background: rgba(255, 255, 255, 0.03);
-                }
-            }
+        .fadeOut{
+            opacity: 0;
         }
         #addDiv{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 400px;
-            border-radius: 10px;
+            width: 100vw;
             margin: auto;
             font-size: 1.6em;
             font-weight: 700;
             letter-spacing: 3px;
-            background: rgba(0, 0, 0, 0.7);
             transition: 1000ms;
-            p{
-                margin: 0;
-            }
-            form{
+            position: absolute;
+            #addWrapper{
                 display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                margin-top: 30px;
-                input{
-                    font-size: 0.7em;
-                    width: 40%;
-                    border-radius: 3px;
-                    letter-spacing: 1px;
-                    padding: 8px;
+                flex-direction: column;
+                align-items: center;
+                padding: 50px 10px 20px 10px;
+                background: rgba(0, 0, 0, 0.7);
+                border-radius: 10px;
+                max-width: 500px;
+                margin: auto;
+                p{
+                    margin: 0;
+                }
+                form{
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    margin-top: 30px;
+                    max-width: 500px;
+                    input{
+                        font-size: 0.7em;
+                        width: 200px;
+                        border-radius: 3px;
+                        letter-spacing: 1px;
+                        padding: 8px;
+                        border: none;
+                        margin: 10px;
+                    }
+                    button{
+                        width: 216px;
+                        padding: 8px;
+                        margin: 10px;
+                        font-size: 0.7em;
+                        font-weight: 900;
+                        letter-spacing: 2px;
+                        border-radius: 3px;
+                        border: none;
+                        color: white;
+                        background: #d3790a;
+                        transition: 300ms;
+                    }
+                    button:hover{
+                        background: $accentColor;
+                    }
+                }
+                #importCloseButton{
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: none;
                     border: none;
                     margin: 10px;
                 }
                 button{
                     width: 40%;
                     padding: 8px;
+                    color: white;
+                    font-weight: 600;
+                    letter-spacing: 2px;
+                    font-size: 0.7em;
+                    height: 50px;
+                    cursor: pointer;
+                    img{
+                        height: 15px;
+                        margin-right: 5px;
+                    }
                 }
             }
-        }
-        .fadeOut{
-            opacity: 0;
         }
     }
     footer{

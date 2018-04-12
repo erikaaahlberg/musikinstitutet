@@ -1,5 +1,16 @@
 body{
     header{
+        #slideShowBanner{
+            #slideShow{
+                height: 500px;
+            }
+            #slideDotsWrapper{
+                .slideDot{
+                    width: 15px;
+                    height: 15px;
+                }
+            }
+        }
     }
     main{
         #searchForm{
@@ -107,6 +118,32 @@ body{
                 }
             }
             #contentOfSpecificPlaylist{
+                width: 100%;
+                #playlistTopContent{
+                    h2{
+                        font-size: 3em;
+                    }
+                    p{
+                        font-size: 1.2em;
+                        margin: 10px 0px;
+                        span{
+                            font-weight: 700;
+                        }
+                    }
+                }
+                h3{
+                    font-size: 2.2em;
+                    padding: 30px;
+                }
+                #buttonWrapper{
+                    input{
+                        font-size: 1.1em;                
+                    }
+                    button{
+                        margin-left: 15px;
+                        font-size: 0.9em;
+                    }
+                }
                 #playlistTracklist{
                     .playlistTrackButton{
                         font-size: 1.2em;

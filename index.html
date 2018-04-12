@@ -11,13 +11,16 @@
 <body>
 
     <header>
-
+        <div id="slideShowBanner">
+            <div id="slideShow"></div>
+            <div id="slideDotsWrapper"></div>
+        </div>
     </header>
 
     <main>
         <form id="searchForm">
             <div id="messageBox"><p>THIS IS A MESSAGEBOX WITH MESSAGE</p></div>
-            <input type="text" id="searchField">
+            <input type="text" id="searchField" placeholder="SEARCH BY NAME OR GENRE..">
 
             <div id="searchButtonWrapper">
                 <button type="button" value="all" class="searchButton activeButton">All</button>
@@ -28,12 +31,9 @@
             </div>
 
         </form>
-
+         <div id="addDiv" class="fadeOut"></div>
         <div id="mainOutput">
             <div id="searchResults"></div>
-        </div>
-
-        <div id="addDiv" class="fadeOut">
         </div>
 
         <!--
@@ -66,7 +66,7 @@
 
 
     </main>
-
+       
     <footer>
         <button id="createArtistButton"><img src="images/plus-circle.svg">ADD ARTIST</button>
         <button id="createAlbumButton"><img src="images/plus-circle.svg">ADD ALBUM/SINGLE</button>
