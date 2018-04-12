@@ -53,51 +53,10 @@ createArtistButton.addEventListener('click', function(){
 /* Handles all fetch queries. */
 class FetchHandle {
     fetchAll() {
-        /* Contains promises and objects */
-        let promiseArray = [];
-        let artistPromiseArray = [];
-        let fetchedObject = { albums: [], albumartists: [], tracks: [], artists: [], playlists: [] };
-        const toFetch = ['albums', 'tracks', 'artists', 'playlists'];
-        /* Start of by fetching everything. */
-        for (let promise of toFetch) {
-            let fetchItem = fetch(`https://folksa.ga/api/${promise}?key=flat_eric`)
-                .then((response) => response.json())
-            promiseArray.push(fetchItem);
-            /* For albums we want the artist name too, so a new fetch is initiated
-             * based on the object that is retreived. */
-            if (promise == 'albums') {
-                Promise.resolve(fetchItem)
-                    .then((resolvedObject) => {
-                        for (let item of resolvedObject) {
-                            let artistPromise = fetch(`https://folksa.ga/api/artists/${item.artists}?key=flat_eric`)
-                                .then((response) => response.json())
-                            artistPromiseArray.push(artistPromise);
-                        }
-                        /* They are promised and applied to fetchedObject.  */
-                        Promise.all(artistPromiseArray)
-                            .then((artistPromisedArray) => {
-                                fetchedObject['albumartists'] = artistPromisedArray;
-                            })
-                            /* All data needs to be present, so we are using then to make sure
-                             * that they are async using then. */
-                            .then(() => {
-                                /* All the items from toFetch are Promised here and applied
-                                 * to fetchedObject. */
-                                Promise.all(promiseArray)
-                                    .then((promisedArray) => {
-                                        for (let i = 0; i < promisedArray.length; i++) {
-                                            fetchedObject[toFetch[i]] = promisedArray[i];
-                                        }
-                                        /* displayAll is called */
-                                        const displayAll = new DOMHandle();
-                                        displayAll.displayAll(fetchedObject.albums, fetchedObject.tracks,
-                                            fetchedObject.artists, fetchedObject.playlists, fetchedObject.albumartists);
-                                        displayAll.filterSearch();
-                                    });
-                            })
-                    })
-            }
-        }
+        this.fetchAlbums()
+        this.fetchTracks()
+        this.fetchArtists()
+        this.fetchPlaylists()
     }
 
     /* Fetches all the albums using this.apiPath which is available in the class */
@@ -111,7 +70,7 @@ class FetchHandle {
                         albums[i].artists[0] = { name: 'No name', _id: false };
                     }
                 }
-                displayTrack.displayTracks(albums);
+                displayTrack.displayAlbums(albums);
                 displayTrack.filterSearch();
             });
     }
@@ -131,7 +90,7 @@ class FetchHandle {
             });
     }
     fetchArtists() {
-        fetch(`https://folksa.ga/api/artists?key=flat_eric`)
+        fetch(`https://folksa.ga/api/artists?limit=999&key=flat_eric`)
             .then((response) => response.json())
             .then((artists) => {
                 const displayArtist = new DOMHandle();
@@ -140,7 +99,7 @@ class FetchHandle {
             });
     }
     fetchPlaylists() {
-        fetch(`https://folksa.ga/api/playlists?key=flat_eric`)
+        fetch(`https://folksa.ga/api/playlists?limit=999&key=flat_eric`)
             .then((response) => response.json())
             .then((playlists) => {
                 const displayPlaylist = new DOMHandle();
@@ -149,7 +108,7 @@ class FetchHandle {
             });
     }
     fetchTopPlaylists() {
-        fetch(`https://folksa.ga/api/playlists?key=flat_eric`)
+        fetch(`https://folksa.ga/api/playlists?limit=999&key=flat_eric`)
             .then((response) => response.json())
             .then((playlists) => {
                 const topPlaylists = new Logic();
@@ -324,8 +283,7 @@ class DOMHandle {
             searchedAlbumButtons += `
                 <button class="showByIdButton" id="${allAlbums[i]._id}" data-genre="${this.displayGenres(allAlbums[i])}">
                     ${allAlbums[i].artists[0].name} –
-                    ${allAlbums[i].title} -
-                    ${allAlbums[i].releaseDate}
+                    ${allAlbums[i].title}
                     <img src="images/rightArrow.svg">
                 </button>
             `;
