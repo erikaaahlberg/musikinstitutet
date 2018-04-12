@@ -58,6 +58,9 @@ body{
         
     }
     main{
+        .hidden{
+            display: none;
+        }
         #searchForm{
             display: flex;
             flex-direction: column;
@@ -90,13 +93,13 @@ body{
                         @include activeButton;
                     }
             }
-            button.errorOkButton,
-            button.noButton{
+            #errorOkButton,
+            #noButton{
                 @include button;
                 background: red;
                 text-transform: uppercase;
             }
-            button.yesButton {
+            #yesButton {
                 @include button;
             }
             #searchField{
