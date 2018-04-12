@@ -68,7 +68,7 @@ class FetchHandle {
 
     /* Fetches all the albums using this.apiPath which is available in the class */
     fetchAlbums() {
-        fetch(`https://folksa.ga/api/tracks?populateArtists=true&limit=999&key=flat_eric`)
+        fetch(`https://folksa.ga/api/albums?populateArtists=true&limit=999&key=flat_eric`)
             .then((response) => response.json())
             .then((albums) => {
                 const displayTrack = new DOMHandle();
@@ -128,28 +128,22 @@ class FetchHandle {
         fetch(`https://folksa.ga/api/albums/${albumId}?key=flat_eric`)
             .then((response) => response.json())
             .then((album) => {
-                fetch(`https://folksa.ga/api/artists/${album.artists[0]._id}?key=flat_eric`)
-                    .then((response) => response.json())
-                    .then((artist) => {
-
-                        const displaySpecificAlbum = new DOMHandle();
-                        displaySpecificAlbum.displaySpecificAlbum(album, artist);
-                    })
-
+                if (!album.artists[0]) {
+                    album.artists[0] = { name: 'No name', _id: false };
+                }
+                const displaySpecificAlbum = new DOMHandle();
+                displaySpecificAlbum.displaySpecificAlbum(album);
             });
     }
     fetchTrackById(trackId) {
         fetch(`https://folksa.ga/api/tracks/${trackId}?key=flat_eric`)
             .then((response) => response.json())
             .then((track) => {
-
-                fetch(`https://folksa.ga/api/artists/${track.artists[0]._id}?key=flat_eric`)
-                    .then((response) => response.json())
-                    .then((artist) => {
-
-                        const displaySpecificTrack = new DOMHandle();
-                        displaySpecificTrack.displaySpecificTrack(track, artist);
-                    });
+                if (!track.artists[0]) {
+                    track.artists[0] = { name: 'No name', _id: false };
+                }
+                const displaySpecificTrack = new DOMHandle();
+                displaySpecificTrack.displaySpecificTrack(track);
             });
     }
     fetchArtistById(artistId) {
@@ -263,7 +257,7 @@ class FetchHandle {
                     });
     }
     deleteItem (itemToDelete, idToDelete) {
-        fetch(`https://folksa.ga/api/${itemToDelete}/${idToDelete}?&key=flat_eric`, 
+        fetch(`https://folksa.ga/api/${itemToDelete}/${idToDelete}?&key=flat_eric`,
         {
             method: 'DELETE',
             headers: {
@@ -428,7 +422,8 @@ class DOMHandle {
         }
 
     }
-    displaySpecificAlbum(album, artist) {
+    displaySpecificAlbum(album) {
+        console.log(album);
 
         const fetchRating = new Logic();
 
@@ -438,7 +433,7 @@ class DOMHandle {
                     <img src="${album.coverImage}">
                     <div id="albumInfo">
                         <h2>${album.title}</h2>
-                        <p id="artistName"> ${artist.name}</p>
+                        <p id="artistName"> ${album.artists[0].name}</p>
                         <p id="genres"><span>Genres:</span> ${album.genres}</p>
                         <p id="releaseDate"><span>Released:</span> ${album.releaseDate}</p>
                         <p id="rating">Rating: ${fetchRating.calculateRating(album)}</p>
@@ -496,14 +491,14 @@ class DOMHandle {
         });
 
     }
-    displaySpecificTrack(track, artist) {
+    displaySpecificTrack(track) {
         const fetchRating = new Logic();
 
         let contentOfSpecificTrack = `
             <div id="contentOfSpecificTrack">
                     <div id="trackInfo">
                         <h2>${track.title}</h2>
-                        <p>${artist.name}</p>
+                        <p>${track.artists[0].name}</p>
                         <p>Rating: ${fetchRating.calculateRating(track)}</p>
                         <button class="trackAlbumButton" id="${track.album.title._id}">
                             ${track.album.title}
@@ -853,8 +848,8 @@ class DOMHandle {
                 const isReleaseDateEmpty = albumController.isEmpty(albumReleaseDate);
                 const isSpotifyURLEmpty = albumController.isEmpty(albumSpotifyURL);
                 const isCoverImageEmpty = albumController.isEmpty(albumCoverImageURL);
-                
-                
+
+
                 /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
                 if (!isGenresEmpty) {
                     const editedGenresParameter = albumController.editGenresParameter(albumGenres);
@@ -888,7 +883,7 @@ class DOMHandle {
             }
             else {
                 const fetchArtistId = new FetchHandle;
-                const albumArtistId = fetchArtistId.fetchItemByName('albums', albumArtistName)     .then((artist) => { 
+                const albumArtistId = fetchArtistId.fetchItemByName('albums', albumArtistName)     .then((artist) => {
                         const albumToPost = new Album(albumTitle, artist[0]._id, albumGenres, albumReleaseDate, albumSpotifyURL, albumCoverImageURL);
                         console.log(albumToPost);
                     });
@@ -905,7 +900,7 @@ class DOMHandle {
             /* Gets the input values */
             const trackController = new Controller;
             const trackArtist = trackController.getInputValue('inputAlbumArtist');
-            
+
             fetchArtistByName(albumArtist);
             const albumTitle = trackController.getInputValue('inputAlbumTitle');
             var albumGenres = trackController.getInputValue('inputAlbumGenres');
