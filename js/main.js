@@ -23,6 +23,7 @@ for (i = 0; i < searchButton.length; i++) {
                 break;
             case 'playlists':
                 newFetch.fetchPlaylists();
+                newFetch.fetchTopPlaylists();
                 break;
         }
     });
@@ -155,7 +156,9 @@ class FetchHandle {
             .then((response) => response.json())
             .then((playlists) => {
                 const topPlaylists = new Logic();
-                console.log(topPlaylists.determineTopPlaylists(playlists));
+                const sortedList = topPlaylists.determineTopPlaylists(playlists);
+                const displayTop = new DOMHandle();
+                displayTop.displayTopPlaylist(sortedList);
             });
     }
     fetchAlbumById(albumId) {
@@ -543,9 +546,9 @@ class DOMHandle {
     });
 }
     displaySpecificArtist(artist, albums){
-        
+
         const convertedDated = artist.born.substring(0,4);
-        
+
         let contentOfSpecificArtist = `
             <div id="contentOfSpecificArtist">
                 <div id="artistTopContent">
@@ -655,7 +658,7 @@ class DOMHandle {
         addPlayListComment.addPlayListComment(commentField.value, commentUser.value, playlist._id, comments);
 
         })
-        
+
         const everyOtherButton = new DOMHandle();
         everyOtherButton.
         everyOtherButton(playlistTracklist.children);
@@ -667,6 +670,37 @@ class DOMHandle {
             const rateThisPlaylist = new FetchHandle();
             rateThisPlaylist.rateStuff('playlists', thisPlaylistId, ratingNumber);
 });
+
+    }
+    displayTopPlaylist(list) {
+        console.log(list);
+        let topPlaylistsButtons = `<div class="topFivePlayLists">
+                                   <p>THE HIGHEST RATED PLAYLISTS</p>`;
+
+        for (let i = 0; i < list.length; i++) {
+            if (i == 5) { break; }
+            /* Storing the albums in a button */
+            topPlaylistsButtons += `
+                    <button class="showByIdButton topPlaylistsButton" id="${list[i].id}">
+                        ${list[i].title} -
+                        ${list[i].rating}
+                        <img src="images/rightArrow.svg">
+                    </button>
+            `;
+        }
+        topPlaylistsButtons += '</div>';
+        mainOutput.insertAdjacentHTML('beforeend', topPlaylistsButtons);
+        const playListButtons = document.getElementsByClassName('topPlaylistsButton');
+        this.everyOtherButton(playListButtons);
+
+        for (i = 0; i < playListButtons.length; i++) {
+            playListButtons[i].addEventListener('click', function() {
+                const newFetch = new FetchHandle();
+                newFetch.fetchPlaylistById(this.id);
+                const deActivate = new DOMHandle();
+                deActivate.deactivateSearchButtons();
+            })
+        }
 
     }
 
