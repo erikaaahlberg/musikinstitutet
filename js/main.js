@@ -129,6 +129,9 @@ class FetchHandle {
             .then((response) => response.json())
             .then((tracks) => {
                 const displayTrack = new DOMHandle();
+                for (let i = 0; i < tracks.length; i++) {
+                    if (tracks[i].artists)
+                }
                 displayTrack.displayTracks(tracks);
                 displayTrack.filterSearch();
             });
@@ -588,13 +591,13 @@ class DOMHandle {
     }
     displaySpecificPlaylist(playlist, comments){
         const fetchRating = new Logic();
-        
+
         const createdDate = playlist.createdAt.substring(0,10)
         const createdTime = playlist.createdAt.substring(11,16)
 
         const updatedDate = playlist.updatedAt.substring(0,10)
         const updatedTime = playlist.updatedAt.substring(11,16)
-        
+
         let contentOfSpecificPlaylist =`
             <div id="contentOfSpecificPlaylist">
                 <div id="playlistTopContent">
@@ -1046,28 +1049,28 @@ class DOMHandle {
         genres += 'none';
         return genres;
     }
-    
+
     slideShowBanner(){
-    
+
     const slideShowBannerDiv = document.
     getElementById('slideShow');
-    
+
     const bannerImages = [
-        "image1.jpg", 
+        "image1.jpg",
         "image2.jpg",
         "image3.jpg",
         "image4.jpg",
         "image5.jpg",
     ];
-    
+
     const dotWrapper = document.
     getElementById('slideDotsWrapper')
-        
+
     let dots = "";
     for(i = 0; i < bannerImages.length; i++){
         dots +=`<div class="slideDot"></div>`;
     }
-        
+
     dotWrapper.innerHTML=dots;
 
     function startSlide(i){
@@ -1084,31 +1087,31 @@ class DOMHandle {
             slideShowBannerDiv.
             nextElementSibling.children[i].
             classList.add('activeDot');
-            
+
             setTimeout(function(){
             slideShowBannerDiv.
             nextElementSibling.children[i].
-            classList.remove('activeDot'); 
+            classList.remove('activeDot');
             }, 2500)
-            
+
             setTimeout(function(){
                 slideShowBannerDiv.firstElementChild.
                 classList.remove('fadeSlide');
             })
-            
+
             setTimeout(function(){
-                
-                if(i === bannerImages.length-1){ 
+
+                if(i === bannerImages.length-1){
                     i = 0;
                 } else {
                     i++
                 }
-                
-                startSlide(i) 
+
+                startSlide(i)
             }, 2500)
         }
     }
-    
+
     i = 0;
     startSlide(i)
 }
