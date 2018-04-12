@@ -52,6 +52,13 @@ createArtistButton.addEventListener('click', function(){
 
 /* Handles all fetch queries. */
 class FetchHandle {
+    /* ----ADDED BY ERIKA----- */
+    constructor (method, body) {
+        this.method = method;
+        this.headers = { 'Accept': 'application/json', 'Content-Type': 'application/json' };
+        this.body = JSON.stringify(body);
+    }
+    /*---------- */
     fetchAll() {
         /* Contains promises and objects */
         let promiseArray = [];
@@ -213,11 +220,11 @@ class FetchHandle {
     }
 
     /* ----- Under construction ----- */
-    fetchArtistByName(artistName) {
-        return fetch(`https://folksa.ga/api/artists?name=${artistName}&key=flat_eric`)
+    fetchItemByName(item, itemName) {
+        return fetch(`https://folksa.ga/api/${item}?name=${itemName}&key=flat_eric`)
             .then((response) => response.json())
-                .then((artist) => {
-                    return artist;
+                .then((fetchedItem) => {
+                    return fetchedItem;
                 });
     }
     /* -------------- */
@@ -287,6 +294,33 @@ class FetchHandle {
             console.log(error);
         });
     }
+    /*--------ADDED BY ERIKA----------- */
+    postItem (itemToPost, HttpRequest) {
+        console.log(HttpRequest);
+        fetch(`https://folksa.ga/api/${itemToPost}?&key=flat_eric`, HttpRequest)
+            .then((response) => response.json())
+                .then((album) => {
+                    console.log(album)
+                })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+    }
+    deleteItem (itemToDelete, idToDelete) {
+        fetch(`https://folksa.ga/api/${itemToDelete}/${idToDelete}?&key=flat_eric`, 
+        {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) => response.json())
+                .then((deletedItem) => {
+                    console.log(deletedItem);
+                });
+    }
+    /*---------------- */
 }
 /* Handles the DOM. */
 class DOMHandle {
@@ -833,32 +867,24 @@ class DOMHandle {
         /* -----------ADDED BY ERIKA------------- */
         postAlbumButton.addEventListener('click', function() {
             event.preventDefault();
-            console.log('hej');
-            /* Gets the input values */
+
+            /* Gets the input values. */
             const albumController = new Controller;
             const albumArtistName = albumController.getInputValue('inputAlbumArtist');
-            const albumArtist = albumController.getInputValue('inputAlbumArtist');
-
-            /* Still not working */
-            var albumArtistId = '';
-            fetchArtistByName(albumArtist);
-            console.log(albumArtistId);
-            /* ------------------ */
-
             const albumTitle = albumController.getInputValue('inputAlbumTitle');
             var albumGenres = albumController.getInputValue('inputAlbumGenres');
             const albumReleaseDate = albumController.getInputValue('inputAlbumReleaseDate');
             const albumSpotifyURL = albumController.getInputValue('inputAlbumSpotifyURL');
             const albumCoverImageURL = albumController.getInputValue('inputAlbumCoverImage');
 
-            /* Title and artist are required to create a new album */
+            /* Title and artist are required to create a new album. */
             const isTitleEmpty = albumController.isEmpty(albumTitle);
             const isArtistEmpty = albumController.isEmpty(albumArtistName);
 
-            /* Checking the imported values before creating a new artist. */
+            /* Checking the imported values before creating a new album. */
             const errorMessages = [];
 
-            /* Title and artist is the only required so checking that first */
+            /* Title and artist are required to be filled in so checking that first. */
             if (isTitleEmpty) {
                 errorMessages.push('Please enter a title!');
             }
@@ -871,7 +897,8 @@ class DOMHandle {
                 const isReleaseDateEmpty = albumController.isEmpty(albumReleaseDate);
                 const isSpotifyURLEmpty = albumController.isEmpty(albumSpotifyURL);
                 const isCoverImageEmpty = albumController.isEmpty(albumCoverImageURL);
-
+                
+                
                 /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
                 if (!isGenresEmpty) {
                     const editedGenresParameter = albumController.editGenresParameter(albumGenres);
@@ -887,6 +914,7 @@ class DOMHandle {
                         errorMessages.push('The spotify URL is not valid, please enter another one.');
                     }
                 }
+
                 /* If cover image is filled in the URL must be checked */
                 if (!isCoverImageEmpty) {
                     const isImageURLValid = albumController.checkURL(albumCoverImageURL);
@@ -894,7 +922,8 @@ class DOMHandle {
                         errorMessages.push('The image URL is not valid, please enter another one.');
                     }
                 }
-            }
+            } /* --- if (!isTitleEmpty && !isArtistEmpty) collapse --- */
+
             /* A DOM-function to print error-messages should be called for here */
             if (errorMessages.length > 0) {
                 for (let errorMessage of errorMessages) {
@@ -902,16 +931,11 @@ class DOMHandle {
                 }
             }
             else {
-                /* Still not working */
-                const fetchId = new FetchHandle;
-                const albumArtistId = fetchId.fetchArtistByName(albumArtistName).then((artist) => {
-                    console.log(artist[0]._id);
-                    const artistId = artist[0]._id;
-                    console.log(artistId);
-                    const albumToPost = new Album(albumTitle, artistId, albumGenres, albumReleaseDate, albumSpotifyURL, albumCoverImageURL);
-                    console.log(albumToPost);
-                });
-            /* ------------------ */
+                const fetchArtistId = new FetchHandle;
+                const albumArtistId = fetchArtistId.fetchItemByName('albums', albumArtistName)     .then((artist) => { 
+                        const albumToPost = new Album(albumTitle, artist[0]._id, albumGenres, albumReleaseDate, albumSpotifyURL, albumCoverImageURL);
+                        console.log(albumToPost);
+                    });
             }
         });
 
@@ -921,6 +945,17 @@ class DOMHandle {
         getElementById('addTrackButton');
 
         addTrackButton.addEventListener('click', function(){
+            event.preventDefault();
+            /* Gets the input values */
+            const trackController = new Controller;
+            const trackArtist = trackController.getInputValue('inputAlbumArtist');
+            
+            fetchArtistByName(albumArtist);
+            const albumTitle = trackController.getInputValue('inputAlbumTitle');
+            var albumGenres = trackController.getInputValue('inputAlbumGenres');
+            const albumReleaseDate = trackController.getInputValue('inputAlbumReleaseDate');
+            const albumCoverImageURL = trackController.getInputValue('inputAlbumCoverImage');
+            const isNameEmpty = trackController.isEmpty(albumTitle);
 
         const inputTrackTitle = document.
         getElementById('inputTrackTitle')
@@ -984,10 +1019,10 @@ class DOMHandle {
             const artistCoverImageURL = artistController.getInputValue('inputArtistCoverImage');
             const isNameEmpty = artistController.isEmpty(artistName);
 
-            /* Checking the imported values before creating a new artist. This can also   be a string because there is not gonna be more than one error message so far, but in case we want to expand */
+            /* Checking the imported values before creating a new artist. */
             const errorMessages = [];
 
-            /* Name is the only one required so checking that first */
+            /* Name is the only parameter required so checking that first */
             if (isNameEmpty) {
                 errorMessages.push('Please enter a name!');
             }
@@ -1000,6 +1035,7 @@ class DOMHandle {
                 if (!isGenresEmpty) {
                     const editedGenresParameter = artistController.editGenresParameter(artistGenres);
                     artistGenres = editedGenresParameter;
+                    console.log(editedGenresParameter);
                 }
                 /* If cover image is filled in the URL must be checked */
                 if (!isCoverImageEmpty) {
@@ -1112,8 +1148,16 @@ class DOMHandle {
     i = 0;
     startSlide(i)
 }
+/*
+displayErrorMessagePopup (errorMessages) {
+    const popupDiv = document.createElement('div');
+    popupDiv.className = 'fadeOut';
+    for (let errorMessage of errorMessages) {
+        const errorMessageParagraph = `<p class = "errorMessage">${errorMessage}</p>`;
+    }
+}*/
 
-}
+}/* --- Class FetchHandle collapse --- */
 
 /* -----------ADDED BY ERIKA------------- */
 class Controller {
@@ -1141,7 +1185,7 @@ class Controller {
             editedGenresParameter = splitGenresParameter[0].concat(',', splitGenresParameter[1]);
         } else {
                 editedGenresParameter = genresParameter;
-            }
+        }
             return editedGenresParameter;
         }
         checkURL(URLaddress) {
@@ -1161,7 +1205,6 @@ class Controller {
         checkYear (year) {
             const currentTime = new Date();
             const currentYear = currentTime.getFullYear();
-            console.log(currentYear);
             if (year > 1500 && year <= currentYear) {
                 return true;
             } else {
@@ -1171,11 +1214,11 @@ class Controller {
 };
 
 class Artist {
-    constructor(name, genres, coverImageURL) {
+    constructor(name, genres, coverImage) {
         if (name != '') {
             this.name =       name;
             this.genres =     genres;
-            this.coverImageURL = coverImage;
+            this.coverImage = coverImage;
         }
     }
     setGenres (genres) {
@@ -1183,22 +1226,22 @@ class Artist {
             this.genres = genres;
         }
     }
-    setCoverImage (coverImageURL) {
+    setCoverImage (coverImage) {
         if (coverImageURL != '') {
-            this.coverImageURL = coverImageURL;
+            this.coverImage = coverImage;
         }
     }
 }
 
 class Album {
     constructor(title, artists, genres, releaseDate, spotifyURL, coverImage) {
-        if (title != '' && artist != '') {
-            this.title =      title;
-            this.artists =     artists;
-            this.genres	=      genres;
+        if (title != '' && artists != '') {
+            this.title       = title;
+            this.artists     = artists;
+            this.genres	     = genres;
             this.releaseDate = releaseDate;
-            this.spotifyURL =  spotifyURL;
-            this.coverImage =  coverImage;
+            this.spotifyURL  = spotifyURL;
+            this.coverImage  = coverImage;
         }
     }
     setGenres (genres) {
@@ -1212,26 +1255,25 @@ class Album {
         }
     }
     setSpotifyURL (spotifyURL) {
-        if (URL != '') {
+        if (spotifyURL != '') {
             this.spotifyURL = spotifyURL;
         }
     }
-    setCoverImage (coverImageURL) {
+    setCoverImage (coverImage) {
         if (coverImageURL != '') {
-            this.coverImageURL = coverImage;
+            this.coverImage = coverImage;
         }
     }
 }
 
 class Tracks {
-    constructor (title, artists, album, genres, coverImage, spotifyURL) {
+    constructor (title, artists, album, genres, coverImage) {
         if (title != '' && artists != '' && album != '') {
             this.title = title;
             this.artists = artists;
             this.album	= album;
             this.genres	= genres;
             this.coverImage = coverImage;
-            this.spotifyURL = spotifyURL;
         }
     }
     setGenres (genres) {
@@ -1239,26 +1281,12 @@ class Tracks {
             this.genres = genres;
         }
     }
-    setCoverImage (coverImageURL) {
-        if (coverImageURL != '') {
-            this.coverImageURL = coverImage;
-        }
-    }
-    setSpotifyURL (spotifyURL) {
-        if (URL != '') {
-            this.spotifyURL = spotifyURL;
+    setCoverImage (coverImage) {
+        if (coverImage != '') {
+            this.coverImage = coverImage;
         }
     }
 }
-
-class HttpRequest {
-    constructor(method, headers, body) {
-        this.method = method;
-        this.headers = headers;
-        this.body = body;
-    }
-}
-/* -----------ADDED BY ERIKA------------- */
 
 class Logic {
     calculateRating(object) {
