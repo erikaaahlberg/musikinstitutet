@@ -64,19 +64,32 @@ body{
             max-width: 800px;
             margin: auto;
             padding: 0 10px;
+            .topFivePlayLists {
+                margin-top: 10px;
+                .topPlaylistsButton {
+                    padding: 20px 25px;
+                }
+                p {
+                    letter-spacing: 2px;
+                    font-weight: 700;
+                    color: orange;
+                    text-align: center;
+                }
+            }
+            .showByIdButton{
+                @include listButtons;
+            }
+            .showByIdButton:hover{
+                background: rgba(255, 255, 255, 0.07);
+            }
+            .lightButton{
+                background: rgba(255, 255, 255, 0.03);
+            }
             #searchResults{
                 max-height: 300px;
                 overflow: scroll;
                 border-radius: 5px;
-                .showByIdButton{
-                    @include listButtons;
-                }
-                .showByIdButton:hover{
-                    background: rgba(255, 255, 255, 0.07);
-                }
-                .lightButton{
-                    background: rgba(255, 255, 255, 0.03);
-                }
+                margin-bottom: 10px;
             }
             #contentOfSpecificAlbum{
                 width: 100%;
@@ -125,7 +138,7 @@ body{
                                 padding: 8px;
                                 border-radius: 5px;
                                 border: none;
-                                
+
                             }
                             button{
                                 background: $accentColor;
@@ -208,7 +221,7 @@ body{
                             border-radius: 20px;
                             border: none;
                             cursor: pointer;
-                        }                        
+                        }
                     }
                 }
                 .underline{
@@ -235,7 +248,7 @@ body{
                     }
                     .lightButton{
                         background: rgba(255, 255, 255, 0.03);
-                    }    
+                    }
                 }
             }
             #contentOfSpecificTrack{
@@ -248,7 +261,7 @@ body{
                         letter-spacing: 3px;
                         text-transform: uppercase;
                         margin: 20px 0;
-                        
+
                     }
                     p{
                         color: $accentColor;
@@ -264,7 +277,7 @@ body{
                     }
                     .trackAlbumButton:hover{
                         background: rgba(255, 255, 255, 0.07);
-                    } 
+                    }
                 }
             }
         }
@@ -285,7 +298,7 @@ body{
                 }
                 .lightButton{
                     background: rgba(255, 255, 255, 0.03);
-                } 
+                }
             }
         }
         #addDiv{
@@ -316,7 +329,7 @@ body{
                     padding: 8px;
                     border: none;
                     margin: 10px;
-                }   
+                }
                 button{
                     width: 40%;
                     padding: 8px;
