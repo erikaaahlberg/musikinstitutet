@@ -102,35 +102,29 @@ class FetchHandle {
 
     /* Fetches all the albums using this.apiPath which is available in the class */
     fetchAlbums() {
-        fetch(`https://folksa.ga/api/albums?key=flat_eric`)
+        fetch(`https://folksa.ga/api/tracks?populateArtists=true&limit=999&key=flat_eric`)
             .then((response) => response.json())
             .then((albums) => {
-                /* Empty array that will contain the artist-data. */
-                let promiseArray = [];
-                /* For every album, a new fetch request is initiated to retreive more
-                 * data. For instance, the artist name. */
+                const displayTrack = new DOMHandle();
                 for (let i = 0; i < albums.length; i++) {
-                    const artistPromise = fetch(`https://folksa.ga/api/artists/${albums[i].artists}?key=flat_eric`)
-                        .then((response) => response.json())
-                    promiseArray.push(artistPromise);
+                    if (!albums[i].artists[0]) {
+                        albums[i].artists[0] = { name: 'No name', _id: false };
+                    }
                 }
-                /* Promise.all is used for the entire promiseArray. Values are then sent
-                 * to the DOMHandle.displayAlbums function. */
-                Promise.all(promiseArray)
-                    .then((artistPromise) => {
-                        const displayAlbum = new DOMHandle();
-                        displayAlbum.displayAlbums(albums, artistPromise);
-                        displayAlbum.filterSearch();
-                    })
+                displayTrack.displayTracks(albums);
+                displayTrack.filterSearch();
             });
     }
+
     fetchTracks() {
-        fetch(`https://folksa.ga/api/tracks?key=flat_eric`)
+        fetch(`https://folksa.ga/api/tracks?limit=999&key=flat_eric`)
             .then((response) => response.json())
             .then((tracks) => {
                 const displayTrack = new DOMHandle();
                 for (let i = 0; i < tracks.length; i++) {
-                    if (tracks[i].artists)
+                    if (!tracks[i].artists[0]) {
+                        tracks[i].artists[0] = { name: 'No name', _id: false };
+                    }
                 }
                 displayTrack.displayTracks(tracks);
                 displayTrack.filterSearch();
@@ -308,15 +302,16 @@ class DOMHandle {
         }
     }
 
-    displayAll(allAlbums, allTracks, allArtists, allPlaylists, allAlbumArtists) {
-        this.displayAlbums(allAlbums, allAlbumArtists);
+    displayAll(allAlbums, allTracks, allArtists, allPlaylists) {
+        this.displayAlbums(allAlbums);
         this.displayTracks(allTracks);
         this.displayArtists(allArtists);
         this.displayPlaylists(allPlaylists);
     }
 
     /* Console logs the JSON-object. Doesn't add anything to the DOM right now. */
-    displayAlbums(allAlbums, allArtists) {
+    displayAlbums(allAlbums) {
+        console.log(allAlbums);
         let searchedAlbumButtons = '';
         /* Loops json object */
 
@@ -328,7 +323,7 @@ class DOMHandle {
             /* Storing the albums in a button */
             searchedAlbumButtons += `
                 <button class="showByIdButton" id="${allAlbums[i]._id}" data-genre="${this.displayGenres(allAlbums[i])}">
-                    ${allArtists[i].name} -
+                    ${allAlbums[i].artists[0].name} –
                     ${allAlbums[i].title} -
                     ${allAlbums[i].releaseDate}
                     <img src="images/rightArrow.svg">
