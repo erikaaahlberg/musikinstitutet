@@ -23,6 +23,7 @@ for (i = 0; i < searchButton.length; i++) {
                 break;
             case 'playlists':
                 newFetch.fetchPlaylists();
+                newFetch.fetchTopPlaylists();
                 break;
         }
     });
@@ -162,7 +163,9 @@ class FetchHandle {
             .then((response) => response.json())
             .then((playlists) => {
                 const topPlaylists = new Logic();
-                console.log(topPlaylists.determineTopPlaylists(playlists));
+                const sortedList = topPlaylists.determineTopPlaylists(playlists);
+                const displayTop = new DOMHandle();
+                displayTop.displayTopPlaylist(sortedList);
             });
     }
     fetchAlbumById(albumId) {
@@ -577,9 +580,9 @@ class DOMHandle {
     });
 }
     displaySpecificArtist(artist, albums){
-        
+
         const convertedDated = artist.born.substring(0,4);
-        
+
         let contentOfSpecificArtist = `
             <div id="contentOfSpecificArtist">
                 <div id="artistTopContent">
@@ -689,7 +692,7 @@ class DOMHandle {
         addPlayListComment.addPlayListComment(commentField.value, commentUser.value, playlist._id, comments);
 
         })
-        
+
         const everyOtherButton = new DOMHandle();
         everyOtherButton.
         everyOtherButton(playlistTracklist.children);
@@ -703,6 +706,37 @@ class DOMHandle {
 });
 
     }
+    displayTopPlaylist(list) {
+        console.log(list);
+        let topPlaylistsButtons = `<div class="topFivePlayLists">
+                                   <p>THE HIGHEST RATED PLAYLISTS</p>`;
+
+        for (let i = 0; i < list.length; i++) {
+            if (i == 5) { break; }
+            /* Storing the albums in a button */
+            topPlaylistsButtons += `
+                    <button class="showByIdButton topPlaylistsButton" id="${list[i].id}">
+                        ${list[i].title} -
+                        ${list[i].rating}
+                        <img src="images/rightArrow.svg">
+                    </button>
+            `;
+        }
+        topPlaylistsButtons += '</div>';
+        mainOutput.insertAdjacentHTML('beforeend', topPlaylistsButtons);
+        const playListButtons = document.getElementsByClassName('topPlaylistsButton');
+        this.everyOtherButton(playListButtons);
+
+        for (i = 0; i < playListButtons.length; i++) {
+            playListButtons[i].addEventListener('click', function() {
+                const newFetch = new FetchHandle();
+                newFetch.fetchPlaylistById(this.id);
+                const deActivate = new DOMHandle();
+                deActivate.deactivateSearchButtons();
+            })
+        }
+
+    }
 
     displayPlaylistComments(comments, newComment){
         const playlistComments = document.getElementById('playlistComments');
@@ -713,8 +747,13 @@ class DOMHandle {
 
             commentContent +=`
                 <div class="playlistComment">
-                    ${comments[0][i].username}
-                    ${comments[0][i].body}
+                    <p class="commenter">
+                        ${comments[0][i].username}
+                    </p>
+                    <div class="underline"></div>
+                    <p class="comment">
+                        ${comments[0][i].body}
+                    </p>
                 </div>
             `
         }
@@ -786,32 +825,34 @@ class DOMHandle {
         const addDiv = document.getElementById('addDiv');
 
         let createAlbumContent =`
-            <p>ADD AN ALBUM</p>
-            <form id="importAlbum">
-                <input type="text" id="inputAlbumArtist" placeholder="ARTIST..">
-                <input type="text" id="inputAlbumTitle" placeholder="ALBUM TITLE..">
-                <input type="text" id="inputAlbumGenres" placeholder="ALBUM GENRE..">
-                <input type="text" id="inputAlbumReleaseDate" placeholder="RELEASE YEAR..">
-                <input type = "text"
-                id = "inputAlbumSpotifyURL"
-                placeholder = "SPOTIFY URL..">
-                <input type="text" id="inputAlbumCoverImage" placeholder="COVER IMAGE URL..">
-                <button type ="button" id="postAlbumButton">
-                    ADD ALBUM
+            <div id="addWrapper">
+                <p>ADD AN ALBUM</p>
+                <form id="importAlbum">
+                    <input type="text" id="inputAlbumArtist" placeholder="ARTIST..">
+                    <input type="text" id="inputAlbumTitle" placeholder="ALBUM TITLE..">
+                    <input type="text" id="inputAlbumGenres" placeholder="ALBUM GENRE..">
+                    <input type="text" id="inputAlbumReleaseDate" placeholder="RELEASE YEAR..">
+                    <input type = "text"
+                    id = "inputAlbumSpotifyURL"
+                    placeholder = "SPOTIFY URL..">
+                    <input type="text" id="inputAlbumCoverImage" placeholder="COVER IMAGE URL..">
+                    <button type ="button" id="postAlbumButton">
+                        ADD ALBUM
+                    </button>
+                </form>
+                <form id="postTrack">
+                    <input text="text" id="inputTrackArtist" placeholder="ARTIST..">
+                    <input text="text" id="inputTrackTitle" placeholder="TRACK TITLE..">
+                    <button type="button" id="addTrackButton">
+                        <i class="far fa-plus-square"></i>
+                    </button>
+                </form>
+                <div id="addTrackTracklist"></div>
+                <button type="button" id="importCloseButton">
+                    <img src="images/x-circle.svg">
+                    BACK
                 </button>
-            </form>
-            <form id="postTrack">
-                <input text="text" id="inputTrackArtist" placeholder="ARTIST..">
-                <input text="text" id="inputTrackTitle" placeholder="TRACK TITLE..">
-                <button type="button" id="addTrackButton">
-                    <i class="far fa-plus-square"></i>
-                </button>
-            </form>
-            <div id="addTrackTracklist"></div>
-            <button type="button" id="importCloseButton">
-                BACK
-            </button>
-
+            </div>
         `;
 
         addDiv.innerHTML=createAlbumContent;
@@ -939,16 +980,19 @@ class DOMHandle {
         const addDiv = document.getElementById('addDiv');
 
         let createArtistContent =`
-            <p>ADD AN ARTIST</p>
+            <div id="addWrapper">
+                <p>ADD ARTIST</p>
                 <form id = "importArtist">
                     <input type="text" id="inputArtistName" placeholder="ARTIST NAME..">
                     <input type="text" id="inputArtistGenres" placeholder="GENRES..">
-                    <input type="text" id="inputArtistCoverImage" placeholder="COVER IMAGE..">
-                    <button id="postArtistButton">Add artist</button>
+                    <input type="text" id="inputArtistCoverImage" placeholder="COVER IMAGE URL..">
+                    <button id="postArtistButton">ADD ARTIST</button>
                 </form>
-            <button type="button" id="importCloseButton">
-                BACK
-            </button>
+                <button type="button" id="importCloseButton">
+                    <img src="images/x-circle.svg">
+                    BACK
+                </button>
+            </div>
             `;
 
         addDiv.innerHTML=createArtistContent;
@@ -1025,6 +1069,72 @@ class DOMHandle {
         genres += 'none';
         return genres;
     }
+    
+    slideShowBanner(){
+    
+    const slideShowBannerDiv = document.
+    getElementById('slideShow');
+    
+    const bannerImages = [
+        "image1.jpg", 
+        "image2.jpg",
+        "image3.jpg",
+        "image4.jpg",
+        "image5.jpg",
+    ];
+    
+    const dotWrapper = document.
+    getElementById('slideDotsWrapper')
+        
+    let dots = "";
+    for(i = 0; i < bannerImages.length; i++){
+        dots +=`<div class="slideDot"></div>`;
+    }
+        
+    dotWrapper.innerHTML=dots;
+
+    function startSlide(i){
+        if(i <= bannerImages.length-1){
+             let addSlide = `
+                <div class="slideWrapper fadeSlide">
+                    <img src="images/${bannerImages[i]}">
+                </div>
+            `;
+            const dot = `<div id="slideDotsWrapper"></div>`
+
+            slideShowBannerDiv.innerHTML=addSlide+dot
+
+            slideShowBannerDiv.
+            nextElementSibling.children[i].
+            classList.add('activeDot');
+            
+            setTimeout(function(){
+            slideShowBannerDiv.
+            nextElementSibling.children[i].
+            classList.remove('activeDot'); 
+            }, 2500)
+            
+            setTimeout(function(){
+                slideShowBannerDiv.firstElementChild.
+                classList.remove('fadeSlide');
+            })
+            
+            setTimeout(function(){
+                
+                if(i === bannerImages.length-1){ 
+                    i = 0;
+                } else {
+                    i++
+                }
+                
+                startSlide(i) 
+            }, 2500)
+        }
+    }
+    
+    i = 0;
+    startSlide(i)
+}
 
 }
 
@@ -1219,6 +1329,9 @@ class Logic {
     }
 
 }
+
+const runSlideShow = new DOMHandle();
+runSlideShow.slideShowBanner();
 
 const startFetch = new FetchHandle();
 startFetch.fetchAll();
