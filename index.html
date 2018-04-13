@@ -25,16 +25,16 @@
                 <div id="messageBox"><p>THIS IS A MESSAGEBOX WITH MESSAGE</p></div>
                 <input type="text" id="searchField" placeholder="SEARCH BY NAME OR GENRE..">
 
-                <div id="searchButtonWrapper">
-                    <button type="button" value="all" class="searchButton activeButton">All</button>
-                    <button type="button" value="albums" class="searchButton">Albums</button>
-                    <button type="button" value="tracks" class="searchButton">Tracks</button>
-                    <button type="button" value="artists" class="searchButton">Artists</button>
-                    <button type="button" value="playlists" class="searchButton">Playlists</button>
-                </div>
 
+            <div id="searchButtonWrapper">
+                <button type="button" id="allButton" value="all" class="searchButton activeButton">All</button>
+                <button type="button" id="albumsButton" value="albums" class="searchButton">Albums</button>
+                <button type="button" id="tracksButton" value="tracks" class="searchButton">Tracks</button>
+                <button type="button" id="artistsButton" value="artists" class="searchButton">Artists</button>
+                <button type="button" id="playlistsButton" value="playlists" class="searchButton">Playlists</button>
             </form>
-             <div id="addDiv" class="fadeOut"></div>
+              
+            <div id="addDiv" class="fadeOut"></div>
             <div id="mainOutput">
                 <div id="searchResults"></div>
             </div>
@@ -67,10 +67,8 @@
             </form>
             -->
 
-
         </main>
-        <aside><div id="playlistComments"></div></aside>
-    </div>       
+        <aside><div id="playlistComments"></div></aside>     
     <footer>
         <button id="createArtistButton"><img src="images/plus-circle.svg">ADD ARTIST</button>
         <button id="createAlbumButton"><img src="images/plus-circle.svg">ADD ALBUM/SINGLE</button>
