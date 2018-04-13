@@ -60,44 +60,88 @@ class FetchHandle {
     }
     /*---------- */
     fetchAll() {
-        this.fetchAlbums()
-        this.fetchTracks()
-        this.fetchArtists()
-        this.fetchPlaylists()
+        /* Contains promises and objects */
+        let promiseArray = [];
+        let artistPromiseArray = [];
+        let fetchedObject = { albums: [], albumartists: [], tracks: [], artists: [], playlists: [] };
+        const toFetch = ['albums', 'tracks', 'artists', 'playlists'];
+        /* Start of by fetching everything. */
+        for (let promise of toFetch) {
+            let fetchItem = fetch(`https://folksa.ga/api/${promise}?key=flat_eric`)
+                .then((response) => response.json())
+            promiseArray.push(fetchItem);
+            /* For albums we want the artist name too, so a new fetch is initiated
+             * based on the object that is retreived. */
+            if (promise == 'albums') {
+                Promise.resolve(fetchItem)
+                    .then((resolvedObject) => {
+                        for (let item of resolvedObject) {
+                            let artistPromise = fetch(`https://folksa.ga/api/artists/${item.artists}?key=flat_eric`)
+                                .then((response) => response.json())
+                            artistPromiseArray.push(artistPromise);
+                        }
+                        /* They are promised and applied to fetchedObject.  */
+                        Promise.all(artistPromiseArray)
+                            .then((artistPromisedArray) => {
+                                fetchedObject['albumartists'] = artistPromisedArray;
+                            })
+                            /* All data needs to be present, so we are using then to make sure
+                             * that they are async using then. */
+                            .then(() => {
+                                /* All the items from toFetch are Promised here and applied
+                                 * to fetchedObject. */
+                                Promise.all(promiseArray)
+                                    .then((promisedArray) => {
+                                        for (let i = 0; i < promisedArray.length; i++) {
+                                            fetchedObject[toFetch[i]] = promisedArray[i];
+                                        }
+                                        /* displayAll is called */
+                                        const displayAll = new DOMHandle();
+                                        displayAll.displayAll(fetchedObject.albums, fetchedObject.tracks,
+                                            fetchedObject.artists, fetchedObject.playlists, fetchedObject.albumartists);
+                                        displayAll.filterSearch();
+                                    });
+                            })
+                    })
+            }
+        }
     }
 
     /* Fetches all the albums using this.apiPath which is available in the class */
     fetchAlbums() {
-        fetch(`https://folksa.ga/api/albums?populateArtists=true&limit=999&key=flat_eric`)
+        fetch(`https://folksa.ga/api/albums?key=flat_eric`)
             .then((response) => response.json())
             .then((albums) => {
-                const displayTrack = new DOMHandle();
+                /* Empty array that will contain the artist-data. */
+                let promiseArray = [];
+                /* For every album, a new fetch request is initiated to retreive more
+                 * data. For instance, the artist name. */
                 for (let i = 0; i < albums.length; i++) {
-                    if (!albums[i].artists[0]) {
-                        albums[i].artists[0] = { name: 'No name', _id: false };
-                    }
+                    const artistPromise = fetch(`https://folksa.ga/api/artists/${albums[i].artists}?key=flat_eric`)
+                        .then((response) => response.json())
+                    promiseArray.push(artistPromise);
                 }
-                displayTrack.displayAlbums(albums);
-                displayTrack.filterSearch();
+                /* Promise.all is used for the entire promiseArray. Values are then sent
+                 * to the DOMHandle.displayAlbums function. */
+                Promise.all(promiseArray)
+                    .then((artistPromise) => {
+                        const displayAlbum = new DOMHandle();
+                        displayAlbum.displayAlbums(albums, artistPromise);
+                        displayAlbum.filterSearch();
+                    })
             });
     }
-
     fetchTracks() {
-        fetch(`https://folksa.ga/api/tracks?limit=999&key=flat_eric`)
+        fetch(`https://folksa.ga/api/tracks?key=flat_eric`)
             .then((response) => response.json())
             .then((tracks) => {
                 const displayTrack = new DOMHandle();
-                for (let i = 0; i < tracks.length; i++) {
-                    if (!tracks[i].artists[0]) {
-                        tracks[i].artists[0] = { name: 'No name', _id: false };
-                    }
-                }
                 displayTrack.displayTracks(tracks);
                 displayTrack.filterSearch();
             });
     }
     fetchArtists() {
-        fetch(`https://folksa.ga/api/artists?limit=999&key=flat_eric`)
+        fetch(`https://folksa.ga/api/artists?key=flat_eric`)
             .then((response) => response.json())
             .then((artists) => {
                 const displayArtist = new DOMHandle();
@@ -106,7 +150,7 @@ class FetchHandle {
             });
     }
     fetchPlaylists() {
-        fetch(`https://folksa.ga/api/playlists?limit=999&key=flat_eric`)
+        fetch(`https://folksa.ga/api/playlists?key=flat_eric`)
             .then((response) => response.json())
             .then((playlists) => {
                 const displayPlaylist = new DOMHandle();
@@ -115,7 +159,7 @@ class FetchHandle {
             });
     }
     fetchTopPlaylists() {
-        fetch(`https://folksa.ga/api/playlists?limit=999&key=flat_eric`)
+        fetch(`https://folksa.ga/api/playlists?key=flat_eric`)
             .then((response) => response.json())
             .then((playlists) => {
                 const topPlaylists = new Logic();
@@ -128,22 +172,28 @@ class FetchHandle {
         fetch(`https://folksa.ga/api/albums/${albumId}?key=flat_eric`)
             .then((response) => response.json())
             .then((album) => {
-                if (!album.artists[0]) {
-                    album.artists[0] = { name: 'No name', _id: false };
-                }
-                const displaySpecificAlbum = new DOMHandle();
-                displaySpecificAlbum.displaySpecificAlbum(album);
+                fetch(`https://folksa.ga/api/artists/${album.artists[0]._id}?key=flat_eric`)
+                    .then((response) => response.json())
+                    .then((artist) => {
+
+                        const displaySpecificAlbum = new DOMHandle();
+                        displaySpecificAlbum.displaySpecificAlbum(album, artist);
+                    })
+
             });
     }
     fetchTrackById(trackId) {
         fetch(`https://folksa.ga/api/tracks/${trackId}?key=flat_eric`)
             .then((response) => response.json())
             .then((track) => {
-                if (!track.artists[0]) {
-                    track.artists[0] = { name: 'No name', _id: false };
-                }
-                const displaySpecificTrack = new DOMHandle();
-                displaySpecificTrack.displaySpecificTrack(track);
+
+                fetch(`https://folksa.ga/api/artists/${track.artists[0]._id}?key=flat_eric`)
+                    .then((response) => response.json())
+                    .then((artist) => {
+
+                        const displaySpecificTrack = new DOMHandle();
+                        displaySpecificTrack.displaySpecificTrack(track, artist);
+                    });
             });
     }
     fetchArtistById(artistId) {
@@ -170,8 +220,8 @@ class FetchHandle {
     }
 
     /* ----- Under construction ----- */
-    fetchItemByName(item, itemName) {
-        return fetch(`https://folksa.ga/api/${item}?name=${itemName}&key=flat_eric`)
+    fetchItemByChosenParameter(item, parameter, itemName) {
+        return fetch(`https://folksa.ga/api/${item}?${parameter}=${itemName}&key=flat_eric`)
             .then((response) => response.json())
                 .then((fetchedItem) => {
                     return fetchedItem;
@@ -211,10 +261,10 @@ class FetchHandle {
             body: JSON.stringify(comment)
           })
           .then((response) => response.json())
-          .then((comment) => {
+          .then((playlist) => {
 
             const displayPlaylistComments = new DOMHandle();
-            displayPlaylistComments.displayPlaylistComments(comments, comment);
+            displayPlaylistComments.displayPlaylistComments(comments);
           });
 
     }
@@ -229,6 +279,7 @@ class FetchHandle {
         })
         .then((response) => response.json())
         .then((vote) => {
+            console.log(vote);
             if (apiPath == 'albums') {
                 this.fetchAlbumById(id);
             }
@@ -240,7 +291,7 @@ class FetchHandle {
             }
         })
         .catch((error) => {
-            //console.log(error);
+            console.log(error);
         });
     }
     /*--------ADDED BY ERIKA----------- */
@@ -248,15 +299,17 @@ class FetchHandle {
         console.log(HttpRequest);
         fetch(`https://folksa.ga/api/${itemToPost}?&key=flat_eric`, HttpRequest)
             .then((response) => response.json())
-                .then((album) => {
-                    console.log(album)
+                .then((postedItem) => {
+                    console.log(postedItem);
                 })
                     .catch((error) => {
-                        //console.log(error);
+                        const display = new DOMHandle;
+                        console.log(error);
+                        //display.displayErrorMessagePopup(error);
                     });
     }
     deleteItem (itemToDelete, idToDelete) {
-        fetch(`https://folksa.ga/api/${itemToDelete}/${idToDelete}?key=flat_eric`,
+        fetch(`https://folksa.ga/api/${itemToDelete}/${idToDelete}?&key=flat_eric`, 
         {
             method: 'DELETE',
             headers: {
@@ -275,7 +328,10 @@ class FetchHandle {
 class DOMHandle {
     activateSearchButton(value) {
         const checkButton = value;
-        this.deactivateSearchButtons();
+        /* Loops thru the buttons and removes the activeButton class */
+        for (i = 0; i < searchButton.length; i++) {
+            searchButton[i].classList.remove('activeButton');
+        }
         /* Adds the activeButton class to selected button */
         checkButton.classList.add('activeButton');
     }
@@ -285,15 +341,15 @@ class DOMHandle {
         }
     }
 
-    displayAll(allAlbums, allTracks, allArtists, allPlaylists) {
-        this.displayAlbums(allAlbums);
+    displayAll(allAlbums, allTracks, allArtists, allPlaylists, allAlbumArtists) {
+        this.displayAlbums(allAlbums, allAlbumArtists);
         this.displayTracks(allTracks);
         this.displayArtists(allArtists);
         this.displayPlaylists(allPlaylists);
     }
 
     /* Console logs the JSON-object. Doesn't add anything to the DOM right now. */
-    displayAlbums(allAlbums) {
+    displayAlbums(allAlbums, allArtists) {
         let searchedAlbumButtons = '';
         /* Loops json object */
 
@@ -305,8 +361,9 @@ class DOMHandle {
             /* Storing the albums in a button */
             searchedAlbumButtons += `
                 <button class="showByIdButton" id="${allAlbums[i]._id}" data-genre="${this.displayGenres(allAlbums[i])}">
-                    ${allAlbums[i].artists[0].name} –
-                    ${allAlbums[i].title}
+                    ${allArtists[i].name} -
+                    ${allAlbums[i].title} -
+                    ${allAlbums[i].releaseDate}
                     <img src="images/rightArrow.svg">
                 </button>
             `;
@@ -417,7 +474,7 @@ class DOMHandle {
         }
 
     }
-    displaySpecificAlbum(album) {
+    displaySpecificAlbum(album, artist) {
 
         const fetchRating = new Logic();
 
@@ -427,7 +484,7 @@ class DOMHandle {
                     <img src="${album.coverImage}">
                     <div id="albumInfo">
                         <h2>${album.title}</h2>
-                        <p id="artistName"> ${album.artists[0].name}</p>
+                        <p id="artistName"> ${artist.name}</p>
                         <p id="genres"><span>Genres:</span> ${album.genres}</p>
                         <p id="releaseDate"><span>Released:</span> ${album.releaseDate}</p>
                         <p id="rating">Rating: ${fetchRating.calculateRating(album)}</p>
@@ -448,16 +505,6 @@ class DOMHandle {
             </div>
         `
         mainOutput.innerHTML = contentOfSpecificAlbum;
-
-        const deleteButton = document.getElementById('deleteAlbum');
-        deleteButton.addEventListener('click', () => {
-            const deleteAlbum = new FetchHandle();
-            deleteAlbum.deleteItem('albums', album._id);
-            const albumsButton = document.getElementById('albumsButton');
-            mainOutput.innerHTML = '<div id="searchResults"></div>';
-            this.activateSearchButton(albumsButton);
-            deleteAlbum.fetchAlbums();
-        });
 
         let trackTitles = "";
 
@@ -481,11 +528,9 @@ class DOMHandle {
             albumTrackButton[i].addEventListener('click', function() {
                 const newFetch = new FetchHandle();
                 newFetch.fetchTrackById(this.id);
+                console.log(this)
             })
         }
-
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.everyOtherButton(albumTrackButton);
 
         const rateAlbum = document.getElementById('rateAlbum');
         rateAlbum.addEventListener('click', () => {
@@ -497,14 +542,14 @@ class DOMHandle {
         });
 
     }
-    displaySpecificTrack(track) {
+    displaySpecificTrack(track, artist) {
         const fetchRating = new Logic();
 
         let contentOfSpecificTrack = `
             <div id="contentOfSpecificTrack">
                     <div id="trackInfo">
                         <h2>${track.title}</h2>
-                        <p>${track.artists[0].name}</p>
+                        <p>${artist.name}</p>
                         <p>Rating: ${fetchRating.calculateRating(track)}</p>
                         <button class="trackAlbumButton" id="${track.album.title._id}">
                             ${track.album.title}
@@ -519,23 +564,13 @@ class DOMHandle {
                     <button id="addToPlaylist">
                         ADD TO PLAYLIST
                     </button>
-                    <button id="deleteTrack">
+                    <button id="deleteAlbum">
                         DELETE TRACK
                     </button>
                 </div>
             </div>
         `
         mainOutput.innerHTML = contentOfSpecificTrack;
-
-        const deleteButton = document.getElementById('deleteTrack');
-        deleteButton.addEventListener('click', () => {
-            const deleteTrack = new FetchHandle();
-            deleteTrack.deleteItem('tracks', track._id);
-            const tracksButton = document.getElementById('tracksButton');
-            mainOutput.innerHTML = '<div id="searchResults"></div>';
-            this.activateSearchButton(tracksButton);
-            deleteTrack.fetchTracks();
-        });
 
         const rateTrack = document.getElementById('rateTrack');
         rateTrack.addEventListener('click', () => {
@@ -547,13 +582,8 @@ class DOMHandle {
     });
 }
     displaySpecificArtist(artist, albums){
-        let convertedDated = '';
-        if (artist.born) {
-          convertedDated = artist.born.substring(0,4);
-        }
-        else {
-          convertedDated = 'No data.';
-        }
+
+        const convertedDated = artist.born.substring(0,4);
 
         let contentOfSpecificArtist = `
             <div id="contentOfSpecificArtist">
@@ -576,54 +606,31 @@ class DOMHandle {
         `
         mainOutput.innerHTML = contentOfSpecificArtist;
 
-        const deleteButton = document.getElementById('deleteArtist');
-        deleteButton.addEventListener('click', () => {
-            const deleteArtist = new FetchHandle();
-            deleteArtist.deleteItem('artists', artist._id);
-            const artistsButton = document.getElementById('artistsButton');
-            mainOutput.innerHTML = '<div id="searchResults"></div>';
-            this.activateSearchButton(artistsButton);
-            deleteArtist.fetchArtists();
-        });
-
         let artistAlbum = "";
         for(let i = 0; i < albums.length; i++){
-            if(!albums[i].type) {
-              artistAlbum +=`
-                  <button class="artistAlbumButton" id="${albums[i]._id}">
-                      ${albums[i].title} -
-                      ${albums[i].releaseDate}
-                      <img src="images/rightArrow.svg">
-                  </button>
-              `;
-            }
+            artistAlbum +=`
+                <button class="artistAlbumButton" id="${albums[i]._id}">
+                    ${albums[i].title} -
+                    ${albums[i].releaseDate}
+                    <img src="images/rightArrow.svg">
+                </button>
+            `;
         }
 
         const albumList = document.getElementById('artistAlbums');
         albumList.innerHTML=artistAlbum;
 
-        const artistAlbumButtons = document.getElementsByClassName('artistAlbumButton');
-        for (let button of artistAlbumButtons) {
-            button.addEventListener('click', function() {
-                const fetchSpecAlbum = new FetchHandle();
-                fetchSpecAlbum.fetchAlbumById(this.id);
-            });
-        }
-
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.everyOtherButton(artistAlbumButtons);
-
 
     }
     displaySpecificPlaylist(playlist, comments){
         const fetchRating = new Logic();
-
+        
         const createdDate = playlist.createdAt.substring(0,10)
         const createdTime = playlist.createdAt.substring(11,16)
 
         const updatedDate = playlist.updatedAt.substring(0,10)
         const updatedTime = playlist.updatedAt.substring(11,16)
-
+        
         let contentOfSpecificPlaylist =`
             <div id="contentOfSpecificPlaylist">
                 <div id="playlistTopContent">
@@ -656,17 +663,6 @@ class DOMHandle {
             </div>
         `
         mainOutput.innerHTML=contentOfSpecificPlaylist
-
-        const deleteButton = document.getElementById('deletePlaylist');
-        deleteButton.addEventListener('click', () => {
-            const deletePlaylist = new FetchHandle();
-            deletePlaylist.deleteItem('playlists', playlist._id);
-            const playlistsButton = document.getElementById('playlistsButton');
-            mainOutput.innerHTML = '<div id="searchResults"></div>';
-            this.activateSearchButton(playlistsButton);
-            deletePlaylist.fetchPlaylists();
-            deletePlaylist.fetchTopPlaylists();
-        });
 
         const playlistTracklist = document.getElementById('playlistTracklist');
 
@@ -713,6 +709,7 @@ class DOMHandle {
 
     }
     displayTopPlaylist(list) {
+        console.log(list);
         let topPlaylistsButtons = `<div class="topFivePlayLists">
                                    <p>THE HIGHEST RATED PLAYLISTS</p>`;
 
@@ -752,14 +749,9 @@ class DOMHandle {
 
             commentContent +=`
                 <div class="playlistComment">
-                    <header>
-                        <p class="commenter">
-                            ${comments[0][i].username}
-                        </p>
-                        <button class="deleteComment" id="${comments[0][i]._id}">
-                            <img src="images/x-circle.svg">
-                        </button>
-                    </header>
+                    <p class="commenter">
+                        ${comments[0][i].username}
+                    </p>
                     <div class="underline"></div>
                     <p class="comment">
                         ${comments[0][i].body}
@@ -769,38 +761,17 @@ class DOMHandle {
         }
 
         playlistComments.innerHTML=commentContent;
-        
-        if(newComment){
-            let newCommentDiv =`
-                <div class="playlistComment">
-                    <header>
-                        <p class="commenter">
-                            ${newComment.username}
-                        </p>
-                        <button class="deleteComment" id="${newComment._id}">
-                            <img src="images/x-circle.svg">
-                        </button>
-                    </header>
-                    <div class="underline"></div>
-                    <p class="comment">
-                        ${newComment.body}
-                    </p>
-                </div>
-            `;
-            
-            playlistComments.insertAdjacentHTML('beforeend', newCommentDiv);
 
-        }
-        
-        const deleteCommentButton = document.
-        getElementsByClassName('deleteComment');
-        
-        for (i = 0; i < deleteCommentButton.length; i++) {
-            deleteCommentButton[i].addEventListener('click', function() {
-                //console.log(this)
-                const newFetch = new FetchHandle();
-                newFetch.deleteItem('comments', this.id);  
-            })
+        if(newComment){
+            const newCommentDiv = document.createElement('div');
+            newCommentDiv.classList.add('playlistComment');
+            const username = document.
+            createTextNode(newComment.username);
+            const body = document.
+            createTextNode(newComment.body);
+            newCommentDiv.appendChild(username)
+            newCommentDiv.appendChild(body)
+            playlistComments.appendChild(newCommentDiv);
         }
 
     }
@@ -928,8 +899,8 @@ class DOMHandle {
                 const isReleaseDateEmpty = albumController.isEmpty(albumReleaseDate);
                 const isSpotifyURLEmpty = albumController.isEmpty(albumSpotifyURL);
                 const isCoverImageEmpty = albumController.isEmpty(albumCoverImageURL);
-
-
+                
+                
                 /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
                 if (!isGenresEmpty) {
                     const editedGenresParameter = albumController.editGenresParameter(albumGenres);
@@ -958,52 +929,69 @@ class DOMHandle {
             /* A DOM-function to print error-messages should be called for here */
             if (errorMessages.length > 0) {
                 for (let errorMessage of errorMessages) {
-                    console.log(errorMessage);
+                    const display = new FetchHandle;
+                    display.displayErrorMessagePopup(errorMessage);
                 }
             }
             else {
                 const fetchArtistId = new FetchHandle;
-                const albumArtistId = fetchArtistId.fetchItemByName('albums', albumArtistName)     .then((artist) => {
+                fetchArtistId.fetchItemByChosenParameter('artists', 'name', albumArtistName).then((artist) => { 
                         const albumToPost = new Album(albumTitle, artist[0]._id, albumGenres, albumReleaseDate, albumSpotifyURL, albumCoverImageURL);
-                        console.log(albumToPost);
+                        const albumPostRequest = new FetchHandle('POST', albumToPost);
+                        console.log(albumPostRequest);
+                        albumPostRequest.postItem('albums', albumPostRequest);
                     });
             }
         });
-
-        /* -----------ADDED BY ERIKA collapse------------- */
 
         const addTrackButton = document.
         getElementById('addTrackButton');
 
         addTrackButton.addEventListener('click', function(){
             event.preventDefault();
-            /* Gets the input values */
+            const addedTracks = [];
+            const errorMessages = [];
             const trackController = new Controller;
-            const trackArtist = trackController.getInputValue('inputAlbumArtist');
+            const newTrackTitle = trackController.getInputValue('inputTrackTitle');
+            const newTrackArtist = trackController.getInputValue('inputTrackArtist');
+            const newTrackAlbum = trackController.getInputValue('inputAlbumTitle');
 
-            fetchArtistByName(albumArtist);
-            const albumTitle = trackController.getInputValue('inputAlbumTitle');
-            var albumGenres = trackController.getInputValue('inputAlbumGenres');
-            const albumReleaseDate = trackController.getInputValue('inputAlbumReleaseDate');
-            const albumCoverImageURL = trackController.getInputValue('inputAlbumCoverImage');
-            const isNameEmpty = trackController.isEmpty(albumTitle);
+            const isArtistEmpty = trackController.isEmpty(newTrackArtist);
+            const isTitleEmpty = trackController.isEmpty(newTrackTitle);
 
-        const inputTrackTitle = document.
-        getElementById('inputTrackTitle')
+            if (isArtistEmpty) {
+                errorMessages.push('Please enter an artist!');
+            }
+            if (isTitleEmpty) {
+                errorMessages.push('Please enter a title!');
+            }
+            if (errorMessages.length > 0) {
+                displayErrorMessagePopup(errorMessages);
+            } else {
+                /* Fetching id's for album and artist to create a track to post */
+                const fetchIds = new FetchHandle;
+                fetchIds.fetchItemByChosenParameter('albums', 'title', newTrackAlbum)
+                .then((fetchedAlbum) => {
+                    /* Creating track to post */
+                    const trackToPost = new Tracks (newTrackTitle, fetchedAlbum[0].artists[0], fetchedAlbum[0]._id, fetchedAlbum[0].genres[0], fetchedAlbum[0].coverImage);
+                    addedTracks.push(`${newTrackArtist} - ${newTrackTitle}`);
+                    console.log(trackToPost);
 
-        const inputTrackArtist = document.
-        getElementById('inputTrackArtist')
+                    /* Posting track */
+                    const postTrackRequest = new FetchHandle('POST', trackToPost);
+                    postTrackRequest.postItem('tracks', postTrackRequest);
 
-        const addTrackTracklist = document.
-        getElementById('addTrackTracklist')
-
-            const p = document.createElement('p');
-            const newTrack = document.createTextNode(inputTrackArtist.value + ' - ' + inputTrackTitle.value)
-            p.appendChild(newTrack);
-            addTrackTracklist.appendChild(p)
-
-        })
-
+                    /* Printing added tracks */
+                    for (let track of addedTracks) {
+                        const p = document.createElement('p');
+                        const addedTrack = document.createTextNode(track);
+                        p.appendChild(addedTrack);
+                        addTrackTracklist.appendChild(p);
+                    } 
+                });
+            }
+        });
+        /*------------------- */
         const importCloseButton = document.getElementById('importCloseButton');
 
         importCloseButton.addEventListener('click', function(){
@@ -1065,7 +1053,6 @@ class DOMHandle {
                 if (!isGenresEmpty) {
                     const editedGenresParameter = artistController.editGenresParameter(artistGenres);
                     artistGenres = editedGenresParameter;
-                    console.log(editedGenresParameter);
                 }
                 /* If cover image is filled in the URL must be checked */
                 if (!isCoverImageEmpty) {
@@ -1077,13 +1064,13 @@ class DOMHandle {
             }
             /* A DOM-function to print error-messages should be called for here */
             if (errorMessages.length > 0) {
-                for (let errorMessage of errorMessages) {
-                    console.log(errorMessage);
-                }
+                const popupMessage = new DOMHandle;
+                popupMessage.displayErrorMessagePopup(errorMessages);
             }
             else {
                 const artistToPost = new Artist(artistName, artistGenres, artistCoverImageURL);
-                console.log(artistToPost);
+                const artistPostRequest = new FetchHandle('POST', artistToPost);
+                artistPostRequest.postItem('artists', artistPostRequest);
             }
         });
         /* -----collapse------ */
@@ -1112,28 +1099,28 @@ class DOMHandle {
         genres += 'none';
         return genres;
     }
-
+    
     slideShowBanner(){
-
+    
     const slideShowBannerDiv = document.
     getElementById('slideShow');
-
+    
     const bannerImages = [
-        "image1.jpg",
+        "image1.jpg", 
         "image2.jpg",
         "image3.jpg",
         "image4.jpg",
         "image5.jpg",
     ];
-
+    
     const dotWrapper = document.
     getElementById('slideDotsWrapper')
-
+        
     let dots = "";
     for(i = 0; i < bannerImages.length; i++){
         dots +=`<div class="slideDot"></div>`;
     }
-
+        
     dotWrapper.innerHTML=dots;
 
     function startSlide(i){
@@ -1150,42 +1137,63 @@ class DOMHandle {
             slideShowBannerDiv.
             nextElementSibling.children[i].
             classList.add('activeDot');
-
+            
             setTimeout(function(){
             slideShowBannerDiv.
             nextElementSibling.children[i].
-            classList.remove('activeDot');
+            classList.remove('activeDot'); 
             }, 2500)
-
+            
             setTimeout(function(){
                 slideShowBannerDiv.firstElementChild.
                 classList.remove('fadeSlide');
             })
-
+            
             setTimeout(function(){
-
-                if(i === bannerImages.length-1){
+                
+                if(i === bannerImages.length-1){ 
                     i = 0;
                 } else {
                     i++
                 }
-
-                startSlide(i)
+                
+                startSlide(i) 
             }, 2500)
         }
     }
-
+    
     i = 0;
     startSlide(i)
 }
-/*
+/*---------ADDED BY ERIKA------------- */
+hideElement (elementId) {
+    const element = document.getElementById(elementId);
+    element.className = 'fadeOut';
+}
+displayElement (elementId) {
+    const element = document.getElementById(elementId).style.display = "block";
+}
 displayErrorMessagePopup (errorMessages) {
-    const popupDiv = document.createElement('div');
-    popupDiv.className = 'fadeOut';
-    for (let errorMessage of errorMessages) {
-        const errorMessageParagraph = `<p class = "errorMessage">${errorMessage}</p>`;
-    }
-}*/
+    const parentElement = document.getElementById('messageBox');
+    
+    const popupBox = document.createElement('div');
+    popupBox.className = 'messagePopupBox';
+    //popupBox.setAttribute('id', 'messagePopupBox');
+    //for (let errorMessage of errorMessages) {
+        const errorMessageParagraph = document.createElement('p');
+        errorMessageParagraph.className = 'errorMessage';
+        const errorMessageNode = document.createTextNode(errorMessages);
+        errorMessageParagraph.appendChild(errorMessageNode);
+        popupBox.appendChild(errorMessageParagraph);
+    //}
+    const okButton = document.createElement('button');
+    const buttonNode = document.createTextNode('Ok');
+    okButton.setAttribute('id', 'errorOkButton');
+    okButton.appendChild(buttonNode);
+    popupBox.appendChild(okButton);
+    parentElement.appendChild(popupBox);
+}
+/*------------------ */
 
 }/* --- Class FetchHandle collapse --- */
 

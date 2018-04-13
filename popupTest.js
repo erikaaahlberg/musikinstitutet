@@ -1,29 +1,31 @@
 function displayErrorMessagePopup (errorMessages) {
-    const popupDiv = document.createElement('div');
-    popupDiv.className = 'messagePopupBox';
+    const parentElement = document.getElementById('messageBox');
+    
+    const popupBox = document.createElement('div');
+    popupBox.className = 'messagePopupBox';
     //popupDiv.setAttribute('id', 'messagePopupBox');
     for (let errorMessage of errorMessages) {
         const errorMessageParagraph = document.createElement('p');
         errorMessageParagraph.className = 'errorMessage';
         const errorMessageNode = document.createTextNode(errorMessage);
         errorMessageParagraph.appendChild(errorMessageNode);
-        popupDiv.appendChild(errorMessageParagraph);
+        popupBox.appendChild(errorMessageParagraph);
     }
-    const messageBox = document.getElementById('messageBox');
     const okButton = document.createElement('button');
     const buttonNode = document.createTextNode('Ok');
     okButton.setAttribute('id', 'errorOkButton');
     okButton.appendChild(buttonNode);
-    popupDiv.appendChild(okButton);
-    messageBox.appendChild(popupDiv);
+    popupBox.appendChild(okButton);
+    parentElement.appendChild(popupBox);
 }
 /*const error = ['det är fel blabla du har helt fel okej', 'inte rätt', 'du fuckar upp de här'];
 displayErrorMessagePopup(error);*/
 
 function questionMessagePopup (question) {
-    const messageBox = document.getElementById('messageBox');
+    const parentElement = document.getElementById('messageBox');
+    displayElement('messageBox');
 
-    const popupDiv = document.createElement('div');
+    const popupBox = document.createElement('div');
     const questionParagraph = document.createElement('p');
     const questionNode = document.createTextNode(question);
     const yesButton = document.createElement('button');
@@ -34,17 +36,17 @@ function questionMessagePopup (question) {
     yesButton.setAttribute('id', 'yesButton');
     noButton.setAttribute('id', 'noButton');
 
-    popupDiv.setAttribute('id', 'messagePopupBox');
-    popupDiv.className = 'messagePopupBox';
+    popupBox.setAttribute('id', 'messagePopupBox');
+    popupBox.className = 'messagePopupBox';
     questionParagraph.className = 'questionMessage';
     //popupDiv.setAttribute('id', 'messagePopupBox');
     questionParagraph.appendChild(questionNode);
-    popupDiv.appendChild(questionParagraph);
+    popupBox.appendChild(questionParagraph);
     yesButton.appendChild(yesButtonNode);
-    popupDiv.appendChild(yesButton);
+    popupBox.appendChild(yesButton);
     noButton.appendChild(noButtonNode);
-    popupDiv.appendChild(noButton);
-    messageBox.appendChild(popupDiv);
+    popupBox.appendChild(noButton);
+    parentElement.appendChild(popupBox);
 
 }
 questionMessagePopup('vill du me på lite eeh ehh ehh hhhheeeh eeeeeeeh?');
@@ -54,17 +56,17 @@ const noButton = document.getElementById('noButton');
 yesButton.addEventListener('click', function(){
     event.preventDefault();
     displayElement('addDiv');
-    hideElement('messagePopupBox');
+    hideElement('messageBox');
     displayAddTrackForm();
 });
 
 noButton.addEventListener('click', function(){
     event.preventDefault();
-    hideElement('messagePopupBox');
+    hideElement('messageBox');
 });
 function hideElement (elementId) {
     const element = document.getElementById(elementId);
-    element.className = 'hidden';
+    element.className = 'fadeOut';
 }
 
 function displayAddTrackForm(){
@@ -76,7 +78,7 @@ function displayAddTrackForm(){
             <i class="far fa-plus-square"></i>
         </button>
     </form>`;     
-    const addDiv = getElementById('addDiv').innerHTML += `
+    const addDiv = document.getElementById('addDiv').innerHTML += `
     <form id="postTrack">
         <input text="text" id="inputTrackTitle" placeholder="TRACK TITLE..">
         <button type="button" id="addTrackButton">
@@ -86,18 +88,18 @@ function displayAddTrackForm(){
 }
 
 const addTrackButton = getElementById('addTrackButton');
-const tracks = [];
+const addedTracks = [];
 
 addTrackButton.addEventListener('click', function(){
     event.preventDefault();
     const trackController = new Controller;
-    tracks.push(trackController.getInputValue('inputTrackTitle'));
-    console.log(tracks);
+    const newTrackTitle = getInputValue('inputTrackTitle');
+    const newTrackArtist = getInputValue('inputTrackArtist');
+    addedTracks.push(`${newTrackArtist} - ${newTrackTitle}`);
 });
-
+for (let track in addedTracks) {
+    console.log(track);
+}
 function displayElement (elementId) {
-    const element = getElementById(elementId);
-    setTimeout(function(){
-        element.classList.remove('fadeOut');
-    })
+    const element = document.getElementById(elementId).style.display = "block";
 }
