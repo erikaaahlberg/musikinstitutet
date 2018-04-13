@@ -229,7 +229,6 @@ class FetchHandle {
         })
         .then((response) => response.json())
         .then((vote) => {
-            console.log(vote);
             if (apiPath == 'albums') {
                 this.fetchAlbumById(id);
             }
@@ -241,7 +240,7 @@ class FetchHandle {
             }
         })
         .catch((error) => {
-            console.log(error);
+            //console.log(error);
         });
     }
     /*--------ADDED BY ERIKA----------- */
@@ -253,7 +252,7 @@ class FetchHandle {
                     console.log(album)
                 })
                     .catch((error) => {
-                        console.log(error);
+                        //console.log(error);
                     });
     }
     deleteItem (itemToDelete, idToDelete) {
@@ -298,7 +297,6 @@ class DOMHandle {
 
     /* Console logs the JSON-object. Doesn't add anything to the DOM right now. */
     displayAlbums(allAlbums) {
-        console.log(allAlbums);
         let searchedAlbumButtons = '';
         /* Loops json object */
 
@@ -423,7 +421,6 @@ class DOMHandle {
 
     }
     displaySpecificAlbum(album) {
-        console.log(album);
 
         const fetchRating = new Logic();
 
@@ -455,6 +452,12 @@ class DOMHandle {
         `
         mainOutput.innerHTML = contentOfSpecificAlbum;
 
+        const deleteButton = document.getElementById('deleteAlbum');
+        deleteButton.addEventListener('click', function() {
+            const deleteAlbum = new FetchHandle();
+            deleteAlbum.deleteItem('albums', album._id);
+        });
+
         let trackTitles = "";
 
         for (let i = 0; i < album.tracks.length; i++) {
@@ -477,9 +480,11 @@ class DOMHandle {
             albumTrackButton[i].addEventListener('click', function() {
                 const newFetch = new FetchHandle();
                 newFetch.fetchTrackById(this.id);
-                console.log(this)
             })
         }
+
+        const everyOtherButton = new DOMHandle();
+        everyOtherButton.everyOtherButton(albumTrackButton);
 
         const rateAlbum = document.getElementById('rateAlbum');
         rateAlbum.addEventListener('click', () => {
@@ -513,13 +518,19 @@ class DOMHandle {
                     <button id="addToPlaylist">
                         ADD TO PLAYLIST
                     </button>
-                    <button id="deleteAlbum">
+                    <button id="deleteTrack">
                         DELETE TRACK
                     </button>
                 </div>
             </div>
         `
         mainOutput.innerHTML = contentOfSpecificTrack;
+
+        const deleteButton = document.getElementById('deleteTrack');
+        deleteButton.addEventListener('click', function() {
+            const deleteTrack = new FetchHandle();
+            deleteTrack.deleteItem('tracks', track._id);
+        });
 
         const rateTrack = document.getElementById('rateTrack');
         rateTrack.addEventListener('click', () => {
@@ -531,8 +542,13 @@ class DOMHandle {
     });
 }
     displaySpecificArtist(artist, albums){
-
-        const convertedDated = artist.born.substring(0,4);
+        let convertedDated = '';
+        if (artist.born) {
+          convertedDated = artist.born.substring(0,4);
+        }
+        else {
+          convertedDated = 'No data.';
+        }
 
         let contentOfSpecificArtist = `
             <div id="contentOfSpecificArtist">
@@ -555,19 +571,38 @@ class DOMHandle {
         `
         mainOutput.innerHTML = contentOfSpecificArtist;
 
+        const deleteButton = document.getElementById('deleteArtist');
+        deleteButton.addEventListener('click', function() {
+            const deleteArtist = new FetchHandle();
+            deleteArtist.deleteItem('artists', artist._id);
+        });
+
         let artistAlbum = "";
         for(let i = 0; i < albums.length; i++){
-            artistAlbum +=`
-                <button class="artistAlbumButton" id="${albums[i]._id}">
-                    ${albums[i].title} -
-                    ${albums[i].releaseDate}
-                    <img src="images/rightArrow.svg">
-                </button>
-            `;
+            if(!albums[i].type) {
+              artistAlbum +=`
+                  <button class="artistAlbumButton" id="${albums[i]._id}">
+                      ${albums[i].title} -
+                      ${albums[i].releaseDate}
+                      <img src="images/rightArrow.svg">
+                  </button>
+              `;
+            }
         }
 
         const albumList = document.getElementById('artistAlbums');
         albumList.innerHTML=artistAlbum;
+
+        const artistAlbumButtons = document.getElementsByClassName('artistAlbumButton');
+        for (let button of artistAlbumButtons) {
+            button.addEventListener('click', function() {
+                const fetchSpecAlbum = new FetchHandle();
+                fetchSpecAlbum.fetchAlbumById(this.id);
+            });
+        }
+
+        const everyOtherButton = new DOMHandle();
+        everyOtherButton.everyOtherButton(artistAlbumButtons);
 
 
     }
@@ -612,6 +647,12 @@ class DOMHandle {
             </div>
         `
         mainOutput.innerHTML=contentOfSpecificPlaylist
+
+        const deleteButton = document.getElementById('deletePlaylist');
+        deleteButton.addEventListener('click', function() {
+            const deletePlaylist = new FetchHandle();
+            deletePlaylist.deleteItem('playlists', playlist._id);
+        });
 
         const playlistTracklist = document.getElementById('playlistTracklist');
 
@@ -658,7 +699,6 @@ class DOMHandle {
 
     }
     displayTopPlaylist(list) {
-        console.log(list);
         let topPlaylistsButtons = `<div class="topFivePlayLists">
                                    <p>THE HIGHEST RATED PLAYLISTS</p>`;
 
