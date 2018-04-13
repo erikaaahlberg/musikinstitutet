@@ -211,10 +211,10 @@ class FetchHandle {
             body: JSON.stringify(comment)
           })
           .then((response) => response.json())
-          .then((playlist) => {
+          .then((comment) => {
 
             const displayPlaylistComments = new DOMHandle();
-            displayPlaylistComments.displayPlaylistComments(comments);
+            displayPlaylistComments.displayPlaylistComments(comments, comment);
           });
 
     }
@@ -256,7 +256,7 @@ class FetchHandle {
                     });
     }
     deleteItem (itemToDelete, idToDelete) {
-        fetch(`https://folksa.ga/api/${itemToDelete}/${idToDelete}?&key=flat_eric`,
+        fetch(`https://folksa.ga/api/${itemToDelete}/${idToDelete}?key=flat_eric`,
         {
             method: 'DELETE',
             headers: {
@@ -752,9 +752,14 @@ class DOMHandle {
 
             commentContent +=`
                 <div class="playlistComment">
-                    <p class="commenter">
-                        ${comments[0][i].username}
-                    </p>
+                    <header>
+                        <p class="commenter">
+                            ${comments[0][i].username}
+                        </p>
+                        <button class="deleteComment" id="${comments[0][i]._id}">
+                            <img src="images/x-circle.svg">
+                        </button>
+                    </header>
                     <div class="underline"></div>
                     <p class="comment">
                         ${comments[0][i].body}
@@ -764,17 +769,38 @@ class DOMHandle {
         }
 
         playlistComments.innerHTML=commentContent;
-
+        
         if(newComment){
-            const newCommentDiv = document.createElement('div');
-            newCommentDiv.classList.add('playlistComment');
-            const username = document.
-            createTextNode(newComment.username);
-            const body = document.
-            createTextNode(newComment.body);
-            newCommentDiv.appendChild(username)
-            newCommentDiv.appendChild(body)
-            playlistComments.appendChild(newCommentDiv);
+            let newCommentDiv =`
+                <div class="playlistComment">
+                    <header>
+                        <p class="commenter">
+                            ${newComment.username}
+                        </p>
+                        <button class="deleteComment" id="${newComment._id}">
+                            <img src="images/x-circle.svg">
+                        </button>
+                    </header>
+                    <div class="underline"></div>
+                    <p class="comment">
+                        ${newComment.body}
+                    </p>
+                </div>
+            `;
+            
+            playlistComments.insertAdjacentHTML('beforeend', newCommentDiv);
+
+        }
+        
+        const deleteCommentButton = document.
+        getElementsByClassName('deleteComment');
+        
+        for (i = 0; i < deleteCommentButton.length; i++) {
+            deleteCommentButton[i].addEventListener('click', function() {
+                //console.log(this)
+                const newFetch = new FetchHandle();
+                newFetch.deleteItem('comments', this.id);  
+            })
         }
 
     }
@@ -975,7 +1001,6 @@ class DOMHandle {
             const newTrack = document.createTextNode(inputTrackArtist.value + ' - ' + inputTrackTitle.value)
             p.appendChild(newTrack);
             addTrackTracklist.appendChild(p)
-
 
         })
 
