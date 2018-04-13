@@ -638,14 +638,17 @@ class DOMHandle {
                 <div class="underline"></div>
                 <h3>TRACKLIST</h3>
                 <div id="playlistTracklist"></div>
-                <form id="commentform">
-                    <input type="text" id="commentField">
-                    <input type="text" id="commentUser">
-                    <button type="button" id="addCommentButton">ADD COMMENT</button>
+                <form id="commentForm">
+                    <input placeholder="Comment.." type="text" id="commentField">
+                    <div id="commentBottom">
+                        <input placeholder="Name.." type="text" id="commentUser">
+                        <button type="button" id="addCommentButton"><img src="images/plus-circle.svg"></button>
+                    </div>
                 </form>
                 <div id="playlistComments"></div>
             </div>
-        `
+        `;
+        
         mainOutput.innerHTML=contentOfSpecificPlaylist
 
         const deleteButton = document.getElementById('deletePlaylist');
@@ -671,7 +674,7 @@ class DOMHandle {
 
         if(!playlist.comments.length == 0){
         const displayPlaylistComments = new DOMHandle();
-        displayPlaylistComments.displayPlaylistComments(comments);
+        displayPlaylistComments.displayPlaylistComments(comments, playlist._id);
         }
 
         const addCommentButton = document.getElementById('addCommentButton');
@@ -682,9 +685,11 @@ class DOMHandle {
 
         const addPlayListComment = new FetchHandle();
         addPlayListComment.addPlayListComment(commentField.value, commentUser.value, playlist._id, comments);
+            setTimeout(function(){
+                addPlayListComment.fetchPlaylistById(playlist._id)
+            },400)
 
         })
-
         const everyOtherButton = new DOMHandle();
         everyOtherButton.
         everyOtherButton(playlistTracklist.children);
@@ -729,7 +734,7 @@ class DOMHandle {
 
     }
 
-    displayPlaylistComments(comments, newComment){
+    displayPlaylistComments(comments, playlistID){
         const playlistComments = document.getElementById('playlistComments');
 
         let commentContent = "";
@@ -756,28 +761,6 @@ class DOMHandle {
 
         playlistComments.innerHTML=commentContent;
         
-        if(newComment){
-            let newCommentDiv =`
-                <div class="playlistComment">
-                    <header>
-                        <p class="commenter">
-                            ${newComment.username}
-                        </p>
-                        <button class="deleteComment" id="${newComment._id}">
-                            <img src="images/x-circle.svg">
-                        </button>
-                    </header>
-                    <div class="underline"></div>
-                    <p class="comment">
-                        ${newComment.body}
-                    </p>
-                </div>
-            `;
-            
-            playlistComments.insertAdjacentHTML('beforeend', newCommentDiv);
-
-        }
-        
         const deleteCommentButton = document.
         getElementsByClassName('deleteComment');
         
@@ -785,7 +768,10 @@ class DOMHandle {
             deleteCommentButton[i].addEventListener('click', function() {
                 //console.log(this)
                 const newFetch = new FetchHandle();
-                newFetch.deleteItem('comments', this.id);  
+                newFetch.deleteItem('comments', this.id); 
+                            setTimeout(function(){
+                newFetch.fetchPlaylistById(playlistID)
+            },400)
             })
         }
 

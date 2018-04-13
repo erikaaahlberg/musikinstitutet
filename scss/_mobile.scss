@@ -7,6 +7,7 @@ body{
     font-family: 'Roboto';
     button{
         outline: none;
+        cursor: pointer;
     }
     input{
         outline: none;
@@ -120,7 +121,7 @@ body{
                     color: $textColor;
                     background: none;
                     transition: 250ms;
-                    cursor: pointer;
+
                 }
                 .activeButton{
                     background: rgba(255, 255, 255, 0.9);
@@ -220,7 +221,7 @@ body{
                                 letter-spacing: 2px;
                                 border-radius: 20px;
                                 border: none;
-                                cursor: pointer;
+
                             }
                         }
                     }
@@ -290,7 +291,6 @@ body{
                             letter-spacing: 2px;
                             border-radius: 20px;
                             border: none;
-                            cursor: pointer;
                         }
                     }
                 }
@@ -392,7 +392,6 @@ body{
                         letter-spacing: 2px;
                         border-radius: 20px;
                         border: none;
-                        cursor: pointer;
                     }
                 }
                 .underline{
@@ -413,6 +412,40 @@ body{
                         @include listButtons;
                     }
                 }
+                #commentForm{
+                    display: flex;
+                    flex-direction: column;
+                    width: 300px;
+                    #commentField{
+                        padding: 8px;
+                        border-radius: 5px;
+                        border: none;
+                    }
+                    #commentBottom{
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        margin-top: 15px;
+                        width: 100%;
+                        #commentUser{
+                            width: 100%;
+                            border-radius: 5px;
+                            border: none;
+                            padding: 8px;
+                        }
+                        #addCommentButton{
+                            border-radius: 5px;
+                            border: none;
+                            background: none;
+                            padding: 0;
+                            
+                            img{
+                                margin-left: 10px;
+                                height: 30px;
+                            }
+                        }
+                    }
+                }
                 #playlistComments{
                     .playlistComment{
                         letter-spacing: 2px;
@@ -430,7 +463,6 @@ body{
                             button{
                                 background: none;
                                 border: none;
-                                cursor: pointer;
                                 img{
                                     height: 15px;
                                 }
@@ -518,7 +550,6 @@ body{
                     letter-spacing: 2px;
                     font-size: 0.7em;
                     height: 50px;
-                    cursor: pointer;
                     img{
                         height: 15px;
                         margin-right: 5px;
@@ -544,7 +575,6 @@ body{
             font-weight: 600;
             letter-spacing: 1px;
             margin: 20px;
-            cursor: pointer;
             img{
                 height: 60px;
                 margin-bottom: 10px;
