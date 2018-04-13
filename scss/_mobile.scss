@@ -85,17 +85,49 @@ body{
         
     }
     main{
+        .hidden{
+            display: none;
+        }
         #searchForm{
             display: flex;
             flex-direction: column;
             align-items: center;
             max-width: 600px;
             margin: 0 20px;
-            #messageBox{
+            /*#messageBox{
                 padding: 20px 0;
                 letter-spacing: 2px;
                 font-weight: 700;
                 color: $accentColor;
+            }*/
+            .messagePopupBox {
+                position: absolute;
+                margin-left: auto;
+                margin-right: auto;
+                left: 0;
+                right: 0;
+                padding: 30px 20px 30px 20px;
+                background: black;
+                color: white;
+                /*background: rgba(0, 0, 0, 0.7);*/
+                letter-spacing: 2px;
+                font-weight: 700;
+                border-radius: 10px;
+                z-index: 2;
+                text-align: center;
+                width: 80%;
+                    button:active {
+                        @include activeButton;
+                    }
+            }
+            #errorOkButton,
+            #noButton{
+                @include button;
+                background: red;
+                text-transform: uppercase;
+            }
+            #yesButton {
+                @include button;
             }
             #searchField{
                 border-radius: 5px;
