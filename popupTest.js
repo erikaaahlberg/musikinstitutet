@@ -53,9 +53,9 @@ const noButton = document.getElementById('noButton');
 
 yesButton.addEventListener('click', function(){
     event.preventDefault();
+    displayElement('addDiv');
     hideElement('messagePopupBox');
     displayAddTrackForm();
-
 });
 
 noButton.addEventListener('click', function(){
@@ -94,3 +94,10 @@ addTrackButton.addEventListener('click', function(){
     tracks.push(trackController.getInputValue('inputTrackTitle'));
     console.log(tracks);
 });
+
+function displayElement (elementId) {
+    const element = getElementById(elementId);
+    setTimeout(function(){
+        element.classList.remove('fadeOut');
+    })
+}
