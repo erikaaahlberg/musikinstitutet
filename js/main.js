@@ -531,8 +531,15 @@ class DOMHandle {
     });
 }
     displaySpecificArtist(artist, albums){
-
-        const convertedDated = artist.born.substring(0,4);
+        console.log(artist);
+        console.log(albums);
+        let convertedDated = '';
+        if (artist.born) {
+          convertedDated = artist.born.substring(0,4);
+        }
+        else {
+          convertedDated = 'No data.';
+        }
 
         let contentOfSpecificArtist = `
             <div id="contentOfSpecificArtist">
@@ -557,13 +564,15 @@ class DOMHandle {
 
         let artistAlbum = "";
         for(let i = 0; i < albums.length; i++){
-            artistAlbum +=`
-                <button class="artistAlbumButton" id="${albums[i]._id}">
-                    ${albums[i].title} -
-                    ${albums[i].releaseDate}
-                    <img src="images/rightArrow.svg">
-                </button>
-            `;
+            if(!albums[i].type) {
+              artistAlbum +=`
+                  <button class="artistAlbumButton" id="${albums[i]._id}">
+                      ${albums[i].title} -
+                      ${albums[i].releaseDate}
+                      <img src="images/rightArrow.svg">
+                  </button>
+              `;
+            }
         }
 
         const albumList = document.getElementById('artistAlbums');
