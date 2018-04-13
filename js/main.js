@@ -452,6 +452,12 @@ class DOMHandle {
         `
         mainOutput.innerHTML = contentOfSpecificAlbum;
 
+        const deleteButton = document.getElementById('deleteAlbum');
+        deleteButton.addEventListener('click', function() {
+            const deleteAlbum = new FetchHandle();
+            deleteAlbum.deleteItem('albums', album._id);
+        });
+
         let trackTitles = "";
 
         for (let i = 0; i < album.tracks.length; i++) {
@@ -512,13 +518,19 @@ class DOMHandle {
                     <button id="addToPlaylist">
                         ADD TO PLAYLIST
                     </button>
-                    <button id="deleteAlbum">
+                    <button id="deleteTrack">
                         DELETE TRACK
                     </button>
                 </div>
             </div>
         `
         mainOutput.innerHTML = contentOfSpecificTrack;
+
+        const deleteButton = document.getElementById('deleteTrack');
+        deleteButton.addEventListener('click', function() {
+            const deleteTrack = new FetchHandle();
+            deleteTrack.deleteItem('tracks', track._id);
+        });
 
         const rateTrack = document.getElementById('rateTrack');
         rateTrack.addEventListener('click', () => {
@@ -558,6 +570,12 @@ class DOMHandle {
             </div>
         `
         mainOutput.innerHTML = contentOfSpecificArtist;
+
+        const deleteButton = document.getElementById('deleteArtist');
+        deleteButton.addEventListener('click', function() {
+            const deleteArtist = new FetchHandle();
+            deleteArtist.deleteItem('artists', artist._id);
+        });
 
         let artistAlbum = "";
         for(let i = 0; i < albums.length; i++){
@@ -629,6 +647,12 @@ class DOMHandle {
             </div>
         `
         mainOutput.innerHTML=contentOfSpecificPlaylist
+
+        const deleteButton = document.getElementById('deletePlaylist');
+        deleteButton.addEventListener('click', function() {
+            const deletePlaylist = new FetchHandle();
+            deletePlaylist.deleteItem('playlists', playlist._id);
+        });
 
         const playlistTracklist = document.getElementById('playlistTracklist');
 
