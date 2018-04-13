@@ -229,7 +229,6 @@ class FetchHandle {
         })
         .then((response) => response.json())
         .then((vote) => {
-            console.log(vote);
             if (apiPath == 'albums') {
                 this.fetchAlbumById(id);
             }
@@ -241,7 +240,7 @@ class FetchHandle {
             }
         })
         .catch((error) => {
-            console.log(error);
+            //console.log(error);
         });
     }
     /*--------ADDED BY ERIKA----------- */
@@ -253,7 +252,7 @@ class FetchHandle {
                     console.log(album)
                 })
                     .catch((error) => {
-                        console.log(error);
+                        //console.log(error);
                     });
     }
     deleteItem (itemToDelete, idToDelete) {
@@ -298,7 +297,6 @@ class DOMHandle {
 
     /* Console logs the JSON-object. Doesn't add anything to the DOM right now. */
     displayAlbums(allAlbums) {
-        console.log(allAlbums);
         let searchedAlbumButtons = '';
         /* Loops json object */
 
@@ -423,7 +421,6 @@ class DOMHandle {
 
     }
     displaySpecificAlbum(album) {
-        console.log(album);
 
         const fetchRating = new Logic();
 
@@ -477,9 +474,11 @@ class DOMHandle {
             albumTrackButton[i].addEventListener('click', function() {
                 const newFetch = new FetchHandle();
                 newFetch.fetchTrackById(this.id);
-                console.log(this)
             })
         }
+
+        const everyOtherButton = new DOMHandle();
+        everyOtherButton.everyOtherButton(albumTrackButton);
 
         const rateAlbum = document.getElementById('rateAlbum');
         rateAlbum.addEventListener('click', () => {
@@ -531,8 +530,6 @@ class DOMHandle {
     });
 }
     displaySpecificArtist(artist, albums){
-        console.log(artist);
-        console.log(albums);
         let convertedDated = '';
         if (artist.born) {
           convertedDated = artist.born.substring(0,4);
@@ -577,6 +574,17 @@ class DOMHandle {
 
         const albumList = document.getElementById('artistAlbums');
         albumList.innerHTML=artistAlbum;
+
+        const artistAlbumButtons = document.getElementsByClassName('artistAlbumButton');
+        for (let button of artistAlbumButtons) {
+            button.addEventListener('click', function() {
+                const fetchSpecAlbum = new FetchHandle();
+                fetchSpecAlbum.fetchAlbumById(this.id);
+            });
+        }
+
+        const everyOtherButton = new DOMHandle();
+        everyOtherButton.everyOtherButton(artistAlbumButtons);
 
 
     }
@@ -667,7 +675,6 @@ class DOMHandle {
 
     }
     displayTopPlaylist(list) {
-        console.log(list);
         let topPlaylistsButtons = `<div class="topFivePlayLists">
                                    <p>THE HIGHEST RATED PLAYLISTS</p>`;
 
