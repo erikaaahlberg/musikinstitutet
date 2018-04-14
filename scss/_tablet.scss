@@ -36,10 +36,6 @@ body{
                 }
             }
         }
-        .messagePopupBox{
-            font-size: 1.2em;
-            width: 60%;
-        }
         #mainOutput{
             #searchResults{
                 .showByIdButton{
@@ -166,6 +162,18 @@ body{
                         letter-spacing: 2px;
                         padding: 20px 25px; 
                     }
+                }
+            }
+        }
+        #messagePopupBox{
+            #messageButtonWrapper {
+                margin-top: 50px;
+                display: flex;
+                justify-content: space-around;
+                flex-direction: row;
+                #noButton,
+                #yesButton{
+                    flex-basis: 40%;
                 }
             }
         }    

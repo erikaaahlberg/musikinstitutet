@@ -583,6 +583,43 @@ body{
                 }
             }
         }
+        #messagePopupBox{
+            width: 80%;
+            position: absolute;
+            margin-left: auto;
+            margin-right: auto;
+            left: 0;
+            right: 0;
+            text-align: center;
+            padding: 50px 10px 50px 10px;
+            background: black;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: auto;
+            z-index: 1;
+            #messageButtonWrapper {
+                margin-top: 20px;
+            }
+            button#errorOkButton,
+            button#yesButton,
+            button#noButton {
+                @include orangeButton;
+            }
+            button#yesButton{
+            }
+            button#noButton{
+                display: inline-block;
+                background: red;
+                &hover:{
+                    background: rgb(255, 88, 88);
+                }
+            }
+            p{
+                font-size: 0.8em;
+                letter-spacing: 2px;
+                font-weight: 700;
+            }
+        }
     }
     footer{
         display: flex;

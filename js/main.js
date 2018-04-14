@@ -251,10 +251,10 @@ class FetchHandle {
                 .then((postedItem) => {
                     console.log(postedItem);
                 })
-                    .catch((error) => {
-                        const display = new DOMHandle;
-                        console.log(error);
-                        //display.displayErrorMessagePopup(error);
+                    .catch((errorMessage) => {
+                        const displayError = new DOMHandle;
+                        console.log(errorMessage);
+                        displayError.displayErrorPopup(errorMessage);
                     });
     }
     deleteItem (itemToDelete, idToDelete) {
@@ -916,12 +916,11 @@ class DOMHandle {
             /* Checking the imported values before creating a new album. */
             const errorMessages = [];
 
-            /* Title and artist are required to be filled in so checking that first. */
             if (isTitleEmpty) {
-                errorMessages.push('Please enter a title!');
+                errorMessages.push('Album title is required.');
             }
             if (isArtistEmpty) {
-                errorMessages.push('Please enter artist name!');
+                errorMessages.push('Artist name is required.');
             }
             /* Checking which other input fields are filled in to see which parameters we have to check if valid */
             if (!isTitleEmpty && !isArtistEmpty) {
@@ -930,6 +929,10 @@ class DOMHandle {
                 const isSpotifyURLEmpty = albumController.isEmpty(albumSpotifyURL);
                 const isCoverImageEmpty = albumController.isEmpty(albumCoverImageURL);
                 
+                console.log(isGenresEmpty);
+                console.log(isReleaseDateEmpty);
+                console.log(isSpotifyURLEmpty);
+                console.log(isCoverImageEmpty);
                 
                 /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
                 if (!isGenresEmpty) {
@@ -938,12 +941,15 @@ class DOMHandle {
                 }
                 if (!isReleaseDateEmpty) {
                     const isReleaseDateValid = albumController.checkYear(albumReleaseDate);
+                    if (!isReleaseDateValid) {
+                        errorMessages.push('The release year is not valid.')
+                    }
                 }
                 /* If spotify URL is filled in the URL must be checked */
                 if (!isSpotifyURLEmpty) {
                     const isSpotifyURLValid = albumController.checkURL(albumSpotifyURL);
                     if (!isSpotifyURLValid) {
-                        errorMessages.push('The spotify URL is not valid, please enter another one.');
+                        errorMessages.push('The spotify URL is not valid.');
                     }
                 }
 
@@ -951,17 +957,17 @@ class DOMHandle {
                 if (!isCoverImageEmpty) {
                     const isImageURLValid = albumController.checkURL(albumCoverImageURL);
                     if (!isImageURLValid) {
-                        errorMessages.push('The image URL is not valid, please enter another one.');
+                        errorMessages.push('The image URL is not valid.');
                     }
                 }
             } /* --- if (!isTitleEmpty && !isArtistEmpty) collapse --- */
 
             /* A DOM-function to print error-messages should be called for here */
             if (errorMessages.length > 0) {
-                for (let errorMessage of errorMessages) {
-                    const display = new FetchHandle;
-                    display.displayErrorMessagePopup(errorMessage);
-                }
+                //for (let errorMessage of errorMessages) {
+                    const displayError = new DOMHandle;
+                    displayError.displayErrorPopup(errorMessages);
+                //}
             }
             else {
                 const fetchArtistId = new FetchHandle;
@@ -972,8 +978,10 @@ class DOMHandle {
                         const albumPostRequest = new FetchHandle('POST', albumToPost);
                         
                         console.log(albumPostRequest);
-                        albumPostRequest.postItem('albums', albumPostRequest);
+                        //albumPostRequest.postItem('albums', albumPostRequest);
                     });
+                const displayAlternative = new DOMHandle;
+                displayAlternative.displayQuestionPopup('Do you want to add tracks now?');
             }
         });
 
@@ -1001,7 +1009,7 @@ class DOMHandle {
                 errorMessages.push('Please enter a title!');
             }
             if (errorMessages.length > 0) {
-                displayErrorMessagePopup(errorMessages);
+                displayErrorPopup(errorMessages);
             } else {
                 /* Fetching id's for album and artist to create a track to post */
                 const fetchIds = new FetchHandle;
@@ -1073,7 +1081,7 @@ class DOMHandle {
             const isNameEmpty = artistController.isEmpty(artistName);
 
             /* Checking the imported values before creating a new artist. */
-            const errorMessages = [];
+            var errorMessages = [];
 
             /* Name is the only parameter required so checking that first */
             if (isNameEmpty) {
@@ -1100,7 +1108,7 @@ class DOMHandle {
             /* A DOM-function to print error-messages should be called for here */
             if (errorMessages.length > 0) {
                 const popupMessage = new DOMHandle;
-                popupMessage.displayErrorMessagePopup(errorMessages);
+                popupMessage.displayErrorPopup(errorMessages);
             }
             else {
                 const artistToPost = new Artist(artistName, artistGenres, artistCoverImageURL);
@@ -1209,25 +1217,67 @@ displayElement (elementId) {
     const element = document.getElementById(elementId).style.display = "block";
 }
 /* -------under construction-------- */
-displayErrorMessagePopup (errorMessages) {
-    const parentElement = document.getElementById('messageBox');
-    
+displayErrorPopup (errorMessages) {
+    const parentElement = document.getElementById('addWrapper');
     const popupBox = document.createElement('div');
     popupBox.className = 'messagePopupBox';
-    //popupBox.setAttribute('id', 'messagePopupBox');
-    //for (let errorMessage of errorMessages) {
+    popupBox.setAttribute('id', 'messagePopupBox');
+
+    for (let errorMessage of errorMessages) {
         const errorMessageParagraph = document.createElement('p');
         errorMessageParagraph.className = 'errorMessage';
         const errorMessageNode = document.createTextNode(errorMessages);
         errorMessageParagraph.appendChild(errorMessageNode);
         popupBox.appendChild(errorMessageParagraph);
-    //}
-    const okButton = document.createElement('button');
-    const buttonNode = document.createTextNode('Ok');
-    okButton.setAttribute('id', 'errorOkButton');
-    okButton.appendChild(buttonNode);
-    popupBox.appendChild(okButton);
+    }
+    popupBox.insertAdjacentHTML('beforeend',
+        `<p>Please try again!</p>
+        <div id = "messageButtonWrapper"> 
+            <button id = "errorOkButton"> Ok </button>
+        </div>`
+    );
     parentElement.appendChild(popupBox);
+    const okButton = document.getElementById('errorOkButton');
+
+    okButton.addEventListener('click', function() {
+        const hide = new DOMHandle;
+        hide.hideElement('messagePopupBox');    
+    });
+}
+displayQuestionPopup (question) {
+    const parentElement = document.getElementById('addWrapper');
+    const popupBox = document.createElement('div');
+    popupBox.className = 'messagePopupBox';
+    popupBox.setAttribute('id', 'messagePopupBox');
+
+    popupBox.innerHTML = `
+        <p>${question}</p>
+        <div id = "messageButtonWrapper">
+            <button id = "yesButton"> Yes </button>
+            <button id = "noButton"> No </button>
+        </div>
+    `;
+    parentElement.appendChild(popupBox);
+
+    /*const questionParagraph = document.createElement('p');
+    const questionNode = document.createTextNode(question);
+    const yesButton = document.createElement('button');
+    const yesButtonNode = document.createTextNode('Yes');
+    const noButton = document.createElement('button');
+    const noButtonNode = document.createTextNode('No');
+
+    yesButton.setAttribute('id', 'yesButton');
+    noButton.setAttribute('id', 'noButton');
+
+    //popupDiv.setAttribute('id', 'messagePopupBox');
+    questionParagraph.appendChild(questionNode);
+    popupBox.appendChild(questionParagraph);
+    yesButton.appendChild(yesButtonNode);
+    popupBox.appendChild(yesButton);
+    noButton.appendChild(noButtonNode);
+    popupBox.appendChild(noButton);
+    parentElement.appendChild(popupBox);*/
+
 }
 }/* --- Class DOMHandle collapse --- */
 
