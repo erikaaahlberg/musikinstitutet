@@ -169,9 +169,9 @@ class FetchHandle {
         });
     }
 
-    /* ----- Under construction ----- */
-    fetchItemByName(item, itemName) {
-        return fetch(`https://folksa.ga/api/${item}?name=${itemName}&key=flat_eric`)
+    /* ----- ADDED BY ERIKA ----- */
+    fetchItemByChosenParameter(item, parameter, itemName) {
+        return fetch(`https://folksa.ga/api/${item}?${parameter}=${itemName}&key=flat_eric`)
             .then((response) => response.json())
                 .then((fetchedItem) => {
                     return fetchedItem;
@@ -248,11 +248,13 @@ class FetchHandle {
         console.log(HttpRequest);
         fetch(`https://folksa.ga/api/${itemToPost}?&key=flat_eric`, HttpRequest)
             .then((response) => response.json())
-                .then((album) => {
-                    console.log(album)
+                .then((postedItem) => {
+                    console.log(postedItem);
                 })
                     .catch((error) => {
-                        //console.log(error);
+                        const display = new DOMHandle;
+                        console.log(error);
+                        //display.displayErrorMessagePopup(error);
                     });
     }
     deleteItem (itemToDelete, idToDelete) {
@@ -927,8 +929,8 @@ class DOMHandle {
                 const isReleaseDateEmpty = albumController.isEmpty(albumReleaseDate);
                 const isSpotifyURLEmpty = albumController.isEmpty(albumSpotifyURL);
                 const isCoverImageEmpty = albumController.isEmpty(albumCoverImageURL);
-
-
+                
+                
                 /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
                 if (!isGenresEmpty) {
                     const editedGenresParameter = albumController.editGenresParameter(albumGenres);
@@ -957,14 +959,20 @@ class DOMHandle {
             /* A DOM-function to print error-messages should be called for here */
             if (errorMessages.length > 0) {
                 for (let errorMessage of errorMessages) {
-                    console.log(errorMessage);
+                    const display = new FetchHandle;
+                    display.displayErrorMessagePopup(errorMessage);
                 }
             }
             else {
                 const fetchArtistId = new FetchHandle;
-                const albumArtistId = fetchArtistId.fetchItemByName('albums', albumArtistName)     .then((artist) => {
+                fetchArtistId.fetchItemByChosenParameter('artists', 'name', albumArtistName)
+                    .then((artist) => { 
                         const albumToPost = new Album(albumTitle, artist[0]._id, albumGenres, albumReleaseDate, albumSpotifyURL, albumCoverImageURL);
-                        console.log(albumToPost);
+
+                        const albumPostRequest = new FetchHandle('POST', albumToPost);
+                        
+                        console.log(albumPostRequest);
+                        albumPostRequest.postItem('albums', albumPostRequest);
                     });
             }
         });
@@ -976,33 +984,48 @@ class DOMHandle {
 
         addTrackButton.addEventListener('click', function(){
             event.preventDefault();
-            /* Gets the input values */
+            const addedTracks = [];
+            const errorMessages = [];
             const trackController = new Controller;
-            const trackArtist = trackController.getInputValue('inputAlbumArtist');
+            const newTrackTitle = trackController.getInputValue('inputTrackTitle');
+            const newTrackArtist = trackController.getInputValue('inputTrackArtist');
+            const newTrackAlbum = trackController.getInputValue('inputAlbumTitle');
 
-            fetchArtistByName(albumArtist);
-            const albumTitle = trackController.getInputValue('inputAlbumTitle');
-            var albumGenres = trackController.getInputValue('inputAlbumGenres');
-            const albumReleaseDate = trackController.getInputValue('inputAlbumReleaseDate');
-            const albumCoverImageURL = trackController.getInputValue('inputAlbumCoverImage');
-            const isNameEmpty = trackController.isEmpty(albumTitle);
+            const isArtistEmpty = trackController.isEmpty(newTrackArtist);
+            const isTitleEmpty = trackController.isEmpty(newTrackTitle);
 
-        const inputTrackTitle = document.
-        getElementById('inputTrackTitle')
+            if (isArtistEmpty) {
+                errorMessages.push('Please enter an artist!');
+            }
+            if (isTitleEmpty) {
+                errorMessages.push('Please enter a title!');
+            }
+            if (errorMessages.length > 0) {
+                displayErrorMessagePopup(errorMessages);
+            } else {
+                /* Fetching id's for album and artist to create a track to post */
+                const fetchIds = new FetchHandle;
+                fetchIds.fetchItemByChosenParameter('albums', 'title', newTrackAlbum)
+                .then((fetchedAlbum) => {
+                    /* Creating track to post */
+                    const trackToPost = new Tracks (newTrackTitle, fetchedAlbum[0].artists[0], fetchedAlbum[0]._id, fetchedAlbum[0].genres[0], fetchedAlbum[0].coverImage);
+                    addedTracks.push(`${newTrackArtist} - ${newTrackTitle}`);
+                    console.log(trackToPost);
 
-        const inputTrackArtist = document.
-        getElementById('inputTrackArtist')
+                    /* Posting track */
+                    const postTrackRequest = new FetchHandle('POST', trackToPost);
+                    postTrackRequest.postItem('tracks', postTrackRequest);
 
-        const addTrackTracklist = document.
-        getElementById('addTrackTracklist')
-
-            const p = document.createElement('p');
-            const newTrack = document.createTextNode(inputTrackArtist.value + ' - ' + inputTrackTitle.value)
-            p.appendChild(newTrack);
-            addTrackTracklist.appendChild(p)
-
-
-        })
+                    /* Printing added tracks */
+                    for (let track of addedTracks) {
+                        const p = document.createElement('p');
+                        const addedTrack = document.createTextNode(track);
+                        p.appendChild(addedTrack);
+                        addTrackTracklist.appendChild(p);
+                    } 
+                });
+            }
+        });
 
         const importCloseButton = document.getElementById('importCloseButton');
 
@@ -1065,7 +1088,6 @@ class DOMHandle {
                 if (!isGenresEmpty) {
                     const editedGenresParameter = artistController.editGenresParameter(artistGenres);
                     artistGenres = editedGenresParameter;
-                    console.log(editedGenresParameter);
                 }
                 /* If cover image is filled in the URL must be checked */
                 if (!isCoverImageEmpty) {
@@ -1077,13 +1099,13 @@ class DOMHandle {
             }
             /* A DOM-function to print error-messages should be called for here */
             if (errorMessages.length > 0) {
-                for (let errorMessage of errorMessages) {
-                    console.log(errorMessage);
-                }
+                const popupMessage = new DOMHandle;
+                popupMessage.displayErrorMessagePopup(errorMessages);
             }
             else {
                 const artistToPost = new Artist(artistName, artistGenres, artistCoverImageURL);
-                console.log(artistToPost);
+                const artistPostRequest = new FetchHandle('POST', artistToPost);
+                artistPostRequest.postItem('artists', artistPostRequest);
             }
         });
         /* -----collapse------ */
@@ -1178,18 +1200,37 @@ class DOMHandle {
     i = 0;
     startSlide(i)
 }
-/*
+/* --------ADDED BY ERIKA--------- */
+hideElement (elementId) {
+    const element = document.getElementById(elementId);
+    element.className = 'fadeOut';
+}
+displayElement (elementId) {
+    const element = document.getElementById(elementId).style.display = "block";
+}
+/* -------under construction-------- */
 displayErrorMessagePopup (errorMessages) {
-    const popupDiv = document.createElement('div');
-    popupDiv.className = 'fadeOut';
-    for (let errorMessage of errorMessages) {
-        const errorMessageParagraph = `<p class = "errorMessage">${errorMessage}</p>`;
-    }
-}*/
+    const parentElement = document.getElementById('messageBox');
+    
+    const popupBox = document.createElement('div');
+    popupBox.className = 'messagePopupBox';
+    //popupBox.setAttribute('id', 'messagePopupBox');
+    //for (let errorMessage of errorMessages) {
+        const errorMessageParagraph = document.createElement('p');
+        errorMessageParagraph.className = 'errorMessage';
+        const errorMessageNode = document.createTextNode(errorMessages);
+        errorMessageParagraph.appendChild(errorMessageNode);
+        popupBox.appendChild(errorMessageParagraph);
+    //}
+    const okButton = document.createElement('button');
+    const buttonNode = document.createTextNode('Ok');
+    okButton.setAttribute('id', 'errorOkButton');
+    okButton.appendChild(buttonNode);
+    popupBox.appendChild(okButton);
+    parentElement.appendChild(popupBox);
+}
+}/* --- Class DOMHandle collapse --- */
 
-}/* --- Class FetchHandle collapse --- */
-
-/* -----------ADDED BY ERIKA------------- */
 class Controller {
     getInputValue (elementId) {
         const element = document.getElementById(elementId);
@@ -1317,6 +1358,7 @@ class Tracks {
         }
     }
 }
+/*------------------------ */
 
 class Logic {
     calculateRating(object) {
@@ -1370,25 +1412,3 @@ runSlideShow.slideShowBanner();
 
 const startFetch = new FetchHandle();
 startFetch.fetchAll();
-/*
-const postArtistButton = getElementById('postArtistButton');
-const postAlbumButton = getElementById('postAlbumButton');
-const postTrackButton = getElementById('postTrackButton');
-postArtistButton.addEventListener('click', function(){
-    const artistName = Controller.getInputValue('inputArtistName');
-    const isNameValid = Controller.checkValue(artistName);
-    const artistGenres = Controller.getInputValue('inputArtistGenres');
-    const isGenresValid = Controller.checkValue(artistGenres);
-    const artistCoverImage = Controller.getInputValue('inputArtistCoverImage');
-    const isCoverImageValid = Controller.checkValue(artistCoverImage);
-    const errorMessages = [];
-    if (!isNameValid) {
-        errorMessages.push('The name you wrote is not valid');
-    }
-    if (!isGenresValid) {
-        errorMessages.push('The genres you wrote is not valid');
-    }
-    if (!isCoverImageValid) {
-        errorMessages.push('The cover image URL is not valid');
-    }
-});*/
