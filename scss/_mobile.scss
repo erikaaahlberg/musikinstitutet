@@ -8,6 +8,8 @@ body{
     button{
         outline: none;
         cursor: pointer;
+        background: none;
+        border: none;
     }
     input{
         outline: none;
@@ -116,11 +118,9 @@ body{
                 button{
                     padding: 5px 7px;
                     border-radius: 5px;
-                    border: none;
                     margin: 5px 20px;
                     letter-spacing: 2px;
                     color: $textColor;
-                    background: none;
                     transition: 250ms;
 
                 }
@@ -436,8 +436,6 @@ body{
                         }
                         #addCommentButton{
                             border-radius: 5px;
-                            border: none;
-                            background: none;
                             padding: 0;
                             
                             img{
@@ -461,8 +459,6 @@ body{
                                 font-weight: 700;
                             } 
                             button{
-                                background: none;
-                                border: none;
                                 img{
                                     height: 15px;
                                 }
@@ -538,8 +534,6 @@ body{
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    background: none;
-                    border: none;
                     margin: 10px;
                 }
                 button{
@@ -569,8 +563,6 @@ body{
             justify-content: center;
             align-items: center;
             font-size: 0.5em;
-            border: none;
-            background: none;
             color: $accentColor;
             font-weight: 600;
             letter-spacing: 1px;
