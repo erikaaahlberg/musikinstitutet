@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Musikinstitutet</title>
+    <link rel="shortcut icon" href="images/disc.png">
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700,900,900i" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
     <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
@@ -18,11 +19,12 @@
             <div id="slideOverlay"></div>
         </div>
     </header>
+    <div class="midContentWrapper">
+        <main>
+            <form id="searchForm">
+                <div id="messageBox" class = "hidden"></div>
+                <input type="text" id="searchField" placeholder="SEARCH BY NAME OR GENRE..">
 
-    <main>
-        <form id="searchForm">
-            <div id="messageBox"><p>THIS IS A MESSAGEBOX WITH MESSAGE</p></div>
-            <input type="text" id="searchField" placeholder="SEARCH BY NAME OR GENRE..">
 
             <div id="searchButtonWrapper">
                 <button type="button" id="allButton" value="all" class="searchButton activeButton">All</button>
@@ -30,45 +32,43 @@
                 <button type="button" id="tracksButton" value="tracks" class="searchButton">Tracks</button>
                 <button type="button" id="artistsButton" value="artists" class="searchButton">Artists</button>
                 <button type="button" id="playlistsButton" value="playlists" class="searchButton">Playlists</button>
+            </form>
+              
+            <div id="addDiv" class="fadeOut"></div>
+            <div id="mainOutput">
+                <div id="searchResults"></div>
             </div>
 
-        </form>
-         <div id="addDiv" class="fadeOut"></div>
-        <div id="mainOutput">
-            <div id="searchResults"></div>
-        </div>
+            <!--
+            <form id = "importArtist">
+                <label for = "inputArtistName">
+                    Name:
+                <label for = "inputTrackTitle">
+                    Title:
+                </label>
+                <input type = "text" id = "inputTrackTitle">
+                <label for = "inputTrackAlbum">
+                    Album:
+                </label>
+                <input type = "text" id = "inputTrackAlbum">
+                <label for = "inputTrackGenres">
+                    Genres:
+                </label>
+                <input type = "text" id = "inputTrackGenres">
+                <label for = "inputTrackCoverImageURL">
+                    Cover image URL:
+                </label>
+                <input type = "text" id = "inputTrackCoverImageURL">
+                <label for = "inputTrackSpotifyURL">
+                    Spotify URL:
+                </label>
+                <input type = "text" id = "inputTrackSpotifyURL">
+                <button type = "button" id = "postTrackButton">Add</button>
+            </form>
+            -->
 
-        <!--
-        <form id = "importArtist">
-            <label for = "inputArtistName">
-                Name:
-            <label for = "inputTrackTitle">
-                Title:
-            </label>
-            <input type = "text" id = "inputTrackTitle">
-            <label for = "inputTrackAlbum">
-                Album:
-            </label>
-            <input type = "text" id = "inputTrackAlbum">
-            <label for = "inputTrackGenres">
-                Genres:
-            </label>
-            <input type = "text" id = "inputTrackGenres">
-            <label for = "inputTrackCoverImageURL">
-                Cover image URL:
-            </label>
-            <input type = "text" id = "inputTrackCoverImageURL">
-            <label for = "inputTrackSpotifyURL">
-                Spotify URL:
-            </label>
-            <input type = "text" id = "inputTrackSpotifyURL">
-            <button type = "button" id = "postTrackButton">Add</button>
-        </form>
-        -->
-
-
-    </main>
-
+        </main>
+        <aside><div id="playlistComments"></div></aside>     
     <footer>
         <button id="createArtistButton"><img src="images/plus-circle.svg">ADD ARTIST</button>
         <button id="createAlbumButton"><img src="images/plus-circle.svg">ADD ALBUM/SINGLE</button>

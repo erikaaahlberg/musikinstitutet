@@ -1,7 +1,15 @@
 body{
     header{
         #slideShowBanner{
+            h1{
+                margin-top: 160px;
+                font-size: 10em;
+                letter-spacing: 10px;
+            }
             #slideShow{
+                height: 500px;
+            }
+            #slideOverlay{
                 height: 500px;
             }
             #slideDotsWrapper{
@@ -27,6 +35,10 @@ body{
                     margin: 10px;
                 }
             }
+        }
+        .messagePopupBox{
+            font-size: 1.2em;
+            width: 60%;
         }
         #mainOutput{
             #searchResults{
