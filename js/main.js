@@ -502,16 +502,22 @@ class DOMHandle {
 
         let contentOfSpecificTrack = `
             <div id="contentOfSpecificTrack">
-                    <div id="trackInfo">
-                        <h2>${track.title}</h2>
-                        <p>${track.artists[0].name}</p>
-                        <p>Rating: ${fetchRating.calculateRating(track)}</p>
-                        <button class="trackAlbumButton" id="${track.album.title._id}">
-                            ${track.album.title}
-                            <img src="images/rightArrow.svg">
+                <div id="trackInfo">
+                    <h2>${track.title}</h2>
+                    <div class="underline"></div>
+                    <p>${track.artists[0].name}</p>
+                    <p class="rating">Rating: ${fetchRating.calculateRating(track)}</p>
+                    <p>
+                        <span>
+                            In album:
+                        </span>
+                        <button class="trackAlbumButton" id="${track.album._id}">
+                        ${track.album.title}
                         </button>
-                    </div>
-                    <div id="buttonWrapper">
+                    </p>
+                    </p>
+                </div>
+                <div id="buttonWrapper">
                     <input type="number" id="ratingNumber" placeholder="+/-" min="1" max="10">
                     <button id="rateTrack">
                         RATE TRACK
@@ -527,6 +533,16 @@ class DOMHandle {
         `
         mainOutput.innerHTML = contentOfSpecificTrack;
 
+        const trackAlbumButton = document.getElementsByClassName('trackAlbumButton');
+
+        for (let button of trackAlbumButton) {
+            button.addEventListener('click', function() {
+        
+                const fetchSpecAlbum = new FetchHandle();
+                fetchSpecAlbum.fetchAlbumById(button.id);
+            });
+        }
+        
         const deleteButton = document.getElementById('deleteTrack');
         deleteButton.addEventListener('click', () => {
             const deleteTrack = new FetchHandle();
@@ -754,12 +770,16 @@ class DOMHandle {
         let commentContent = "";
 
         for(let i = 0; i < comments[0].length; i++){
-
             commentContent +=`
                 <div class="playlistComment">
-                    <p class="commenter">
-                        ${comments[0][i].username}
-                    </p>
+                    <header>
+                        <p class="commenter">
+                            ${comments[0][i].username}
+                        </p> 
+                        <button class="deleteComment" id="${comments[0][i]._id}">
+                            <img src="images/x-circle.svg">
+                        </button>
+                    </header>
                     <div class="underline"></div>
                     <p class="comment">
                         ${comments[0][i].body}
@@ -775,12 +795,11 @@ class DOMHandle {
         
         for (i = 0; i < deleteCommentButton.length; i++) {
             deleteCommentButton[i].addEventListener('click', function() {
-                //console.log(this)
                 const newFetch = new FetchHandle();
                 newFetch.deleteItem('comments', this.id); 
-                            setTimeout(function(){
+            setTimeout(function(){
                 newFetch.fetchPlaylistById(playlistID)
-            },400)
+            })
             })
         }
     }

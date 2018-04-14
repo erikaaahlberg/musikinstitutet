@@ -122,10 +122,14 @@ body{
             }
             #contentOfSpecificTrack{
                 #trackInfo{
-                    .trackAlbumButton{
-                        font-size: 1.2em;
-                        letter-spacing: 2px;
-                        padding: 20px 25px;           
+                }
+                #buttonWrapper{
+                    input{
+                        font-size: 1.1em;                
+                    }
+                    button{
+                        margin-left: 15px;
+                        font-size: 0.9em;
                     }
                 }
             }
