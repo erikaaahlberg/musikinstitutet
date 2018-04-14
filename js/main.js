@@ -275,10 +275,7 @@ class FetchHandle {
 class DOMHandle {
     activateSearchButton(value) {
         const checkButton = value;
-        /* Loops thru the buttons and removes the activeButton class */
-        for (i = 0; i < searchButton.length; i++) {
-            searchButton[i].classList.remove('activeButton');
-        }
+        this.deactivateSearchButtons();
         /* Adds the activeButton class to selected button */
         checkButton.classList.add('activeButton');
     }
@@ -453,9 +450,13 @@ class DOMHandle {
         mainOutput.innerHTML = contentOfSpecificAlbum;
 
         const deleteButton = document.getElementById('deleteAlbum');
-        deleteButton.addEventListener('click', function() {
+        deleteButton.addEventListener('click', () => {
             const deleteAlbum = new FetchHandle();
             deleteAlbum.deleteItem('albums', album._id);
+            const albumsButton = document.getElementById('albumsButton');
+            mainOutput.innerHTML = '<div id="searchResults"></div>';
+            this.activateSearchButton(albumsButton);
+            deleteAlbum.fetchAlbums();
         });
 
         let trackTitles = "";
@@ -527,9 +528,13 @@ class DOMHandle {
         mainOutput.innerHTML = contentOfSpecificTrack;
 
         const deleteButton = document.getElementById('deleteTrack');
-        deleteButton.addEventListener('click', function() {
+        deleteButton.addEventListener('click', () => {
             const deleteTrack = new FetchHandle();
             deleteTrack.deleteItem('tracks', track._id);
+            const tracksButton = document.getElementById('tracksButton');
+            mainOutput.innerHTML = '<div id="searchResults"></div>';
+            this.activateSearchButton(tracksButton);
+            deleteTrack.fetchTracks();
         });
 
         const rateTrack = document.getElementById('rateTrack');
@@ -572,9 +577,13 @@ class DOMHandle {
         mainOutput.innerHTML = contentOfSpecificArtist;
 
         const deleteButton = document.getElementById('deleteArtist');
-        deleteButton.addEventListener('click', function() {
+        deleteButton.addEventListener('click', () => {
             const deleteArtist = new FetchHandle();
             deleteArtist.deleteItem('artists', artist._id);
+            const artistsButton = document.getElementById('artistsButton');
+            mainOutput.innerHTML = '<div id="searchResults"></div>';
+            this.activateSearchButton(artistsButton);
+            deleteArtist.fetchArtists();
         });
 
         let artistAlbum = "";
@@ -649,9 +658,14 @@ class DOMHandle {
         mainOutput.innerHTML=contentOfSpecificPlaylist
 
         const deleteButton = document.getElementById('deletePlaylist');
-        deleteButton.addEventListener('click', function() {
+        deleteButton.addEventListener('click', () => {
             const deletePlaylist = new FetchHandle();
             deletePlaylist.deleteItem('playlists', playlist._id);
+            const playlistsButton = document.getElementById('playlistsButton');
+            mainOutput.innerHTML = '<div id="searchResults"></div>';
+            this.activateSearchButton(playlistsButton);
+            deletePlaylist.fetchPlaylists();
+            deletePlaylist.fetchTopPlaylists();
         });
 
         const playlistTracklist = document.getElementById('playlistTracklist');

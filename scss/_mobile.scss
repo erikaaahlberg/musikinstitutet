@@ -52,7 +52,7 @@ body{
                     opacity: 0.5;
                 }
             }
-            
+
             #slideOverlay{
                 position: absolute;
                 top:0;
@@ -83,7 +83,7 @@ body{
                 }
             }
         }
-        
+
     }
     main{
         #searchForm{
@@ -313,7 +313,7 @@ body{
                     padding: 0 10px;
                     .artistAlbumButton{
                         @include listButtons;
-                    }   
+                    }
                 }
             }
             #contentOfSpecificTrack{
@@ -381,7 +381,7 @@ body{
                         apperence: text;
                         padding: 8px;
                         border-radius: 5px;
-                        border: none;        
+                        border: none;
                     }
                     button{
                         background: $accentColor;
@@ -429,7 +429,7 @@ body{
                             width: 100%;
                         }
                         .comment{
-                            
+
                         }
                     }
                 }
