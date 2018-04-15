@@ -852,9 +852,67 @@ class DOMHandle {
             }
         }
     }
+    addTrackEventListener(){
+        event.preventDefault();
+        const addedTracks = [];
+        const errorMessages = [];
+        const trackController = new Controller;
+        const trackDom = new DOMHandle;
+        const trackFetch = new FetchHandle;
+        const newTrackTitle = trackController.getInputValue('inputTrackTitle');
+        const newTrackArtist = trackController.getInputValue('inputTrackArtist');
+        const newTrackAlbum = trackController.getInputValue('inputAlbumTitle');
+
+        console.log(newTrackTitle);
+        console.log(newTrackArtist);
+        console.log(newTrackAlbum);
+
+        const isArtistEmpty = trackController.isEmpty(newTrackArtist);
+        const isTitleEmpty = trackController.isEmpty(newTrackTitle);
+
+        if (isArtistEmpty) {
+            errorMessages.push('Artist name is required.');
+        }
+        if (isTitleEmpty) {
+            errorMessages.push('Title is required.');
+        }
+        if (errorMessages.length > 0) {
+            trackDom.displayErrorPopup(errorMessages);
+        } else {
+            /* Fetching id's for album and artist to create a track to post */
+            trackFetch.fetchItemByChosenParameter('albums', 'title', newTrackAlbum)
+            .then((fetchedAlbum) => {
+                /* Creating track to post */
+                console.log(fetchedAlbum);
+                const trackToPost = new Tracks (newTrackTitle, fetchedAlbum[0].artists[0], fetchedAlbum[0]._id, fetchedAlbum[0].genres[0], fetchedAlbum[0].coverImage);
+                addedTracks.push(`${newTrackArtist} - ${newTrackTitle}`);
+                console.log(trackToPost);
+
+                /* Posting track */
+                const postTrackRequest = new FetchHandle('POST', trackToPost);
+                postTrackRequest.postItem('tracks', postTrackRequest);
+
+                /* Printing added tracks */
+                for (let track of addedTracks) {
+                    const parentElement = document.getElementById('addWrapper');
+                    const p = document.createElement('p');
+                    const addedTrack = document.createTextNode(track);
+                    p.appendChild(addedTrack);
+                    parentElement.appendChild(p);
+                } 
+            });
+        }
+    }
 
     createAlbumContent(){
         const addDiv = document.getElementById('addDiv');
+        const albumDom = new DOMHandle;
+        const albumController = new Controller;
+        const albumFetch = new FetchHandle;
+        
+        setTimeout(function(){
+            addDiv.classList.remove('fadeOut');
+        });
 
         let createAlbumContent =`
             <div id="addWrapper">
@@ -872,14 +930,9 @@ class DOMHandle {
                         ADD ALBUM
                     </button>
                 </form>
-                <form id="postTrack">
-                    <input text="text" id="inputTrackArtist" placeholder="ARTIST..">
-                    <input text="text" id="inputTrackTitle" placeholder="TRACK TITLE..">
-                    <button type="button" id="addTrackButton">
-                        <i class="far fa-plus-square"></i>
-                    </button>
-                </form>
-                <div id="addTrackTracklist"></div>
+                <a href = "#" id = "addTrackToExistingAlbum" class = "mainLink">
+                Add track to existing album
+                </a>
                 <button type="button" id="importCloseButton">
                     <img src="images/x-circle.svg">
                     BACK
@@ -889,19 +942,57 @@ class DOMHandle {
 
         addDiv.innerHTML=createAlbumContent;
 
-        setTimeout(function(){
-            addDiv.classList.remove('fadeOut');
-        });
-
+        /* Get buttons */
+        const importCloseButton = document.getElementById('importCloseButton');
         const postAlbumButton = document.
         getElementById('postAlbumButton');
+        const addTrackToExistingAlbum = document.getElementById('addTrackToExistingAlbum');
+        
+        /* Go back-button */
+        importCloseButton.addEventListener('click',function(){
+            let createAlbumContent =``;
+                addDiv.classList.add('fadeOut');
+            setTimeout(function(){
+                addDiv.innerHTML=createAlbumContent;
+            }, 1000)
+        });
+
+        /* Add track to existing album link */
+        addTrackToExistingAlbum.addEventListener('click', function(){
+            addDiv.innerHTML = `
+            <div id="addWrapper">
+            <p>ADD TRACK TO EXISTING ALBUM</p>
+            <form id="addTrackToExistingAlbum">
+                <input type="text" id="inputAlbumTitle" placeholder="ALBUM TITLE..">
+                <input type="text" id="inputTrackTitle" placeholder="TRACK TITLE..">
+                <input type="text" id="inputTrackArtist" placeholder="ARTIST..">
+                <button type ="button" id="addTrackButton">
+                    ADD TRACK
+                </button>
+            </form>
+            <a href = "#" id="createAlbum" class = "mainLink">
+            Add new album
+            </a>
+            <button type="button" id="importCloseButton">
+                <img src="images/x-circle.svg">
+                BACK
+            </button>
+        </div>
+            `;
+            const addTrackButton = document.
+            getElementById('addTrackButton');
+    
+            addTrackButton.addEventListener('click', function(){
+                albumDom.addTrackEventListener();
+            });
+        });
 
         /* -----------ADDED BY ERIKA------------- */
         postAlbumButton.addEventListener('click', function() {
             event.preventDefault();
 
             /* Gets the input values. */
-            const albumController = new Controller;
+            //const albumController = new Controller;
             const albumArtistName = albumController.getInputValue('inputAlbumArtist');
             const albumTitle = albumController.getInputValue('inputAlbumTitle');
             var albumGenres = albumController.getInputValue('inputAlbumGenres');
@@ -965,13 +1056,11 @@ class DOMHandle {
             /* A DOM-function to print error-messages should be called for here */
             if (errorMessages.length > 0) {
                 //for (let errorMessage of errorMessages) {
-                    const displayError = new DOMHandle;
-                    displayError.displayErrorPopup(errorMessages);
+                    albumDom.displayErrorPopup(errorMessages);
                 //}
             }
             else {
-                const fetchArtistId = new FetchHandle;
-                fetchArtistId.fetchItemByChosenParameter('artists', 'name', albumArtistName)
+                albumFetch.fetchItemByChosenParameter('artists', 'name', albumArtistName)
                     .then((artist) => { 
                         const albumToPost = new Album(albumTitle, artist[0]._id, albumGenres, albumReleaseDate, albumSpotifyURL, albumCoverImageURL);
 
@@ -980,14 +1069,48 @@ class DOMHandle {
                         console.log(albumPostRequest);
                         //albumPostRequest.postItem('albums', albumPostRequest);
                     });
-                const displayAlternative = new DOMHandle;
-                displayAlternative.displayQuestionPopup('Do you want to add tracks now?');
+                
+                /* Display alternative popup */
+                albumDom.displayQuestionPopup('Do you want to add tracks now?');
+
+                const yesButton = document.getElementById('yesButton');
+                const noButton = document.getElementById('noButton');
+                const messagePopupBox = document.getElementById('messagePopupBox');
+                const parentElement = document.getElementById('addWrapper');
+
+                yesButton.addEventListener('click', function(){
+                    albumDomHandle.hideElement('messagePopupBox');
+                    const addTrackContent = `
+                    <form id="postTrack">
+                        <input text="text" id="inputTrackArtist" placeholder="ARTIST..">
+                        <input text="text" id="inputTrackTitle" placeholder="TRACK TITLE..">
+                        <button type="button" id="addTrackButton">
+                            <i class="far fa-plus-square"></i>
+                        </button>
+                    </form>
+                    <div id="addTrackTracklist"></div>
+                    `;
+                    parentElement.insertAdjacentHTML('beforeend', addTrackContent);
+                    const addTrackButton = document.
+                    getElementById('addTrackButton');
+            
+                    addTrackButton.addEventListener('click', function(){
+                        albumDomHandle.addTrackEventListener();
+                    });
+                });
+                
+               /* const addTrackButton = document.
+                getElementById('addTrackButton');
+        
+                addTrackButton.addEventListener('click', function(){
+                    
+                });*/
             }
         });
 
         /* -----------ADDED BY ERIKA collapse------------- */
 
-        const addTrackButton = document.
+        /*const addTrackButton = document.
         getElementById('addTrackButton');
 
         addTrackButton.addEventListener('click', function(){
@@ -1011,20 +1134,20 @@ class DOMHandle {
             if (errorMessages.length > 0) {
                 displayErrorPopup(errorMessages);
             } else {
-                /* Fetching id's for album and artist to create a track to post */
+                /* Fetching id's for album and artist to create a track to post 
                 const fetchIds = new FetchHandle;
                 fetchIds.fetchItemByChosenParameter('albums', 'title', newTrackAlbum)
                 .then((fetchedAlbum) => {
-                    /* Creating track to post */
+                    /* Creating track to post 
                     const trackToPost = new Tracks (newTrackTitle, fetchedAlbum[0].artists[0], fetchedAlbum[0]._id, fetchedAlbum[0].genres[0], fetchedAlbum[0].coverImage);
                     addedTracks.push(`${newTrackArtist} - ${newTrackTitle}`);
                     console.log(trackToPost);
 
-                    /* Posting track */
+                    /* Posting track 
                     const postTrackRequest = new FetchHandle('POST', trackToPost);
                     postTrackRequest.postItem('tracks', postTrackRequest);
 
-                    /* Printing added tracks */
+                    /* Printing added tracks 
                     for (let track of addedTracks) {
                         const p = document.createElement('p');
                         const addedTrack = document.createTextNode(track);
@@ -1045,7 +1168,7 @@ class DOMHandle {
         }, 1000)
 
 
-        })
+        })*/
 
     }
 
@@ -1085,7 +1208,7 @@ class DOMHandle {
 
             /* Name is the only parameter required so checking that first */
             if (isNameEmpty) {
-                errorMessages.push('Please enter a name!');
+                errorMessages.push('Artist name is required.');
             }
             /* Checking which other input fields are filled in to see which parameters we have to check if valid */
             else {
@@ -1101,7 +1224,7 @@ class DOMHandle {
                 if (!isCoverImageEmpty) {
                     const isValidURL = artistController.checkURL(artistCoverImageURL);
                     if (!isValidURL) {
-                        errorMessages.push('The URL is not valid, please enter another one.');
+                        errorMessages.push('The URL is not valid.');
                     }
                 }
             }
@@ -1226,7 +1349,7 @@ displayErrorPopup (errorMessages) {
     for (let errorMessage of errorMessages) {
         const errorMessageParagraph = document.createElement('p');
         errorMessageParagraph.className = 'errorMessage';
-        const errorMessageNode = document.createTextNode(errorMessages);
+        const errorMessageNode = document.createTextNode(errorMessage);
         errorMessageParagraph.appendChild(errorMessageNode);
         popupBox.appendChild(errorMessageParagraph);
     }
