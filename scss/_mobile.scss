@@ -16,10 +16,13 @@ body{
         outline: none;
         border-radius: $mainRadius;
     }
+<<<<<<< HEAD
+=======
     .fadeOut{
         opacity: 0;
     }
     /*---- HEADER STYLING ---- */
+>>>>>>> master
     header{
         #slideShowBanner{
             h1{
@@ -87,10 +90,21 @@ body{
                 .activeDot{
                         background: white;
                 }
+<<<<<<< HEAD
+            }
+        }
+
+    }
+    main{
+        .hidden {
+            display: none;
+        }       
+=======
             } //slideDotsWrapper END TAG
         } //slideShowBanner END TAG
     } //header END TAG
     main{       
+>>>>>>> master
         a.mainLink{
             color: $accentColor;
             font-weight: 600;
@@ -103,10 +117,11 @@ body{
             max-width: 600px;
             margin: 0 20px;
             #messageBox{
-                padding: 20px 0;
+                display: none;
+                /*padding: 20px 0;
                 letter-spacing: 2px;
                 font-weight: 700;
-                color: $accentColor;
+                color: $accentColor;*/
             }
             #searchField{
                 border: none;
@@ -512,7 +527,7 @@ body{
                 }
             }
         }
-        #messagePopupBox{
+        .messagePopupBox{
             width: 80%;
             position: absolute;
             margin-left: auto;
@@ -539,9 +554,15 @@ body{
             button#noButton{
                 display: inline-block;
                 background: red;
+<<<<<<< HEAD
+                /*&:hover{
+                    background: rgb(255, 88, 88);
+                }*/
+=======
             }
             button#noButton:hover{
                 background: rgb(255, 88, 88);  
+>>>>>>> master
             }
             p{
                 font-size: 0.8em;
