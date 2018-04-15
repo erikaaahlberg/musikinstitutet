@@ -576,7 +576,7 @@ class DOMHandle {
         let contentOfSpecificArtist = `
             <div id="contentOfSpecificArtist">
                 <div id="artistTopContent">
-                    <img src="${artist.image}">
+                    <img src="${artist.coverImage}">
                     <div id="artistInfo">
                         <h2>${artist.name}</h2>
                         <p id="genres"><span>Genres:</span> ${artist.genres}</p>

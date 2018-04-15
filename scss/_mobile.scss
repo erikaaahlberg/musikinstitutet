@@ -13,6 +13,7 @@ body{
     }
     input{
         outline: none;
+        border-radius: $mainRadius;
     }
 
     header{
@@ -100,7 +101,6 @@ body{
                 color: $accentColor;
             }
             #searchField{
-                border-radius: 5px;
                 border: none;
                 font-size: 1.1em;
                 letter-spacing: 1px;
@@ -115,7 +115,7 @@ body{
                 width: 100%;
                 button{
                     padding: 5px 7px;
-                    border-radius: 5px;
+                    border-radius: $mainRadius;
                     margin: 5px 20px;
                     letter-spacing: 2px;
                     color: $textColor;
@@ -137,7 +137,7 @@ body{
             #searchResults{
                 max-height: 300px;
                 overflow: scroll;
-                border-radius: 5px;
+                border-radius: $mainRadius;
                 margin-bottom: 10px;
                 .showByIdButton{
                     @include listButtons;
@@ -178,9 +178,7 @@ body{
                     #albumInfo{
                         letter-spacing: 2px;
                         h2{
-                            text-transform: uppercase;
-                            letter-spacing: 3px;
-                            font-size: 2.2em;
+                            @include displaySpecificH2;
                             margin: 25px 0 0 0;
                         }
                         p{
@@ -204,24 +202,11 @@ body{
                         #buttonWrapper{
                             margin-top: 40px;
                             input{
-                                font-size: 0.9em;
-                                apperence: text;
-                                padding: 8px;
-                                border-radius: 5px;
-                                border: none;
+                                @include ratingStyling;
 
                             }
                             button{
-                                background: $accentColor;
-                                color: $backgroundColor;
-                                padding: 10px 15px;
-                                margin-left: 10px;
-                                font-size: 0.8em;
-                                font-weight: 700;
-                                letter-spacing: 2px;
-                                border-radius: 20px;
-                                border: none;
-
+                                @include displaySpecificButtons;
                             }
                         }
                     }
@@ -269,10 +254,7 @@ body{
                     #artistInfo{
                         letter-spacing: 2px;
                         h2{
-                            text-transform: uppercase;
-                            color: $accentColor;
-                            letter-spacing: 3px;
-                            font-size: 2.2em;
+                            @include displaySpecificH2;
                             margin: 25px 0 0 0;
                         }
                         p{
@@ -282,15 +264,7 @@ body{
                             }
                         }
                         button{
-                            background: $accentColor;
-                            color: $backgroundColor;
-                            padding: 10px 15px;
-                            font-size: 0.8em;
-                            font-weight: 700;
-                            margin-top: 40px;
-                            letter-spacing: 2px;
-                            border-radius: 20px;
-                            border: none;
+                            @include displaySpecificButtons;
                         }
                     }
                 }
@@ -325,21 +299,11 @@ body{
                         align-items: center;
                         justify-content: space-between;
                         h2{
-                            font-size: 2.4em;
-                            letter-spacing: 3px;
-                            text-transform: uppercase;
+                            @include displaySpecificH2;
                             margin: 20px 0;
                         }
                         button{
-                            background: $accentColor;
-                            color: $backgroundColor;
-                            padding: 10px 15px;
-                            margin-left: 10px;
-                            font-size: 0.8em;
-                            font-weight: 700;
-                            letter-spacing: 2px;
-                            border-radius: 20px;
-                            border: none;
+                            @include displaySpecificButtons;
                         }
                     }
                     .underline{
@@ -372,22 +336,10 @@ body{
                 #buttonWrapper{
                     margin-bottom: 60px;
                     input{
-                        font-size: 0.9em;
-                        apperence: text;
-                        padding: 8px;
-                        border-radius: 5px;
-                        border: none;
+                        @include ratingStyling;
                     }
                     button{
-                        background: $accentColor;
-                        color: $backgroundColor;
-                        padding: 10px 15px;
-                        margin-left: 10px;
-                        font-size: 0.8em;
-                        font-weight: 700;
-                        letter-spacing: 2px;
-                        border-radius: 20px;
-                        border: none;
+                        @include displaySpecificButtons;
                     }
                 }
             }
@@ -401,13 +353,11 @@ body{
                     font-size: 1em;
                     padding: 20px 0 40px 0;
                     h2{
-                        text-transform: uppercase;
+                        @include displaySpecificH2;
                         text-align: center;
                         color: $accentColor;
-                        letter-spacing: 3px;
                         font-size: 2.5em;
-                        margin: 0;
-                        margin-bottom: 40px;
+                        margin: 0 0 40px 0;
                     }
                     p{
                         margin: 10px 0px;
@@ -423,22 +373,10 @@ body{
                 #buttonWrapper{
                     margin-bottom: 60px;
                     input{
-                        font-size: 0.9em;
-                        apperence: text;
-                        padding: 8px;
-                        border-radius: 5px;
-                        border: none;
+                        @include ratingStyling;
                     }
                     button{
-                        background: $accentColor;
-                        color: $backgroundColor;
-                        padding: 10px 15px;
-                        margin-left: 10px;
-                        font-size: 0.8em;
-                        font-weight: 700;
-                        letter-spacing: 2px;
-                        border-radius: 20px;
-                        border: none;
+                        @include displaySpecificButtons;
                     }
                 }
                 .underline{
@@ -465,7 +403,6 @@ body{
                     width: 300px;
                     #commentField{
                         padding: 8px;
-                        border-radius: 5px;
                         border: none;
                     }
                     #commentBottom{
@@ -476,12 +413,11 @@ body{
                         width: 100%;
                         #commentUser{
                             width: 100%;
-                            border-radius: 5px;
                             border: none;
                             padding: 8px;
                         }
                         #addCommentButton{
-                            border-radius: 5px;
+                            border-radius: $mainRadius;
                             padding: 0;
                             
                             img{
@@ -553,7 +489,6 @@ body{
                     input{
                         font-size: 0.7em;
                         width: 200px;
-                        border-radius: 3px;
                         letter-spacing: 1px;
                         padding: 8px;
                         border: none;
@@ -566,7 +501,7 @@ body{
                         font-size: 0.7em;
                         font-weight: 900;
                         letter-spacing: 2px;
-                        border-radius: 3px;
+                        border-radius: $mainRadius;
                         border: none;
                         color: white;
                         background: #d3790a;
