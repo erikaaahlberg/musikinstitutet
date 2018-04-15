@@ -136,32 +136,33 @@ body{
             max-width: 800px;
             margin: auto;
             padding: 0 10px;
-            .topFivePlayLists {
-                margin-top: 10px;
-                .topPlaylistsButton {
-                    padding: 20px 25px;
-                }
-                p {
-                    letter-spacing: 2px;
-                    font-weight: 700;
-                    color: orange;
-                    text-align: center;
-                }
-            }
-            .showByIdButton{
-                @include listButtons;
-            }
-            .showByIdButton:hover{
-                background: rgba(255, 255, 255, 0.07);
-            }
-            .lightButton{
-                background: rgba(255, 255, 255, 0.03);
-            }
             #searchResults{
                 max-height: 300px;
                 overflow: scroll;
                 border-radius: 5px;
                 margin-bottom: 10px;
+                .showByIdButton{
+                    @include listButtons;
+                }
+                .showByIdButton:hover{
+                    background: rgba(255, 255, 255, 0.07);
+                }
+                .lightButton{
+                    background: rgba(255, 255, 255, 0.03);
+                }
+            }
+            .topFivePlayLists {
+                p{
+                    color: $accentColor;
+                    text-align: center;
+                    text-decoration: underline;
+                    font-weight: 700;
+                    font-size: 1.5em;
+                    margin-bottom: 30px;
+                }
+                .topPlaylistsButton {
+                    @include listButtons;
+                }
             }
             #contentOfSpecificAlbum{
                 width: 100%;
