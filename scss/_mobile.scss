@@ -16,13 +16,10 @@ body{
         outline: none;
         border-radius: $mainRadius;
     }
-<<<<<<< HEAD
-=======
     .fadeOut{
         opacity: 0;
     }
     /*---- HEADER STYLING ---- */
->>>>>>> master
     header{
         #slideShowBanner{
             h1{
@@ -90,21 +87,10 @@ body{
                 .activeDot{
                         background: white;
                 }
-<<<<<<< HEAD
-            }
-        }
-
-    }
-    main{
-        .hidden {
-            display: none;
-        }       
-=======
             } //slideDotsWrapper END TAG
         } //slideShowBanner END TAG
     } //header END TAG
     main{       
->>>>>>> master
         a.mainLink{
             color: $accentColor;
             font-weight: 600;
@@ -554,15 +540,9 @@ body{
             button#noButton{
                 display: inline-block;
                 background: red;
-<<<<<<< HEAD
-                /*&:hover{
-                    background: rgb(255, 88, 88);
-                }*/
-=======
             }
             button#noButton:hover{
                 background: rgb(255, 88, 88);  
->>>>>>> master
             }
             p{
                 font-size: 0.8em;

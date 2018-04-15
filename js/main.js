@@ -915,9 +915,9 @@ class DOMHandle {
 
     createAlbumContent(){
         const addDiv = document.getElementById('addDiv');
-        const albumDom = new DOMHandle;
-        const albumController = new Controller;
-        const albumFetch = new FetchHandle;
+        const albumDom = new DOMHandle();
+        const albumController = new Controller();
+        const albumFetch = new FetchHandle();
         
         setTimeout(function(){
             addDiv.classList.remove('fadeOut');
@@ -1001,7 +1001,6 @@ class DOMHandle {
             event.preventDefault();
 
             /* Gets the input values. */
-            //const albumController = new Controller;
             const albumArtistName = albumController.getInputValue('inputAlbumArtist');
             const albumTitle = albumController.getInputValue('inputAlbumTitle');
             var albumGenres = albumController.getInputValue('inputAlbumGenres');
@@ -1062,11 +1061,8 @@ class DOMHandle {
                 }
             } /* --- if (!isTitleEmpty && !isArtistEmpty) collapse --- */
 
-            /* A DOM-function to print error-messages should be called for here */
             if (errorMessages.length > 0) {
-                //for (let errorMessage of errorMessages) {
                     albumDom.displayErrorPopup(errorMessages);
-                //}
             }
             else {
                 albumFetch.fetchItemByChosenParameter('artists', 'name', albumArtistName)
@@ -1277,6 +1273,9 @@ class DOMHandle {
 }
 createPlaylistContent(){
     const addDiv = document.getElementById('addDiv');
+    const playlistController = new Controller();
+    const playlistDom = new DOMHandle();
+    const playlistFetch = new FetchHandle();
     
     setTimeout(function(){
         addDiv.classList.remove('fadeOut');
@@ -1290,7 +1289,7 @@ createPlaylistContent(){
                 <input type="text" id="inputPlaylistGenres" placeholder="GENRES..">
                 <input type="text" id="inputPlaylistCoverImage" placeholder="PLAYLIST IMAGE URL..">
                 <input type="text" id="inputPlaylistCreator" placeholder="CREATED BY..">
-                <button id="postPlaylistButton">ADD PLAYLIST</button>
+                <button id="addPlaylistButton">ADD PLAYLIST</button>
             </form>
             <a href = "#" id="addTrackToExistingPlaylist" class = "mainLink">
             Add tracks to existing playlist
@@ -1306,8 +1305,8 @@ createPlaylistContent(){
 
      /* Get buttons */
      const importCloseButton = document.getElementById('importCloseButton');
-     const postPlaylistButton = document.
-     getElementById('postPlaylistButton');
+     const addPlaylistButton = document.
+     getElementById('addPlaylistButton');
      const addTrackToExistingPlaylist = document.getElementById('addTrackToExistingPlaylist');
      
      /* Go back-button */
@@ -1317,6 +1316,57 @@ createPlaylistContent(){
          setTimeout(function(){
              addDiv.innerHTML=createAlbumContent;
          }, 1000)
+     });
+
+     addPlaylistButton.addEventListener('click', function(){
+         event.preventDefault();
+         /* Gets the input values. */
+         const playlistTitle = playlistController.getInputValue('inputPlaylistTitle');
+         var playlistGenres = playlistController.getInputValue('inputPlaylistGenres');
+         const playlistImageURL = playlistController.getInputValue('inputPlaylistCoverImage');
+         const playlistCreator = playlistController.getInputValue('inputPlaylistCreator');
+
+         /* Title and creator are required parameters */
+         const isTitleEmpty = playlistController.isEmpty(playlistTitle);
+         const isCreatorEmpty = playlistController.isEmpty(playlistCreator);
+
+         /* Checking the imported values before creating a new album. */
+         const errorMessages = [];
+         
+        if (isTitleEmpty) {
+            errorMessages.push('Playlist title is required.');
+        }
+        if (isCreatorEmpty) {
+            errorMessages.push('Creator name is required.');
+        }
+
+        /* Checking which other input fields are filled in to see which parameters we have to check if valid */
+        if (!isTitleEmpty && !isCreatorEmpty) {
+            const isGenresEmpty = playlistController.isEmpty(playlistGenres);
+            const isCoverImageEmpty = playlistController.isEmpty(playlistImageURL);
+            
+            if (!isGenresEmpty) {
+                const editedGenresParameter = playlistController.editGenresParameter(playlistGenres);
+                playlistGenres = editedGenresParameter;    
+            }
+            if (!isCoverImageEmpty) {
+                const isImageURLValid = playlistController.checkURL(playlistImageURL);
+                if (!isImageURLValid) {
+                    errorMessages.push('The image URL is not valid.');
+                }    
+            }
+        } /* --- if (!isTitleEmpty && !isCreatorEmpty) collapse --- */
+
+        if (errorMessages.length > 0) {
+                playlistDom.displayErrorPopup(errorMessages);
+        }
+        else {
+                const playlistToPost = new Playlist(playlistTitle, playlistGenres, playlistImageURL, playlistCreator);
+                console.log(playlistToPost);
+                const playlistPostRequest = new FetchHandle('POST', playlistToPost);
+                    
+                playlistPostRequest.postItem('playlists', playlistPostRequest);
+            }
      });
 }
 
@@ -1498,6 +1548,17 @@ class Tracks {
     setCoverImage (coverImage) {
         if (coverImage != '') {
             this.coverImage = coverImage;
+        }
+    }
+}
+
+class Playlist {
+    constructor (title, genres, coverImage, createdBy) {
+        if (title != '') {
+            this.title = title;
+            this.genres = genres;
+            this.coverImage = coverImage;
+            this.createdBy = createdBy;
         }
     }
 }
