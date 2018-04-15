@@ -348,6 +348,18 @@ class DOMHandle {
 
 
     }
+    displayTracksInSelector(allTracks) {
+        const selector = document.getElementById('trackSelector');
+        let i = 0;
+        for (let track of allTracks) {
+            const option = document.createElement('option');
+            var artist = track[i].artists; //[i].name;
+            var title = track[i].title;
+            option.text = `${artist} - ${title}`;
+            selector.add(option);
+            i++;
+        }
+    }
     displayTracks(allTracks) {
 
 
@@ -899,7 +911,35 @@ class DOMHandle {
             }
         }
     }
-    addTrackToAlbumEventListener(){
+    addTrackToPlaylistEventListener () {
+        event.preventDefault();
+        const addedTracks = [];
+        const errorMessages = [];
+        const trackController = new Controller;
+        const trackDom = new DOMHandle;
+        const trackFetch = new FetchHandle;
+        const newTrackTitle = trackController.getInputValue('inputTrackTitle');
+        const newTrackArtist = trackController.getInputValue('inputTrackArtist');
+
+        const isArtistEmpty = trackController.isEmpty(newTrackArtist);
+        const isTitleEmpty = trackController.isEmpty(newTrackTitle);
+
+        if (isArtistEmpty) {
+            errorMessages.push('Artist name is required.');
+        }
+        if (isTitleEmpty) {
+            errorMessages.push('Title is required.');
+        }
+        if (errorMessages.length > 0) {
+            trackDom.displayErrorPopup(errorMessages);
+        } else {
+            trackFetch.fetchItemByChosenParameter('playlists', 'title', newTrackTitle)
+            .then((fetchedPlaylist) => {
+                console.log(fetchedPlaylist);
+            });   
+    }
+}
+    addTrackToAlbumEventListener() {
         event.preventDefault();
         const addedTracks = [];
         const errorMessages = [];
@@ -1149,6 +1189,7 @@ class DOMHandle {
                     const popupDom = new DOMHandle;
                     messagePopupBox.innerHTML = ``;
                     messagePopupBox.className = 'hidden';
+                    popupDom.fadeOutAnimation(addDiv, 'out');
                 });
             }
         });
@@ -1350,8 +1391,14 @@ createPlaylistContent(){
             </button>
         </div>
         `;
-
     addDiv.innerHTML = createPlaylistForm;
+    
+    const importCloseButton = document.getElementById('importCloseButton');
+    
+    importCloseButton.addEventListener('click', function(){
+        playlistDom.closeButtonAction();
+    });
+        
     const addToExistingPlaylistLink = document.getElementById('addToExistingPlaylist');
 
     /* Add track to existing album link */
@@ -1385,7 +1432,6 @@ createPlaylistContent(){
     });
 
      /* Get buttons */
-     const importCloseButton = document.getElementById('importCloseButton');
      const addPlaylistButton = document.
      getElementById('addPlaylistButton');
      const addTrackToExistingPlaylist = document.getElementById('addTrackToExistingPlaylist');
@@ -1447,10 +1493,60 @@ createPlaylistContent(){
                 const playlistPostRequest = new FetchHandle('POST', playlistToPost);
                     
                 //playlistPostRequest.postItem('playlists', playlistPostRequest);
-            }
-     });
-}
+                /* Display alternative popup */
+                playlistDom.displayQuestionPopup('Do you want to add tracks now?');
 
+                const yesButton = document.getElementById('yesButton');
+                const noButton = document.getElementById('noButton');
+                const messagePopupBox = document.getElementById('messagePopupBox');
+                const parentElement = document.getElementById('addWrapper');
+
+                yesButton.addEventListener('click', function() {
+                    
+                    playlistDom.hideElement('messagePopupBox');
+                    const addTrackContent = `
+                    <form id="addTrackToPlaylist">
+                        <select id = "trackSelector"></select>
+                        <button type="button" id="addTrackButton">
+                            <i class="far fa-plus-square"></i>
+                        </button>
+                    </form>
+                    <div id="addTrackTracklist"></div>
+                    `;
+                parentElement.insertAdjacentHTML('beforeend', addTrackContent);
+                const trackFetch = new FetchHandle();
+                trackFetch.fetchItemByChosenParameter('tracks', 'limit', '999')
+                    .then((fetchedTracks) => {
+                        const selector = document.getElementById('trackSelector');
+                        let i = 0;
+                        for (let track of fetchedTracks) {
+                            /*console.log(track.title);
+                            console.log(track.artists[0].name);
+                            console.log(i);*/
+                            const option = document.createElement('option');
+                            var artist = track.artists[0].name;
+                            var title = track.title;
+                            option.text = `${track.artists[0].name} - ${track.title}`;
+                            selector.add(option);
+                            i++;
+                        }
+                    //playlistDom.displayTracksInSelector(fetchedTracks);
+                });
+                const addTrackButton = document.getElementById('addTrackButton');
+
+                addTrackButton.addEventListener('click', function() {
+                    playlistDom.addTrackToPlaylistEventListener();
+                });
+                });
+                noButton.addEventListener('click', function(){
+                    const popupDom = new DOMHandle;
+                    messagePopupBox.innerHTML = ``;
+                    messagePopupBox.className = 'hidden';
+                    popupDom.fadeOutAnimation(addDiv, 'out');
+                });
+        }
+    });
+}
     
     fadeOutAnimation(div, addRemove){
         console.log(div)
@@ -1465,6 +1561,7 @@ createPlaylistContent(){
 /* --------ADDED BY ERIKA--------- */
 hideElement (elementId) {
     const element = document.getElementById(elementId);
+    element.innerHTML = ``;
     element.className = 'hidden';
 }
 displayElement (elementId) {
@@ -1512,7 +1609,15 @@ displayQuestionPopup (question) {
         </div>
     `;
     parentElement.appendChild(popupBox);
-}
+}/*
+closeButtonAction() {
+    const addDiv = document.getElementById('addDiv');
+    //let createAlbumContent =``;
+    addDiv.classList.add('fadeOut');
+    setTimeout(function(){
+        addDiv.innerHTML = ``;
+    }, 1000)
+}*/
 }/* --- Class DOMHandle collapse --- */
 
 class Controller {
@@ -1651,6 +1756,9 @@ class Playlist {
             this.coverImage = coverImage;
             this.createdBy = createdBy;
         }
+    }
+    addTracks (trackId) {
+        this.tracks += `,${trackId}`;
     }
     setCoverImage (coverImage) {
         if (coverImage != '') {
