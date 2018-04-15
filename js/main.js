@@ -1142,7 +1142,7 @@ class DOMHandle {
         if(i <= bannerImages.length-1){
              let addSlide = `
                 <div class="slideWrapper fadeSlide">
-                    <img src="images/${bannerImages[i]}">
+                    <img src="images/${bannerImages[i]}"
                 </div>
             `;
             const dot = `<div id="slideDotsWrapper"></div>`
