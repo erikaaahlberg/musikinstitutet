@@ -1066,8 +1066,7 @@ class DOMHandle {
 
                         const albumPostRequest = new FetchHandle('POST', albumToPost);
                         
-                        console.log(albumPostRequest);
-                        //albumPostRequest.postItem('albums', albumPostRequest);
+                        albumPostRequest.postItem('albums', albumPostRequest);
                     });
                 
                 /* Display alternative popup */
@@ -1098,78 +1097,8 @@ class DOMHandle {
                         albumDomHandle.addTrackEventListener();
                     });
                 });
-                
-               /* const addTrackButton = document.
-                getElementById('addTrackButton');
-        
-                addTrackButton.addEventListener('click', function(){
-                    
-                });*/
             }
         });
-
-        /* -----------ADDED BY ERIKA collapse------------- */
-
-        /*const addTrackButton = document.
-        getElementById('addTrackButton');
-
-        addTrackButton.addEventListener('click', function(){
-            event.preventDefault();
-            const addedTracks = [];
-            const errorMessages = [];
-            const trackController = new Controller;
-            const newTrackTitle = trackController.getInputValue('inputTrackTitle');
-            const newTrackArtist = trackController.getInputValue('inputTrackArtist');
-            const newTrackAlbum = trackController.getInputValue('inputAlbumTitle');
-
-            const isArtistEmpty = trackController.isEmpty(newTrackArtist);
-            const isTitleEmpty = trackController.isEmpty(newTrackTitle);
-
-            if (isArtistEmpty) {
-                errorMessages.push('Please enter an artist!');
-            }
-            if (isTitleEmpty) {
-                errorMessages.push('Please enter a title!');
-            }
-            if (errorMessages.length > 0) {
-                displayErrorPopup(errorMessages);
-            } else {
-                /* Fetching id's for album and artist to create a track to post 
-                const fetchIds = new FetchHandle;
-                fetchIds.fetchItemByChosenParameter('albums', 'title', newTrackAlbum)
-                .then((fetchedAlbum) => {
-                    /* Creating track to post 
-                    const trackToPost = new Tracks (newTrackTitle, fetchedAlbum[0].artists[0], fetchedAlbum[0]._id, fetchedAlbum[0].genres[0], fetchedAlbum[0].coverImage);
-                    addedTracks.push(`${newTrackArtist} - ${newTrackTitle}`);
-                    console.log(trackToPost);
-
-                    /* Posting track 
-                    const postTrackRequest = new FetchHandle('POST', trackToPost);
-                    postTrackRequest.postItem('tracks', postTrackRequest);
-
-                    /* Printing added tracks 
-                    for (let track of addedTracks) {
-                        const p = document.createElement('p');
-                        const addedTrack = document.createTextNode(track);
-                        p.appendChild(addedTrack);
-                        addTrackTracklist.appendChild(p);
-                    } 
-                });
-            }
-        });
-
-        const importCloseButton = document.getElementById('importCloseButton');
-
-        importCloseButton.addEventListener('click', function(){
-        let createAlbumContent =``;
-            addDiv.classList.add('fadeOut');
-        setTimeout(function(){
-            addDiv.innerHTML=createAlbumContent;
-        }, 1000)
-
-
-        })*/
-
     }
 
     createArtistContent(){
