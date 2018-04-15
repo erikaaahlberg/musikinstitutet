@@ -512,7 +512,12 @@ class DOMHandle {
         let contentOfSpecificTrack = `
             <div id="contentOfSpecificTrack">
                 <div id="trackInfo">
-                    <h2>${track.title}</h2>
+                    <div id="topTrackContent">
+                        <h2>${track.title}</h2>
+                        <button id="addToPlaylist">
+                            ADD TO PLAYLIST
+                        </button>
+                    </div>
                     <div class="underline"></div>
                     <p>${track.artists[0].name}</p>
                     <p class="rating">Rating: ${fetchRating.calculateRating(track)}</p>
@@ -530,9 +535,6 @@ class DOMHandle {
                     <input type="number" id="ratingNumber" placeholder="+/-" min="1" max="10">
                     <button id="rateTrack">
                         RATE TRACK
-                    </button>
-                    <button id="addToPlaylist">
-                        ADD TO PLAYLIST
                     </button>
                     <button id="deleteTrack">
                         DELETE TRACK
@@ -583,7 +585,7 @@ class DOMHandle {
         let contentOfSpecificArtist = `
             <div id="contentOfSpecificArtist">
                 <div id="artistTopContent">
-                    <img src="${artist.image}">
+                    <img src="${artist.coverImage}">
                     <div id="artistInfo">
                         <h2>${artist.name}</h2>
                         <p id="genres"><span>Genres:</span> ${artist.genres}</p>
@@ -1235,7 +1237,7 @@ class DOMHandle {
         if(i <= bannerImages.length-1){
              let addSlide = `
                 <div class="slideWrapper fadeSlide">
-                    <img src="images/${bannerImages[i]}">
+                    <img src="images/${bannerImages[i]}"
                 </div>
             `;
             const dot = `<div id="slideDotsWrapper"></div>`

@@ -2,15 +2,15 @@ body{
     header{
         #slideShowBanner{
             h1{
-                margin-top: 160px;
+                margin-top: 120px;
                 font-size: 10em;
                 letter-spacing: 10px;
             }
             #slideShow{
-                height: 500px;
+                height: 400px;
             }
             #slideOverlay{
-                height: 500px;
+                height: 400px;
             }
             #slideDotsWrapper{
                 .slideDot{
@@ -43,6 +43,16 @@ body{
                     letter-spacing: 2px;
                     padding: 20px 25px;
                 }  
+            }
+            .topFivePlayLists{
+                p{
+                    font-size: 1.6em;
+                }
+                .topPlaylistsButton{
+                    font-size: 1.2em;
+                    letter-spacing: 2px;
+                    padding: 20px 25px;
+                }
             }
             #contentOfSpecificAlbum{
                 #albumTopContent{
