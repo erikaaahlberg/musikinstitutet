@@ -143,6 +143,7 @@ body{
             max-width: 800px;
             margin: auto;
             padding: 0 10px;
+            transition: 500ms;
             #searchResults{
                 max-height: 300px;
                 overflow: scroll;
