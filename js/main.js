@@ -548,12 +548,12 @@ class DOMHandle {
 
         for (let button of trackAlbumButton) {
             button.addEventListener('click', function() {
-        
+
                 const fetchSpecAlbum = new FetchHandle();
                 fetchSpecAlbum.fetchAlbumById(button.id);
             });
         }
-        
+
         const deleteButton = document.getElementById('deleteTrack');
         deleteButton.addEventListener('click', () => {
             const deleteTrack = new FetchHandle();
@@ -684,7 +684,7 @@ class DOMHandle {
                 <div id="playlistComments"></div>
             </div>
         `;
-        
+
         mainOutput.innerHTML=contentOfSpecificPlaylist
 
         const deleteButton = document.getElementById('deletePlaylist');
@@ -752,7 +752,7 @@ class DOMHandle {
             if (i == 5) { break; }
             /* Storing the albums in a button */
             topPlaylistsButtons += `
-                    <button class="showByIdButton topPlaylistsButton" id="${list[i].id}">
+                    <button class="topPlaylistsButton" id="${list[i].id}">
                         ${list[i].title} -
                         ${list[i].rating}
                         <img src="images/rightArrow.svg">
@@ -786,7 +786,7 @@ class DOMHandle {
                     <header>
                         <p class="commenter">
                             ${comments[0][i].username}
-                        </p> 
+                        </p>
                         <button class="deleteComment" id="${comments[0][i]._id}">
                             <img src="images/x-circle.svg">
                         </button>
@@ -800,14 +800,14 @@ class DOMHandle {
         }
 
         playlistComments.innerHTML=commentContent;
-        
+
         const deleteCommentButton = document.
         getElementsByClassName('deleteComment');
-        
+
         for (i = 0; i < deleteCommentButton.length; i++) {
             deleteCommentButton[i].addEventListener('click', function() {
                 const newFetch = new FetchHandle();
-                newFetch.deleteItem('comments', this.id); 
+                newFetch.deleteItem('comments', this.id);
             setTimeout(function(){
                 newFetch.fetchPlaylistById(playlistID)
             })
@@ -819,7 +819,8 @@ class DOMHandle {
         for (let sbutton of searchButton) {
             if (sbutton.classList.contains('activeButton')) {
                 const filter = searchField.value.toUpperCase();
-                const buttons = mainOutput.getElementsByTagName('button');
+                const buttons = document.querySelectorAll('.showByIdButton');
+                console.log(buttons);
                 let visibleButtons = [];
                 for (let i = 0; i < buttons.length; i++) {
                     let dataGenre = buttons[i].getAttribute('data-genre').toUpperCase();
@@ -908,17 +909,24 @@ class DOMHandle {
                     const addedTrack = document.createTextNode(track);
                     p.appendChild(addedTrack);
                     parentElement.appendChild(p);
-                } 
+                }
             });
         }
     }
 
     createAlbumContent(){
         const addDiv = document.getElementById('addDiv');
+<<<<<<< HEAD
         const albumDom = new DOMHandle();
         const albumController = new Controller();
         const albumFetch = new FetchHandle();
         
+=======
+        const albumDom = new DOMHandle;
+        const albumController = new Controller;
+        const albumFetch = new FetchHandle;
+
+>>>>>>> master
         setTimeout(function(){
             addDiv.classList.remove('fadeOut');
         });
@@ -956,7 +964,7 @@ class DOMHandle {
         const postAlbumButton = document.
         getElementById('postAlbumButton');
         const addTrackToExistingAlbum = document.getElementById('addTrackToExistingAlbum');
-        
+
         /* Go back-button */
         importCloseButton.addEventListener('click',function(){
             let createAlbumContent =``;
@@ -990,7 +998,7 @@ class DOMHandle {
             `;
             const addTrackButton = document.
             getElementById('addTrackButton');
-    
+
             addTrackButton.addEventListener('click', function(){
                 albumDom.addTrackEventListener();
             });
@@ -1027,12 +1035,12 @@ class DOMHandle {
                 const isReleaseDateEmpty = albumController.isEmpty(albumReleaseDate);
                 const isSpotifyURLEmpty = albumController.isEmpty(albumSpotifyURL);
                 const isCoverImageEmpty = albumController.isEmpty(albumCoverImageURL);
-                
+
                 console.log(isGenresEmpty);
                 console.log(isReleaseDateEmpty);
                 console.log(isSpotifyURLEmpty);
                 console.log(isCoverImageEmpty);
-                
+
                 /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
                 if (!isGenresEmpty) {
                     const editedGenresParameter = albumController.editGenresParameter(albumGenres);
@@ -1066,20 +1074,20 @@ class DOMHandle {
             }
             else {
                 albumFetch.fetchItemByChosenParameter('artists', 'name', albumArtistName)
-                    .then((artist) => { 
+                    .then((artist) => {
                         const albumToPost = new Album(albumTitle, artist[0]._id, albumGenres, albumReleaseDate, albumSpotifyURL, albumCoverImageURL);
                         console.log(albumToPost);
                         const albumPostRequest = new FetchHandle('POST', albumToPost);
-                        
+
                         //albumPostRequest.postItem('albums', albumPostRequest);
                     });
-                
+
                 /* Display alternative popup */
                 albumDom.displayQuestionPopup('Do you want to add tracks now?');
 
                 const yesButton = document.getElementById('yesButton');
                 const noButton = document.getElementById('noButton');
-    
+
                 const messagePopupBox = document.getElementById('messagePopupBox');
                 const parentElement = document.getElementById('addWrapper');
 
@@ -1098,7 +1106,7 @@ class DOMHandle {
                     parentElement.insertAdjacentHTML('beforeend', addTrackContent);
                     const addTrackButton = document.
                     getElementById('addTrackButton');
-            
+
                     addTrackButton.addEventListener('click', function(){
                         albumDomHandle.addTrackEventListener();
                     });
@@ -1114,7 +1122,7 @@ class DOMHandle {
 
     createArtistContent(){
         const addDiv = document.getElementById('addDiv');
-        
+
         setTimeout(function(){
             addDiv.classList.remove('fadeOut');
         })
@@ -1273,14 +1281,18 @@ class DOMHandle {
 }
 createPlaylistContent(){
     const addDiv = document.getElementById('addDiv');
+<<<<<<< HEAD
     const playlistController = new Controller();
     const playlistDom = new DOMHandle();
     const playlistFetch = new FetchHandle();
     
+=======
+
+>>>>>>> master
     setTimeout(function(){
         addDiv.classList.remove('fadeOut');
     })
-    
+
     let createPlaylistContent =`
         <div id="addWrapper">
             <p>CREATE PLAYLIST</p>
@@ -1300,7 +1312,7 @@ createPlaylistContent(){
             </button>
         </div>
         `;
-    
+
     addDiv.innerHTML=createPlaylistContent;
 
      /* Get buttons */
@@ -1308,7 +1320,7 @@ createPlaylistContent(){
      const addPlaylistButton = document.
      getElementById('addPlaylistButton');
      const addTrackToExistingPlaylist = document.getElementById('addTrackToExistingPlaylist');
-     
+
      /* Go back-button */
      importCloseButton.addEventListener('click',function(){
          let createAlbumContent =``;
@@ -1395,7 +1407,7 @@ displayErrorPopup (errorMessages) {
     }
     popupBox.insertAdjacentHTML('beforeend',
         `<p>Please try again!</p>
-        <div id = "messageButtonWrapper"> 
+        <div id = "messageButtonWrapper">
             <button id = "errorOkButton"> Ok </button>
         </div>`
     );
@@ -1404,7 +1416,7 @@ displayErrorPopup (errorMessages) {
 
     okButton.addEventListener('click', function() {
         const hide = new DOMHandle;
-        hide.hideElement('messagePopupBox');    
+        hide.hideElement('messagePopupBox');
     });
 }
 displayQuestionPopup (question) {

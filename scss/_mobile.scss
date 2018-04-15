@@ -90,7 +90,11 @@ body{
             } //slideDotsWrapper END TAG
         } //slideShowBanner END TAG
     } //header END TAG
+<<<<<<< HEAD
     main{       
+=======
+    main{
+>>>>>>> master
         a.mainLink{
             color: $accentColor;
             font-weight: 600;
@@ -403,7 +407,7 @@ body{
                         #addCommentButton{
                             border-radius: $mainRadius;
                             padding: 0;
-                            
+
                             img{
                                 margin-left: 10px;
                                 height: 30px;
@@ -423,7 +427,7 @@ body{
                             justify-content: space-between;
                             .commenter{
                                 font-weight: 700;
-                            } 
+                            }
                             button{
                                 img{
                                     height: 15px;
@@ -542,7 +546,11 @@ body{
                 background: red;
             }
             button#noButton:hover{
+<<<<<<< HEAD
                 background: rgb(255, 88, 88);  
+=======
+                background: rgb(255, 88, 88);
+>>>>>>> master
             }
             p{
                 font-size: 0.8em;
