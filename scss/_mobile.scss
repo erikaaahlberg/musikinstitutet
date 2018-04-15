@@ -14,7 +14,6 @@ body{
     input{
         outline: none;
     }
-
     header{
         #slideShowBanner{
             h1{
@@ -88,7 +87,10 @@ body{
         }
 
     }
-    main{       
+    main{
+        .hidden {
+            display: none;
+        }       
         a.mainLink{
             color: $accentColor;
             font-weight: 600;
@@ -101,10 +103,11 @@ body{
             max-width: 600px;
             margin: 0 20px;
             #messageBox{
-                padding: 20px 0;
+                display: none;
+                /*padding: 20px 0;
                 letter-spacing: 2px;
                 font-weight: 700;
-                color: $accentColor;
+                color: $accentColor;*/
             }
             #searchField{
                 border-radius: 5px;
@@ -588,7 +591,7 @@ body{
                 }
             }
         }
-        #messagePopupBox{
+        .messagePopupBox{
             width: 80%;
             position: absolute;
             margin-left: auto;
@@ -615,9 +618,9 @@ body{
             button#noButton{
                 display: inline-block;
                 background: red;
-                &hover:{
+                /*&:hover{
                     background: rgb(255, 88, 88);
-                }
+                }*/
             }
             p{
                 font-size: 0.8em;
