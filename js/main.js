@@ -29,6 +29,7 @@ for (i = 0; i < searchButton.length; i++) {
     });
 }
 
+
 const searchField = document.getElementById('searchField');
 searchField.addEventListener('keyup', () => {
     const filterRequest = new DOMHandle();
@@ -280,6 +281,7 @@ class FetchHandle {
     }
     /*---------------- */
 }
+
 /* Handles the DOM. */
 class DOMHandle {
     activateSearchButton(value) {
@@ -345,6 +347,18 @@ class DOMHandle {
         }
 
 
+    }
+    displayTracksInSelector(allTracks) {
+        const selector = document.getElementById('trackSelector');
+        let i = 0;
+        for (let track of allTracks) {
+            const option = document.createElement('option');
+            var artist = track[i].artists; //[i].name;
+            var title = track[i].title;
+            option.text = `${artist} - ${title}`;
+            selector.add(option);
+            i++;
+        }
     }
     displayTracks(allTracks) {
 
@@ -855,7 +869,7 @@ class DOMHandle {
             if (sbutton.classList.contains('activeButton')) {
                 const filter = searchField.value.toUpperCase();
                 const buttons = document.querySelectorAll('.showByIdButton');
-                console.log(buttons);
+                //console.log(buttons);
                 let visibleButtons = [];
                 for (let i = 0; i < buttons.length; i++) {
                     let dataGenre = buttons[i].getAttribute('data-genre').toUpperCase();
@@ -897,7 +911,35 @@ class DOMHandle {
             }
         }
     }
-    addTrackEventListener(){
+    addTrackToPlaylistEventListener () {
+        event.preventDefault();
+        const addedTracks = [];
+        const errorMessages = [];
+        const trackController = new Controller;
+        const trackDom = new DOMHandle;
+        const trackFetch = new FetchHandle;
+        const newTrackTitle = trackController.getInputValue('inputTrackTitle');
+        const newTrackArtist = trackController.getInputValue('inputTrackArtist');
+
+        const isArtistEmpty = trackController.isEmpty(newTrackArtist);
+        const isTitleEmpty = trackController.isEmpty(newTrackTitle);
+
+        if (isArtistEmpty) {
+            errorMessages.push('Artist name is required.');
+        }
+        if (isTitleEmpty) {
+            errorMessages.push('Title is required.');
+        }
+        if (errorMessages.length > 0) {
+            trackDom.displayErrorPopup(errorMessages);
+        } else {
+            trackFetch.fetchItemByChosenParameter('playlists', 'title', newTrackTitle)
+            .then((fetchedPlaylist) => {
+                console.log(fetchedPlaylist);
+            });   
+    }
+}
+    addTrackToAlbumEventListener() {
         event.preventDefault();
         const addedTracks = [];
         const errorMessages = [];
@@ -1032,7 +1074,7 @@ class DOMHandle {
             getElementById('addTrackButton');
 
             addTrackButton.addEventListener('click', function(){
-                albumDom.addTrackEventListener();
+                albumDom.addTrackToAlbumEventListener();
             });
         });
 
@@ -1140,13 +1182,14 @@ class DOMHandle {
                     getElementById('addTrackButton');
 
                     addTrackButton.addEventListener('click', function(){
-                        albumDomHandle.addTrackEventListener();
+                        albumDomHandle.addTrackToAlbumEventListener();
                     });
                 });
                 noButton.addEventListener('click', function(){
                     const popupDom = new DOMHandle;
                     messagePopupBox.innerHTML = ``;
                     messagePopupBox.className = 'hidden';
+                    popupDom.fadeOutAnimation(addDiv, 'out');
                 });
             }
         });
@@ -1329,7 +1372,7 @@ createPlaylistContent(){
         addDiv.classList.remove('fadeOut');
     })
 
-    let createPlaylistContent =`
+    const createPlaylistForm =`
         <div id="addWrapper">
             <p>CREATE PLAYLIST</p>
             <form id = "createPlaylist">
@@ -1339,7 +1382,7 @@ createPlaylistContent(){
                 <input type="text" id="inputPlaylistCreator" placeholder="CREATED BY..">
                 <button id="addPlaylistButton">ADD PLAYLIST</button>
             </form>
-            <a href = "#" id="addTrackToExistingPlaylist" class = "mainLink">
+            <a href = "#" id="addToExistingPlaylist" class = "mainLink">
             Add tracks to existing playlist
             </a>
             <button type="button" id="importCloseButton">
@@ -1348,11 +1391,47 @@ createPlaylistContent(){
             </button>
         </div>
         `;
+    addDiv.innerHTML = createPlaylistForm;
+    
+    const importCloseButton = document.getElementById('importCloseButton');
+    
+    importCloseButton.addEventListener('click', function(){
+        playlistDom.closeButtonAction();
+    });
+        
+    const addToExistingPlaylistLink = document.getElementById('addToExistingPlaylist');
 
-    addDiv.innerHTML=createPlaylistContent;
+    /* Add track to existing album link */
+    addToExistingPlaylistLink.addEventListener('click', function(){
+        const addToExistingPlaylist = `
+        <div id="addWrapper">
+            <p>ADD TRACK TO EXISTING PLAYLIST</p>
+            <form id="addTrackToExistingPlaylist">
+                <input type="text" id="inputPlaylistTitle" placeholder="PLAYLIST TITLE..">
+                <input type="text" id="inputTrackTitle" placeholder="TRACK TITLE..">
+                <button type ="button" id="addTrackButton">
+                    ADD TRACK
+                </button>
+            </form>
+            <a href = "#" id="createPlaylist" class = "mainLink">
+            Add new playlist
+            </a>
+            <button type="button" id="importCloseButton">
+                <img src="images/x-circle.svg">
+                BACK
+            </button>
+        </div>
+        `;
+        addDiv.innerHTML = addToExistingPlaylist;
+        const addTrackButton = document.
+        getElementById('addTrackButton');
+
+        /*addTrackButton.addEventListener('click', function(){
+            albumDom.addTrackEventListener();
+        });*/
+    });
 
      /* Get buttons */
-     const importCloseButton = document.getElementById('importCloseButton');
      const addPlaylistButton = document.
      getElementById('addPlaylistButton');
      const addTrackToExistingPlaylist = document.getElementById('addTrackToExistingPlaylist');
@@ -1413,11 +1492,61 @@ createPlaylistContent(){
                 console.log(playlistToPost);
                 const playlistPostRequest = new FetchHandle('POST', playlistToPost);
                     
-                playlistPostRequest.postItem('playlists', playlistPostRequest);
-            }
-     });
-}
+                //playlistPostRequest.postItem('playlists', playlistPostRequest);
+                /* Display alternative popup */
+                playlistDom.displayQuestionPopup('Do you want to add tracks now?');
 
+                const yesButton = document.getElementById('yesButton');
+                const noButton = document.getElementById('noButton');
+                const messagePopupBox = document.getElementById('messagePopupBox');
+                const parentElement = document.getElementById('addWrapper');
+
+                yesButton.addEventListener('click', function() {
+                    
+                    playlistDom.hideElement('messagePopupBox');
+                    const addTrackContent = `
+                    <form id="addTrackToPlaylist">
+                        <select id = "trackSelector"></select>
+                        <button type="button" id="addTrackButton">
+                            <i class="far fa-plus-square"></i>
+                        </button>
+                    </form>
+                    <div id="addTrackTracklist"></div>
+                    `;
+                parentElement.insertAdjacentHTML('beforeend', addTrackContent);
+                const trackFetch = new FetchHandle();
+                trackFetch.fetchItemByChosenParameter('tracks', 'limit', '999')
+                    .then((fetchedTracks) => {
+                        const selector = document.getElementById('trackSelector');
+                        let i = 0;
+                        for (let track of fetchedTracks) {
+                            /*console.log(track.title);
+                            console.log(track.artists[0].name);
+                            console.log(i);*/
+                            const option = document.createElement('option');
+                            var artist = track.artists[0].name;
+                            var title = track.title;
+                            option.text = `${track.artists[0].name} - ${track.title}`;
+                            selector.add(option);
+                            i++;
+                        }
+                    //playlistDom.displayTracksInSelector(fetchedTracks);
+                });
+                const addTrackButton = document.getElementById('addTrackButton');
+
+                addTrackButton.addEventListener('click', function() {
+                    playlistDom.addTrackToPlaylistEventListener();
+                });
+                });
+                noButton.addEventListener('click', function(){
+                    const popupDom = new DOMHandle;
+                    messagePopupBox.innerHTML = ``;
+                    messagePopupBox.className = 'hidden';
+                    popupDom.fadeOutAnimation(addDiv, 'out');
+                });
+        }
+    });
+}
     
     fadeOutAnimation(div, addRemove){
         console.log(div)
@@ -1432,6 +1561,7 @@ createPlaylistContent(){
 /* --------ADDED BY ERIKA--------- */
 hideElement (elementId) {
     const element = document.getElementById(elementId);
+    element.innerHTML = ``;
     element.className = 'hidden';
 }
 displayElement (elementId) {
@@ -1479,7 +1609,15 @@ displayQuestionPopup (question) {
         </div>
     `;
     parentElement.appendChild(popupBox);
-}
+}/*
+closeButtonAction() {
+    const addDiv = document.getElementById('addDiv');
+    //let createAlbumContent =``;
+    addDiv.classList.add('fadeOut');
+    setTimeout(function(){
+        addDiv.innerHTML = ``;
+    }, 1000)
+}*/
 }/* --- Class DOMHandle collapse --- */
 
 class Controller {
@@ -1617,6 +1755,19 @@ class Playlist {
             this.genres = genres;
             this.coverImage = coverImage;
             this.createdBy = createdBy;
+        }
+    }
+    addTracks (trackId) {
+        this.tracks += `,${trackId}`;
+    }
+    setCoverImage (coverImage) {
+        if (coverImage != '') {
+            this.coverImage = coverImage;
+        }
+    }
+    setGenres (genres) {
+        if (genres != '') {
+            this.genres = genres;
         }
     }
 }
