@@ -90,11 +90,7 @@ body{
             } //slideDotsWrapper END TAG
         } //slideShowBanner END TAG
     } //header END TAG
-<<<<<<< HEAD
-    main{       
-=======
-    main{
->>>>>>> master
+    main{ 
         a.mainLink{
             color: $accentColor;
             font-weight: 600;
@@ -106,6 +102,7 @@ body{
             align-items: center;
             max-width: 600px;
             margin: 0 20px;
+            padding-top: 50px;
             #messageBox{
                 display: none;
                 /*padding: 20px 0;
@@ -546,11 +543,7 @@ body{
                 background: red;
             }
             button#noButton:hover{
-<<<<<<< HEAD
                 background: rgb(255, 88, 88);  
-=======
-                background: rgb(255, 88, 88);
->>>>>>> master
             }
             p{
                 font-size: 0.8em;
