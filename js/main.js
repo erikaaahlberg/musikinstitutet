@@ -1073,7 +1073,6 @@ class DOMHandle {
                 albumDom.displayQuestionPopup('Do you want to add tracks now?');
 
                 const yesButton = document.getElementById('yesButton');
-                const noButton = document.getElementById('noButton');
                 const messagePopupBox = document.getElementById('messagePopupBox');
                 const parentElement = document.getElementById('addWrapper');
 
@@ -1310,26 +1309,12 @@ displayQuestionPopup (question) {
         </div>
     `;
     parentElement.appendChild(popupBox);
+    const noButton = document.getElementById('noButton');
 
-    /*const questionParagraph = document.createElement('p');
-    const questionNode = document.createTextNode(question);
-    const yesButton = document.createElement('button');
-    const yesButtonNode = document.createTextNode('Yes');
-    const noButton = document.createElement('button');
-    const noButtonNode = document.createTextNode('No');
-
-    yesButton.setAttribute('id', 'yesButton');
-    noButton.setAttribute('id', 'noButton');
-
-    //popupDiv.setAttribute('id', 'messagePopupBox');
-    questionParagraph.appendChild(questionNode);
-    popupBox.appendChild(questionParagraph);
-    yesButton.appendChild(yesButtonNode);
-    popupBox.appendChild(yesButton);
-    noButton.appendChild(noButtonNode);
-    popupBox.appendChild(noButton);
-    parentElement.appendChild(popupBox);*/
-
+    noButton.addEventListener('click', function(){
+        const popupDom = new DOMHandle;
+        popupDom.hideElement('messagePopupBox');
+    });
 }
 }/* --- Class DOMHandle collapse --- */
 
