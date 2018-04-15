@@ -90,7 +90,11 @@ body{
             } //slideDotsWrapper END TAG
         } //slideShowBanner END TAG
     } //header END TAG
+<<<<<<< HEAD
+    main{       
+=======
     main{
+>>>>>>> master
         a.mainLink{
             color: $accentColor;
             font-weight: 600;
@@ -542,7 +546,11 @@ body{
                 background: red;
             }
             button#noButton:hover{
+<<<<<<< HEAD
+                background: rgb(255, 88, 88);  
+=======
                 background: rgb(255, 88, 88);
+>>>>>>> master
             }
             p{
                 font-size: 0.8em;
