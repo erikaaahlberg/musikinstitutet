@@ -331,10 +331,18 @@ class DOMHandle {
 
         for (i = 0; i < showByIdButton.length; i++) {
             showByIdButton[i].addEventListener('click', function() {
-                const newFetch = new FetchHandle();
-                newFetch.fetchAlbumById(this.id);
+            
                 const deActivate = new DOMHandle();
                 deActivate.deactivateSearchButtons();
+               let id = this.id    
+            
+               deActivate.fadeOutAnimation(mainOutput, 'add');
+                
+                setTimeout(function(){
+                    console.log(id)
+                    const newFetch = new FetchHandle();
+                    newFetch.fetchAlbumById(id);
+                },500)
             })
         }
 
@@ -363,10 +371,16 @@ class DOMHandle {
 
         for (i = 0; i < showByIdButton.length; i++) {
             showByIdButton[i].addEventListener('click', function() {
-                const newFetch = new FetchHandle();
-                newFetch.fetchTrackById(this.id);
+                let id = this.id
                 const deActivate = new DOMHandle();
                 deActivate.deactivateSearchButtons();
+                deActivate.fadeOutAnimation(mainOutput, 'add');
+                
+                setTimeout(function(){
+                    const newFetch = new FetchHandle();
+                    newFetch.fetchTrackById(id);
+                },500)
+            
             });
         }
    }
@@ -391,10 +405,15 @@ class DOMHandle {
         getElementsByClassName('showByIdButton');
         for (i = 0; i < showByIdButton.length; i++) {
             showByIdButton[i].addEventListener('click', function() {
-                const newFetch = new FetchHandle();
-                newFetch.fetchArtistById(this.id);
+                                let id = this.id
                 const deActivate = new DOMHandle();
                 deActivate.deactivateSearchButtons();
+                deActivate.fadeOutAnimation(mainOutput, 'add');
+                
+                setTimeout(function(){
+                    const newFetch = new FetchHandle();
+                    newFetch.fetchArtistById(id);
+                },500)
             })
         }
 
@@ -420,16 +439,23 @@ class DOMHandle {
         getElementsByClassName('showByIdButton');
         for (i = 0; i < showByIdButton.length; i++) {
             showByIdButton[i].addEventListener('click', function() {
-                const newFetch = new FetchHandle();
-                newFetch.fetchPlaylistById(this.id);
+                                let id = this.id
                 const deActivate = new DOMHandle();
                 deActivate.deactivateSearchButtons();
+                deActivate.fadeOutAnimation(mainOutput, 'add');
+                
+                setTimeout(function(){
+                    const newFetch = new FetchHandle();
+                    newFetch.fetchPlaylistById(id);
+                },500)
             })
         }
 
     }
     displaySpecificAlbum(album) {
-
+        
+        runSlideShow.fadeOutAnimation(mainOutput, 'remove')
+        
         const fetchRating = new Logic();
 
         let contentOfSpecificAlbum = `
@@ -459,7 +485,7 @@ class DOMHandle {
             </div>
         `
         mainOutput.innerHTML = contentOfSpecificAlbum;
-
+        
         const deleteButton = document.getElementById('deleteAlbum');
         deleteButton.addEventListener('click', () => {
             const deleteAlbum = new FetchHandle();
@@ -509,6 +535,9 @@ class DOMHandle {
 
     }
     displaySpecificTrack(track) {
+        
+        runSlideShow.fadeOutAnimation(mainOutput, 'remove')
+        
         const fetchRating = new Logic();
 
         let contentOfSpecificTrack = `
@@ -576,6 +605,9 @@ class DOMHandle {
     });
 }
     displaySpecificArtist(artist, albums){
+        
+        runSlideShow.fadeOutAnimation(mainOutput, 'remove')
+        
         let convertedDated = '';
         if (artist.born) {
           convertedDated = artist.born.substring(0,4);
@@ -645,6 +677,9 @@ class DOMHandle {
 
     }
     displaySpecificPlaylist(playlist, comments){
+        
+        runSlideShow.fadeOutAnimation(mainOutput, 'remove')
+        
         const fetchRating = new Logic();
 
         const createdDate = playlist.createdAt.substring(0,10)
@@ -918,12 +953,13 @@ class DOMHandle {
 
     createAlbumContent(){
         const addDiv = document.getElementById('addDiv');
-        const albumDom = new DOMHandle();
-        const albumController = new Controller();
-        const albumFetch = new FetchHandle();
-        
+
+        const albumDom = new DOMHandle;
+        const albumController = new Controller;
+        const albumFetch = new FetchHandle;
+
         setTimeout(function(){
-            addDiv.classList.remove('fadeOut');
+            albumDom.fadeOutAnimation(addDiv, 'remove')
         });
 
         let createAlbumContent =`
@@ -962,11 +998,14 @@ class DOMHandle {
 
         /* Go back-button */
         importCloseButton.addEventListener('click',function(){
+            
             let createAlbumContent =``;
-                addDiv.classList.add('fadeOut');
+            albumDom.fadeOutAnimation(addDiv, 'add');
+            
             setTimeout(function(){
                 addDiv.innerHTML=createAlbumContent;
-            }, 1000)
+            }, 1000);
+            
         });
 
         /* Add track to existing album link */
@@ -1122,6 +1161,8 @@ class DOMHandle {
             addDiv.classList.remove('fadeOut');
         })
 
+        const artistDom = new DOMHandle;
+        
         let createArtistContent =`
             <div id="addWrapper">
                 <p>ADD ARTIST</p>
@@ -1188,12 +1229,18 @@ class DOMHandle {
         });
         /* -----collapse------ */
 
-        importCloseButton.addEventListener('click', function(){
-        let createAlbumContent =``;
-            addDiv.classList.add('fadeOut');
         setTimeout(function(){
-            addDiv.innerHTML=createAlbumContent;
-        }, 1000)
+            artistDom.fadeOutAnimation(addDiv, 'remove');
+        })
+
+        importCloseButton.addEventListener('click', function(){
+            
+            let createAlbumContent =``;
+            artistDom.fadeOutAnimation(addDiv, 'add');
+            
+            setTimeout(function(){
+                addDiv.innerHTML=createAlbumContent;
+            }, 1000)
 
         });
     }
@@ -1404,6 +1451,16 @@ createPlaylistContent(){
      });
 }
 
+    
+    fadeOutAnimation(div, addRemove){
+        console.log(div)
+        console.log(addRemove)
+        if(addRemove === 'remove'){
+            div.classList.remove('fadeOut');
+        } else {
+            div.classList.add('fadeOut');   
+        }
+    }
 
 /* --------ADDED BY ERIKA--------- */
 hideElement (elementId) {
@@ -1654,7 +1711,6 @@ class Logic {
     }
 
 }
-
 const runSlideShow = new DOMHandle();
 runSlideShow.slideShowBanner();
 
