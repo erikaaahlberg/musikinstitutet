@@ -29,6 +29,7 @@ for (i = 0; i < searchButton.length; i++) {
     });
 }
 
+
 const searchField = document.getElementById('searchField');
 searchField.addEventListener('keyup', () => {
     const filterRequest = new DOMHandle();
@@ -280,6 +281,7 @@ class FetchHandle {
     }
     /*---------------- */
 }
+
 /* Handles the DOM. */
 class DOMHandle {
     activateSearchButton(value) {
@@ -820,7 +822,7 @@ class DOMHandle {
             if (sbutton.classList.contains('activeButton')) {
                 const filter = searchField.value.toUpperCase();
                 const buttons = document.querySelectorAll('.showByIdButton');
-                console.log(buttons);
+                //console.log(buttons);
                 let visibleButtons = [];
                 for (let i = 0; i < buttons.length; i++) {
                     let dataGenre = buttons[i].getAttribute('data-genre').toUpperCase();
@@ -862,7 +864,7 @@ class DOMHandle {
             }
         }
     }
-    addTrackEventListener(){
+    addTrackToAlbumEventListener(){
         event.preventDefault();
         const addedTracks = [];
         const errorMessages = [];
@@ -993,7 +995,7 @@ class DOMHandle {
             getElementById('addTrackButton');
 
             addTrackButton.addEventListener('click', function(){
-                albumDom.addTrackEventListener();
+                albumDom.addTrackToAlbumEventListener();
             });
         });
 
@@ -1101,7 +1103,7 @@ class DOMHandle {
                     getElementById('addTrackButton');
 
                     addTrackButton.addEventListener('click', function(){
-                        albumDomHandle.addTrackEventListener();
+                        albumDomHandle.addTrackToAlbumEventListener();
                     });
                 });
                 noButton.addEventListener('click', function(){
@@ -1282,7 +1284,7 @@ createPlaylistContent(){
         addDiv.classList.remove('fadeOut');
     })
 
-    let createPlaylistContent =`
+    const createPlaylistForm =`
         <div id="addWrapper">
             <p>CREATE PLAYLIST</p>
             <form id = "createPlaylist">
@@ -1292,7 +1294,7 @@ createPlaylistContent(){
                 <input type="text" id="inputPlaylistCreator" placeholder="CREATED BY..">
                 <button id="addPlaylistButton">ADD PLAYLIST</button>
             </form>
-            <a href = "#" id="addTrackToExistingPlaylist" class = "mainLink">
+            <a href = "#" id="addToExistingPlaylist" class = "mainLink">
             Add tracks to existing playlist
             </a>
             <button type="button" id="importCloseButton">
@@ -1302,7 +1304,38 @@ createPlaylistContent(){
         </div>
         `;
 
-    addDiv.innerHTML=createPlaylistContent;
+    addDiv.innerHTML = createPlaylistForm;
+    const addToExistingPlaylistLink = document.getElementById('addToExistingPlaylist');
+
+    /* Add track to existing album link */
+    addToExistingPlaylistLink.addEventListener('click', function(){
+        const addToExistingPlaylist = `
+        <div id="addWrapper">
+            <p>ADD TRACK TO EXISTING PLAYLIST</p>
+            <form id="addTrackToExistingPlaylist">
+                <input type="text" id="inputPlaylistTitle" placeholder="PLAYLIST TITLE..">
+                <input type="text" id="inputTrackTitle" placeholder="TRACK TITLE..">
+                <button type ="button" id="addTrackButton">
+                    ADD TRACK
+                </button>
+            </form>
+            <a href = "#" id="createPlaylist" class = "mainLink">
+            Add new playlist
+            </a>
+            <button type="button" id="importCloseButton">
+                <img src="images/x-circle.svg">
+                BACK
+            </button>
+        </div>
+        `;
+        addDiv.innerHTML = addToExistingPlaylist;
+        const addTrackButton = document.
+        getElementById('addTrackButton');
+
+        /*addTrackButton.addEventListener('click', function(){
+            albumDom.addTrackEventListener();
+        });*/
+    });
 
      /* Get buttons */
      const importCloseButton = document.getElementById('importCloseButton');
@@ -1366,7 +1399,7 @@ createPlaylistContent(){
                 console.log(playlistToPost);
                 const playlistPostRequest = new FetchHandle('POST', playlistToPost);
                     
-                playlistPostRequest.postItem('playlists', playlistPostRequest);
+                //playlistPostRequest.postItem('playlists', playlistPostRequest);
             }
      });
 }
@@ -1560,6 +1593,16 @@ class Playlist {
             this.genres = genres;
             this.coverImage = coverImage;
             this.createdBy = createdBy;
+        }
+    }
+    setCoverImage (coverImage) {
+        if (coverImage != '') {
+            this.coverImage = coverImage;
+        }
+    }
+    setGenres (genres) {
+        if (genres != '') {
+            this.genres = genres;
         }
     }
 }
