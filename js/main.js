@@ -916,17 +916,10 @@ class DOMHandle {
 
     createAlbumContent(){
         const addDiv = document.getElementById('addDiv');
-<<<<<<< HEAD
         const albumDom = new DOMHandle();
         const albumController = new Controller();
         const albumFetch = new FetchHandle();
         
-=======
-        const albumDom = new DOMHandle;
-        const albumController = new Controller;
-        const albumFetch = new FetchHandle;
-
->>>>>>> master
         setTimeout(function(){
             addDiv.classList.remove('fadeOut');
         });
@@ -1281,14 +1274,10 @@ class DOMHandle {
 }
 createPlaylistContent(){
     const addDiv = document.getElementById('addDiv');
-<<<<<<< HEAD
     const playlistController = new Controller();
     const playlistDom = new DOMHandle();
     const playlistFetch = new FetchHandle();
     
-=======
-
->>>>>>> master
     setTimeout(function(){
         addDiv.classList.remove('fadeOut');
     })
