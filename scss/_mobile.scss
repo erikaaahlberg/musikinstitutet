@@ -88,7 +88,12 @@ body{
         }
 
     }
-    main{
+    main{       
+        a.mainLink{
+            color: $accentColor;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
         #searchForm{
             display: flex;
             flex-direction: column;
