@@ -88,7 +88,7 @@ body{
         }
 
     }
-    main{       
+    main{
         a.mainLink{
             color: $accentColor;
             font-weight: 600;
@@ -144,6 +144,7 @@ body{
             .topFivePlayLists {
                 margin-top: 10px;
                 .topPlaylistsButton {
+                    @include listButtons;
                     padding: 20px 25px;
                 }
                 p {
@@ -474,7 +475,7 @@ body{
                         #addCommentButton{
                             border-radius: 5px;
                             padding: 0;
-                            
+
                             img{
                                 margin-left: 10px;
                                 height: 30px;
@@ -494,7 +495,7 @@ body{
                             justify-content: space-between;
                             .commenter{
                                 font-weight: 700;
-                            } 
+                            }
                             button{
                                 img{
                                     height: 15px;
@@ -615,7 +616,7 @@ body{
             button#noButton{
                 display: inline-block;
                 background: red;
-                &hover:{
+                &:hover{
                     background: rgb(255, 88, 88);
                 }
             }
