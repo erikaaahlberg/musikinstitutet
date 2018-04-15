@@ -30,6 +30,14 @@ $mainRadius: 5px;
     font-size: 2.2em;
 }
 
+@mixin displaySpecificH3{
+    font-size: 1.8em;
+    text-align: center;
+    letter-spacing: 3px;
+    padding: 20px;
+    margin: 0;
+}
+
 @mixin displaySpecificButtons{
     background: $accentColor;
     color: $backgroundColor;
@@ -46,4 +54,10 @@ $mainRadius: 5px;
     font-size: 0.9em;
     padding: 8px;
     border: none;
+}
+
+@mixin displaySpecificUnderline{
+    border-bottom: 1px solid $textColor;
+    width: 95%;
+    margin: auto;
 }
