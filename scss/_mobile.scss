@@ -1,4 +1,5 @@
 body{
+    /*---- GENERAL STYLING ---- */
     background: $backgroundColor;
     font-size: 12px;
     margin: 0;
@@ -13,17 +14,21 @@ body{
     }
     input{
         outline: none;
+        border-radius: $mainRadius;
     }
-
+    .fadeOut{
+        opacity: 0;
+    }
+    /*---- HEADER STYLING ---- */
     header{
         #slideShowBanner{
             h1{
                 color: $accentColor;
-                margin-top: 150px;
+                margin-top: 100px;
                 font-weight: 900;
-                font-size: 10em;
+                font-size: 5em;
                 font-style: italic;
-                letter-spacing: 10px;
+                letter-spacing: 5px;
                 position: absolute;
                 left: 0;
                 right: 0;
@@ -47,14 +52,12 @@ body{
                     img{
                         position: absolute;
                         width: 100%;
-                        bottom: 0;
-                        left: 0;
                     }
                 }
                 .fadeSlide{
                     opacity: 0.5;
                 }
-            }
+            } //slideShow END TAG
 
             #slideOverlay{
                 position: absolute;
@@ -62,7 +65,7 @@ body{
                 background: black;
                 opacity: 0.6;
                 width: 100%;
-                height: 500px;
+                height: 300px;
             }
             #slideDotsWrapper{
                 display: flex;
@@ -84,10 +87,9 @@ body{
                 .activeDot{
                         background: white;
                 }
-            }
-        }
-
-    }
+            } //slideDotsWrapper END TAG
+        } //slideShowBanner END TAG
+    } //header END TAG
     main{       
         a.mainLink{
             color: $accentColor;
@@ -107,7 +109,6 @@ body{
                 color: $accentColor;
             }
             #searchField{
-                border-radius: 5px;
                 border: none;
                 font-size: 1.1em;
                 letter-spacing: 1px;
@@ -122,12 +123,11 @@ body{
                 width: 100%;
                 button{
                     padding: 5px 7px;
-                    border-radius: 5px;
+                    border-radius: $mainRadius;
                     margin: 5px 20px;
                     letter-spacing: 2px;
                     color: $textColor;
                     transition: 250ms;
-
                 }
                 .activeButton{
                     background: rgba(255, 255, 255, 0.9);
@@ -141,32 +141,30 @@ body{
             max-width: 800px;
             margin: auto;
             padding: 0 10px;
-            .topFivePlayLists {
-                margin-top: 10px;
-                .topPlaylistsButton {
-                    padding: 20px 25px;
-                }
-                p {
-                    letter-spacing: 2px;
-                    font-weight: 700;
-                    color: orange;
-                    text-align: center;
-                }
-            }
-            .showByIdButton{
-                @include listButtons;
-            }
-            .showByIdButton:hover{
-                background: rgba(255, 255, 255, 0.07);
-            }
-            .lightButton{
-                background: rgba(255, 255, 255, 0.03);
-            }
             #searchResults{
                 max-height: 300px;
                 overflow: scroll;
-                border-radius: 5px;
+                border-radius: $mainRadius;
                 margin-bottom: 10px;
+                .showByIdButton{
+                    @include listButtons;
+                }
+                .showByIdButton:hover{
+                    background: rgba(255, 255, 255, 0.07);
+                }
+            }
+            .topFivePlayLists {
+                p{
+                    color: $accentColor;
+                    text-align: center;
+                    text-decoration: underline;
+                    font-weight: 700;
+                    font-size: 1.1em;
+                    margin-bottom: 30px;
+                }
+                .topPlaylistsButton {
+                    @include listButtons;
+                }
             }
             #contentOfSpecificAlbum{
                 width: 100%;
@@ -184,9 +182,7 @@ body{
                     #albumInfo{
                         letter-spacing: 2px;
                         h2{
-                            text-transform: uppercase;
-                            letter-spacing: 3px;
-                            font-size: 2.2em;
+                            @include displaySpecificH2;
                             margin: 25px 0 0 0;
                         }
                         p{
@@ -210,39 +206,20 @@ body{
                         #buttonWrapper{
                             margin-top: 40px;
                             input{
-                                font-size: 0.9em;
-                                apperence: text;
-                                padding: 8px;
-                                border-radius: 5px;
-                                border: none;
+                                @include ratingStyling;
 
                             }
                             button{
-                                background: $accentColor;
-                                color: $backgroundColor;
-                                padding: 10px 15px;
-                                margin-left: 10px;
-                                font-size: 0.8em;
-                                font-weight: 700;
-                                letter-spacing: 2px;
-                                border-radius: 20px;
-                                border: none;
-
+                                @include displaySpecificButtons;
                             }
                         }
                     }
                 }
                 .underline{
-                    border-bottom: 1px solid $textColor;
-                    width: 95%;
-                    margin: auto;
+                    @include displaySpecificUnderline;
                 }
                 h3{
-                    font-size: 1.8em;
-                    text-align: center;
-                    letter-spacing: 3px;
-                    padding: 20px;
-                    margin: 0;
+                    @include displaySpecificH3;
                 }
                 #albumTracklist{
                     display: flex;
@@ -253,9 +230,6 @@ body{
                     }
                     .albumTrackButton:hover{
                         background: rgba(255, 255, 255, 0.07);
-                    }
-                    .lightButton{
-                            background: rgba(255, 255, 255, 0.03);
                     }
                 }
             }
@@ -275,10 +249,7 @@ body{
                     #artistInfo{
                         letter-spacing: 2px;
                         h2{
-                            text-transform: uppercase;
-                            color: $accentColor;
-                            letter-spacing: 3px;
-                            font-size: 2.2em;
+                            @include displaySpecificH2;
                             margin: 25px 0 0 0;
                         }
                         p{
@@ -288,29 +259,15 @@ body{
                             }
                         }
                         button{
-                            background: $accentColor;
-                            color: $backgroundColor;
-                            padding: 10px 15px;
-                            font-size: 0.8em;
-                            font-weight: 700;
-                            margin-top: 40px;
-                            letter-spacing: 2px;
-                            border-radius: 20px;
-                            border: none;
+                            @include displaySpecificButtons;
                         }
                     }
                 }
                 .underline{
-                    border-bottom: 1px solid $textColor;
-                    width: 95%;
-                    margin: auto;
+                    @include displaySpecificUnderline;
                 }
                 h3{
-                    font-size: 1.8em;
-                    text-align: center;
-                    letter-spacing: 3px;
-                    padding: 20px;
-                    margin: 0;
+                    @include displaySpecificH3;
                 }
                 #artistAlbums{
                     display: flex;
@@ -326,12 +283,17 @@ body{
                 flex-direction: column;
                 align-items: center;
                 #trackInfo{
-                    h2{
-                        font-size: 2.4em;
-                        letter-spacing: 3px;
-                        text-transform: uppercase;
-                        margin: 20px 0;
-
+                    #topTrackContent{
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        h2{
+                            @include displaySpecificH2;
+                            margin: 20px 0;
+                        }
+                        button{
+                            @include displaySpecificButtons;
+                        }
                     }
                     .underline{
                         border-bottom: 1px solid $textColor;
@@ -363,22 +325,10 @@ body{
                 #buttonWrapper{
                     margin-bottom: 60px;
                     input{
-                        font-size: 0.9em;
-                        apperence: text;
-                        padding: 8px;
-                        border-radius: 5px;
-                        border: none;
+                        @include ratingStyling;
                     }
                     button{
-                        background: $accentColor;
-                        color: $backgroundColor;
-                        padding: 10px 15px;
-                        margin-left: 10px;
-                        font-size: 0.8em;
-                        font-weight: 700;
-                        letter-spacing: 2px;
-                        border-radius: 20px;
-                        border: none;
+                        @include displaySpecificButtons;
                     }
                 }
             }
@@ -392,13 +342,11 @@ body{
                     font-size: 1em;
                     padding: 20px 0 40px 0;
                     h2{
-                        text-transform: uppercase;
+                        @include displaySpecificH2;
                         text-align: center;
                         color: $accentColor;
-                        letter-spacing: 3px;
                         font-size: 2.5em;
-                        margin: 0;
-                        margin-bottom: 40px;
+                        margin: 0 0 40px 0;
                     }
                     p{
                         margin: 10px 0px;
@@ -414,35 +362,17 @@ body{
                 #buttonWrapper{
                     margin-bottom: 60px;
                     input{
-                        font-size: 0.9em;
-                        apperence: text;
-                        padding: 8px;
-                        border-radius: 5px;
-                        border: none;
+                        @include ratingStyling;
                     }
                     button{
-                        background: $accentColor;
-                        color: $backgroundColor;
-                        padding: 10px 15px;
-                        margin-left: 10px;
-                        font-size: 0.8em;
-                        font-weight: 700;
-                        letter-spacing: 2px;
-                        border-radius: 20px;
-                        border: none;
+                        @include displaySpecificButtons;
                     }
                 }
                 .underline{
-                    border-bottom: 1px solid $textColor;
-                    width: 95%;
-                    margin: auto;
+                    @include displaySpecificUnderline;
                 }
                 h3{
-                    font-size: 1.8em;
-                    text-align: center;
-                    letter-spacing: 3px;
-                    padding: 20px;
-                    margin: 0;
+                    @include displaySpecificH3;
                 }
                 #playlistTracklist{
                     width: 100%;
@@ -456,7 +386,6 @@ body{
                     width: 300px;
                     #commentField{
                         padding: 8px;
-                        border-radius: 5px;
                         border: none;
                     }
                     #commentBottom{
@@ -467,12 +396,11 @@ body{
                         width: 100%;
                         #commentUser{
                             width: 100%;
-                            border-radius: 5px;
                             border: none;
                             padding: 8px;
                         }
                         #addCommentButton{
-                            border-radius: 5px;
+                            border-radius: $mainRadius;
                             padding: 0;
                             
                             img{
@@ -486,7 +414,7 @@ body{
                     .playlistComment{
                         letter-spacing: 2px;
                         padding: 10px 20px;
-                        border-radius: 5px;
+                        border-radius: $mainRadius;
                         margin: 5px 0 0 5px;
                         background: rgba(255, 255, 255, 0.1);
                         header{
@@ -511,9 +439,6 @@ body{
                     }
                 }
             }
-        }
-        .fadeOut{
-            opacity: 0;
         }
         #addDiv{
             width: 100vw;
@@ -544,7 +469,6 @@ body{
                     input{
                         font-size: 0.7em;
                         width: 200px;
-                        border-radius: 3px;
                         letter-spacing: 1px;
                         padding: 8px;
                         border: none;
@@ -557,7 +481,7 @@ body{
                         font-size: 0.7em;
                         font-weight: 900;
                         letter-spacing: 2px;
-                        border-radius: 3px;
+                        border-radius: $mainRadius;
                         border: none;
                         color: white;
                         background: #d3790a;
@@ -615,9 +539,9 @@ body{
             button#noButton{
                 display: inline-block;
                 background: red;
-                &hover:{
-                    background: rgb(255, 88, 88);
-                }
+            }
+            button#noButton:hover{
+                background: rgb(255, 88, 88);  
             }
             p{
                 font-size: 0.8em;
