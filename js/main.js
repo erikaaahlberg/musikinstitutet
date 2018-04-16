@@ -258,7 +258,7 @@ class FetchHandle {
                         display.displayPopup([error]);
                     });
     }
-    
+
     postItem (itemToPost, HttpRequest) {
         const theItem = itemToPost.slice(0, -1);
         const display = new DOMHandle;
@@ -824,8 +824,8 @@ class DOMHandle {
             setTimeout(() => {
                 mainOutput.innerHTML = '<div id="searchResults"></div>';
                 this.activateSearchButton(playlistsButton);
-                deletePlaylist.fetchPlaylists();
-                deletePlaylist.fetchTopPlaylists();
+                newFetch.fetchPlaylists();
+                newFetch.fetchTopPlaylists();
             }, mainAnimationTime)
         });
 
@@ -1104,7 +1104,7 @@ class DOMHandle {
 
                 const trackId = document.getElementsByTagName('option')[selectedIndex].value;
                 console.log(trackId);
-                
+
                 const selectedTrack =  document.getElementsByTagName('option')[selectedIndex].innerHTML;
 
                 selectedTracks.push(selectedTrack);
@@ -1156,7 +1156,7 @@ class DOMHandle {
                 postTrackRequest.postItem('tracks', postTrackRequest);
 
                 /* Printing added tracks*/
-                trackDom.displayAddedTracks(addedTracks, 'addWrapper'); 
+                trackDom.displayAddedTracks(addedTracks, 'addWrapper');
             });
         }
     }
@@ -1188,7 +1188,7 @@ class DOMHandle {
                     </button>
                 </form>
                 <a href = "#" id = "addTrackToExistingAlbum" class = "mainLink">
-                    ADD TRACK TO EXISTING ALBUM 
+                    ADD TRACK TO EXISTING ALBUM
                     <img src="images/rightArrow.svg">
                 </a>
                 <button type="button" id="importCloseButton">
@@ -1209,7 +1209,7 @@ class DOMHandle {
         importCloseButton.addEventListener('click',function(){
             albumDom.fadeOutAnimation(addDiv, 'add');
             setTimeout( () => {
-                addDiv.innerHTML = ``;    
+                addDiv.innerHTML = ``;
             }, mainAnimationTime)
         });
 
@@ -1237,7 +1237,7 @@ class DOMHandle {
                 </button>
             </div>
             `;
-            
+
             const createAlbumLink = document.getElementById('createAlbum');
 
             createAlbumLink.addEventListener('click', function(){
@@ -1251,11 +1251,11 @@ class DOMHandle {
                 albumDom.addTrackToAlbumEventListener();
             });
             const importCloseButton = document.getElementById('importCloseButton');
-            
+
             importCloseButton.addEventListener('click', function(){
                 albumDom.fadeOutAnimation(addDiv, 'add');
                 setTimeout( () => {
-                    addDiv.innerHTML = ``;    
+                    addDiv.innerHTML = ``;
                 }, mainAnimationTime)
             });
         });
@@ -1565,7 +1565,7 @@ class DOMHandle {
                 </button>
             </div>
         `;
-        
+
         playlistDom.fadeOutAnimation(addDiv, 'remove');
         addDiv.innerHTML = createPlaylistForm;
 
@@ -1619,6 +1619,10 @@ class DOMHandle {
             const parentElement = document.getElementById('addTrackToExistingPlaylist');
 
             playlistDom.chooseTrackSelector(parentElement);
+            const selector = document.getElementById('trackSelector');
+        
+            selector.classList.add('annanKlass');
+            console.log(selector)
 
         });
 
@@ -1761,13 +1765,12 @@ class DOMHandle {
         parentElement.appendChild(popupBox);
     }
     displayAddedTracks (addedTracks, parentElementId) {
-        for (let track of addedTracks) {
-            const parentElement = document.getElementById(parentElementId);
-            const p = document.createElement('p');
-            const addedTrack = document.createTextNode(track);
-            p.appendChild(addedTrack);
-            parentElement.appendChild(p);
-        }    
+        const lastTrack = addedTracks.slice(-1)[0];
+        const parentElement = document.getElementById(parentElementId);
+        const p = document.createElement('p');
+        const addedTrack = document.createTextNode(lastTrack);
+        p.appendChild(addedTrack);
+        parentElement.appendChild(p);
     }
 }/* --- Class DomHandle collapse --- */
 
