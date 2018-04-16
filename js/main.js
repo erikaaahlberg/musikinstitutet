@@ -895,8 +895,8 @@ class DOMHandle {
             const commentFieldEmpty = newController.isEmpty(commentFieldDiv.value);
             const commentUserEmpty = newController.isEmpty(commentUser.value);
             const wrongMessageComment = document.getElementById('wrongMessageComment');
-
-            if(commentFieldEmpty && commentUserEmpty){
+            
+            if(commentFieldEmpty || commentUserEmpty){
                 let wrongMessage='<p> YOU HAVE TO FILL IN THE FIELDS CORRECTLY</p>';
                 wrongMessageComment.innerHTML=wrongMessage;
                 setTimeout(() => {
