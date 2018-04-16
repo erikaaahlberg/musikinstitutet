@@ -40,7 +40,6 @@ class Init {
         });
 
         const createAlbumButton = document.getElementById('createAlbumButton');
-
         createAlbumButton.addEventListener('click', function(){
             const createAlbum = new DOMHandle();
             createAlbum.createAlbumContent();
@@ -665,7 +664,7 @@ class DOMHandle {
             setTimeout(() => {
                 mainOutput.innerHTML = '<div id="searchResults"></div>';
                 this.activateSearchButton(tracksButton);
-                deleteTrack.fetchTracks();
+                newFetch.fetchTracks();
             }, mainAnimationTime);
         });
 
