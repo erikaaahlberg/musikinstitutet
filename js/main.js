@@ -1772,7 +1772,7 @@ class DOMHandle {
     hideElement (elementId) {
         const element = document.getElementById(elementId);
         element.innerHTML = ``;
-        element.className = 'hidden';
+        element.classList.add('hidden');
     }
     displayElement (elementId) {
         const element = document.getElementById(elementId).style.display = "block";
@@ -1800,7 +1800,7 @@ class DOMHandle {
 
         okButton.addEventListener('click', function() {
             const hide = new DOMHandle;
-            hide.hideElement('messagePopupBox');
+            hide.hideElement('popUpWindow');
         });
 }
     displayQuestionPopup (question) {

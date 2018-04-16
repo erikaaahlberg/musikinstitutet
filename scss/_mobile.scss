@@ -26,6 +26,10 @@ body {
         border-radius: $mainRadius;
     }
 
+    .hidden {
+        display: none;
+    }
+
     .fadeOut {
         opacity: 0;
     }
@@ -648,7 +652,7 @@ body {
                             }
                         }
                         }
-                    }   
+                    }
                 }
             }
         }
