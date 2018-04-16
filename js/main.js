@@ -1514,9 +1514,12 @@ class DOMHandle {
 
         //artistDom.fadeOutAnimation(addDiv, 'remove');
 
-        importCloseButton.addEventListener('click', function(){
+        /* Go back-button */
+        importCloseButton.addEventListener('click',function(){
             artistDom.fadeOutAnimation(addDiv, 'add');
-            addDiv.innerHTML = ``;
+            setTimeout( () => {
+                addDiv.innerHTML = ``;
+            }, mainAnimationTime)
         });
     }
     displayGenres(object) {
