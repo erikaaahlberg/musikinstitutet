@@ -938,20 +938,9 @@ class DOMHandle {
             deleteCommentButton[i].addEventListener('click', function(){
                 newDOM.fadeOutAnimation(playlistComments, 'add');
                 setTimeout( () => {
-                    playlistComments.innerHTML=`
-                        <div id="commentMessage">
-                            <img src="images/check.svg">
-                            <p> COMMENT HAS BEEN DELETE </p>
-                        </div>
-                    `;
-                    newDOM.fadeOutAnimation(playlistComments, 'remove');
-                    setTimeout( () => {
-                        console.log(this.id)
                         newFetch.deleteItem('comments', this.id);
-                        newDOM.fadeOutAnimation(commentsOutput, 'add');
-                        newFetch.fetchPlaylistById(playlistID)
+                        newFetch.fetchPlaylistById(playlistID);
                     }, 500);
-                }, 500);
             });
         }
         
