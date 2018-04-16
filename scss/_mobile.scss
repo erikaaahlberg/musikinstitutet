@@ -1,4 +1,4 @@
-body{
+body {
     /*---- GENERAL STYLING ---- */
     background: $backgroundColor;
     font-size: 12px;
@@ -6,23 +6,91 @@ body{
     padding: 0;
     color: white;
     font-family: 'Roboto';
-    button{
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    *,
+    *:after,
+    *:before {
+    	-webkit-box-sizing: inherit;
+    	box-sizing: inherit;
+    }
+    button {
         outline: none;
         cursor: pointer;
         background: none;
         border: none;
     }
-    input{
+
+    input {
         outline: none;
         border-radius: $mainRadius;
     }
-    .fadeOut{
+
+    .fadeOut {
         opacity: 0;
     }
+
+    .spinner {
+        margin: 100px auto 0;
+        margin-top: 0px;
+        width: 70px;
+        text-align: center;
+        @-webkit-keyframes sk-bouncedelay {
+            0%,
+            100%,
+            80% {
+                -webkit-transform: scale(0);
+            }
+
+            40% {
+                -webkit-transform: scale(1.0);
+            }
+        }
+        @keyframes sk-bouncedelay {
+            0%,
+            100%,
+            80% {
+                -webkit-transform: scale(0);
+                transform: scale(0);
+            }
+
+            40% {
+                -webkit-transform: scale(1.0);
+                transform: scale(1.0);
+            }
+        }
+        div {
+           width: 18px;
+           height: 18px;
+           background-color: $accentColor;
+           border-radius: 100%;
+           display: inline-block;
+           -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+           animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+       }
+        .bounce1 {
+            -webkit-animation-delay: -0.32s;
+            animation-delay: -0.32s;
+        }
+        .bounce2 {
+            -webkit-animation-delay: -0.16s;
+            animation-delay: -0.16s;
+        }
+    }
+
+    #popUpWindow {
+        position: fixed;
+        width: 400px;
+        left: 50%;
+        top: 40%;
+        opacity: 0.9;
+        transform: translate(-50%, -50%);
+    }
+
     /*---- HEADER STYLING ---- */
-    header{
-        #slideShowBanner{
-            h1{
+    header {
+        #slideShowBanner {
+            h1 {
                 color: $accentColor;
                 margin-top: 100px;
                 font-weight: 900;
@@ -35,39 +103,46 @@ body{
                 text-align: center;
                 z-index: 1;
                 opacity: 0.9;
-                span{
+
+                span {
                     font-family: 'Times New Roman';
                     color: white;
                 }
             }
-            #slideShow{
+
+            #slideShow {
                 width: 100%;
                 height: 300px;
                 overflow: hidden;
                 background: black;
                 position: relative;
                 margin: auto;
-                .slideWrapper{
+
+                .slideWrapper {
                     transition: 700ms;
-                    img{
+
+                    img {
                         position: absolute;
                         width: 100%;
                     }
                 }
-                .fadeSlide{
+
+                .fadeSlide {
                     opacity: 0.5;
                 }
-            } //slideShow END TAG
+            }
+            //slideShow END TAG
 
-            #slideOverlay{
+            #slideOverlay {
                 position: absolute;
-                top:0;
+                top: 0;
                 background: black;
                 opacity: 0.6;
                 width: 100%;
                 height: 300px;
             }
-            #slideDotsWrapper{
+
+            #slideDotsWrapper {
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -76,7 +151,8 @@ body{
                 margin-top: -50px;
                 position: absolute;
                 z-index: 1;
-                .slideDot{
+
+                .slideDot {
                     width: 10px;
                     height: 10px;
                     margin: 5px;
@@ -84,46 +160,56 @@ body{
                     border: 1px solid white;
                     transition: 700ms;
                 }
-                .activeDot{
-                        background: white;
+
+                .activeDot {
+                    background: white;
                 }
-            } //slideDotsWrapper END TAG
-        } //slideShowBanner END TAG
-    } //header END TAG
-    main{
-        a.mainLink{
+            }
+            //slideDotsWrapper END TAG
+        }
+        //slideShowBanner END TAG
+    }
+    //header END TAG
+
+    main {
+        a.mainLink {
             color: $accentColor;
             font-weight: 600;
             letter-spacing: 1px;
         }
-        #searchForm{
+
+        #searchForm {
             display: flex;
             flex-direction: column;
             align-items: center;
             max-width: 600px;
             margin: 0 20px;
             padding-top: 50px;
-            #messageBox{
+
+            #messageBox {
                 display: none;
                 /*padding: 20px 0;
                 letter-spacing: 2px;
                 font-weight: 700;
                 color: $accentColor;*/
             }
-            #searchField{
+
+            #searchField {
                 border: none;
                 font-size: 1.1em;
                 letter-spacing: 1px;
                 width: 100%;
                 padding: 10px;
             }
-            #searchButtonWrapper{
+
+            #searchButtonWrapper {
                 display: flex;
                 flex-wrap: wrap;
                 justify-content: center;
                 margin: 20px 0;
                 width: 100%;
-                button{
+
+                button {
                     padding: 5px 7px;
                     border-radius: $mainRadius;
                     margin: 5px 20px;
@@ -131,33 +217,39 @@ body{
                     color: $textColor;
                     transition: 250ms;
                 }
-                .activeButton{
+
+                .activeButton {
                     background: rgba(255, 255, 255, 0.9);
                     color: black;
                 }
             }
         }
-        #mainOutput{
+
+        #mainOutput {
             display: flex;
             flex-direction: column;
             max-width: 800px;
             margin: auto;
             padding: 0 10px;
             transition: 500ms;
-            #searchResults{
+
+            #searchResults {
                 max-height: 300px;
                 overflow: scroll;
                 border-radius: $mainRadius;
                 margin-bottom: 10px;
-                .showByIdButton{
+
+                .showByIdButton {
                     @include listButtons;
                 }
-                .showByIdButton:hover{
+
+                .showByIdButton:hover {
                     background: rgba(255, 255, 255, 0.07);
                 }
             }
+
             .topFivePlayLists {
-                p{
+                p {
                     color: $accentColor;
                     text-align: center;
                     text-decoration: underline;
@@ -166,203 +258,250 @@ body{
                     font-size: 1.1em;
                     margin-bottom: 30px;
                 }
+
                 .topPlaylistsButton {
                     @include listButtons;
                 }
             }
-            #contentOfSpecificAlbum{
+
+            #contentOfSpecificAlbum {
                 width: 100%;
                 transition: 500ms;
-                #albumTopContent{
+
+                #albumTopContent {
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
                     align-items: center;
                     font-size: 1em;
-                    padding: 20px 0 60px 0;
-                    img{
+                    padding: 20px 0 60px;
+
+                    img {
                         width: 90%;
                         max-width: 380px;
                     }
-                    #albumInfo{
+
+                    #albumInfo {
                         letter-spacing: 2px;
-                        h2{
+
+                        h2 {
                             @include displaySpecificH2;
-                            margin: 25px 0 0 0;
+                            margin: 25px 0 0;
                         }
-                        p{
-                            margin: 10px 0px;
-                            span{
+
+                        p {
+                            margin: 10px 0;
+
+                            span {
                                 font-weight: 700;
                             }
                         }
-                        #artistName{
+
+                        #artistName {
                             font-size: 1.4em;
                             font-weight: 700;
                             color: $accentColor;
                             margin-bottom: 25px;
                             margin-top: 0;
                         }
-                        #rating{
+
+                        #rating {
                             margin-top: 25px;
                             font-weight: 700;
                             font-size: 1.2em;
                         }
-                        #buttonWrapper{
-                            margin-top: 40px;
-                            input{
-                                @include ratingStyling;
 
+                        #buttonWrapper {
+                            margin-top: 40px;
+
+                            input {
+                                @include ratingStyling;
                             }
-                            button{
+
+                            button {
                                 @include displaySpecificButtons;
                             }
                         }
                     }
                 }
-                .underline{
+
+                .underline {
                     @include displaySpecificUnderline;
                 }
-                h3{
+
+                h3 {
                     @include displaySpecificH3;
                 }
-                #albumTracklist{
+
+                #albumTracklist {
                     display: flex;
                     flex-direction: column;
                     padding: 0 10px;
-                    .albumTrackButton{
+
+                    .albumTrackButton {
                         @include listButtons;
                     }
-                    .albumTrackButton:hover{
+
+                    .albumTrackButton:hover {
                         background: rgba(255, 255, 255, 0.07);
                     }
                 }
             }
-            #contentOfSpecificArtist{
+
+            #contentOfSpecificArtist {
                 width: 100%;
                 transition: 500ms;
-                #artistTopContent{
+
+                #artistTopContent {
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
                     align-items: center;
                     font-size: 1em;
-                    padding: 20px 0 60px 0;
-                    img{
+                    padding: 20px 0 60px;
+
+                    img {
                         width: 90%;
                         max-width: 380px;
                     }
-                    #artistInfo{
+
+                    #artistInfo {
                         letter-spacing: 2px;
-                        h2{
+
+                        h2 {
                             @include displaySpecificH2;
-                            margin: 25px 0 0 0;
+                            margin: 25px 0 0;
                         }
-                        p{
-                            margin: 10px 0px;
-                            span{
+
+                        p {
+                            margin: 10px 0;
+
+                            span {
                                 font-weight: 700;
                             }
                         }
-                        button{
+
+                        button {
                             @include displaySpecificButtons;
                         }
                     }
                 }
-                .underline{
+
+                .underline {
                     @include displaySpecificUnderline;
                 }
-                h3{
+
+                h3 {
                     @include displaySpecificH3;
                 }
-                #artistAlbums{
+
+                #artistAlbums {
                     display: flex;
                     flex-direction: column;
                     padding: 0 10px;
-                    .artistAlbumButton{
+
+                    .artistAlbumButton {
                         @include listButtons;
                     }
                 }
             }
-            #contentOfSpecificTrack{
+
+            #contentOfSpecificTrack {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 transition: 500ms;
-                #trackInfo{
-                    #topTrackContent{
+
+                #trackInfo {
+                    #topTrackContent {
                         display: flex;
                         align-items: center;
                         justify-content: space-between;
-                        h2{
+
+                        h2 {
                             @include displaySpecificH2;
                             margin: 20px 0;
                         }
-                        button{
+
+                        button {
                             @include displaySpecificButtons;
                         }
                     }
-                    .underline{
+
+                    .underline {
                         border-bottom: 1px solid $textColor;
                         width: 100%;
                         margin: 40px 0;
                     }
-                    p{
+
+                    p {
                         font-weight: 900;
                         color: $accentColor;
                         letter-spacing: 2px;
                         font-size: 1.2em;
                         margin: 0;
                     }
-                    .rating{
+
+                    .rating {
                         font-weight: 400;
                         color: $textColor;
                         margin-bottom: 20px;
                     }
-                    .trackAlbumButton{
+
+                    .trackAlbumButton {
                         color: $textColor;
                         padding: 0;
                         font-size: 1em;
                         margin-bottom: 50px;
                     }
-                    .trackAlbumButton:hover{
+
+                    .trackAlbumButton:hover {
                         text-decoration: underline;
                     }
                 }
-                #buttonWrapper{
+
+                #buttonWrapper {
                     margin-bottom: 60px;
-                    input{
+
+                    input {
                         @include ratingStyling;
                     }
-                    button{
+
+                    button {
                         @include displaySpecificButtons;
                     }
                 }
             }
-            #contentOfSpecificPlaylist{
+
+            #contentOfSpecificPlaylist {
                 width: 100%;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 transition: 500ms;
-                #playlistTopContent{
+
+                #playlistTopContent {
                     letter-spacing: 2px;
                     font-size: 1em;
-                    padding: 20px 0 40px 0;
-                    h2{
+                    padding: 20px 0 40px;
+
+                    h2 {
                         @include displaySpecificH2;
                         text-align: center;
                         color: $accentColor;
                         font-size: 2.5em;
-                        margin: 0 0 40px 0;
+                        margin: 0 0 40px;
                     }
-                    p{
-                        margin: 10px 0px;
-                        span{
+
+                    p {
+                        margin: 10px 0;
+
+                        span {
                             font-weight: 700;
                         }
                     }
-                    #createdBy{
+
+                    #createdBy {
                         font-size: 1.3em;
                         color: $accentColor;
                     }
@@ -372,7 +511,8 @@ body{
                     input{
                         @include ratingStyling;
                     }
-                    button{
+
+                    button {
                         @include displaySpecificButtons;
                     }
                 }
@@ -382,17 +522,21 @@ body{
                 .underline{
                     @include displaySpecificUnderline;
                 }
-                h3{
+
+                h3 {
                     @include displaySpecificH3;
                 }
-                #playlistTracklist{
+
+                #playlistTracklist {
                     width: 100%;
-                    .playlistTrackButton{
+
+                    .playlistTrackButton {
                         @include listButtons;
                         justify-content: center;
                         font-weight: 400;
                     }
                 }
+
                 #displayComments{
                     margin-bottom: 50px;
                 }
@@ -515,7 +659,8 @@ body{
                 }
             }
         }
-        #addDiv{
+
+        #addDiv {
             width: 100vw;
             margin: auto;
             font-size: 1.6em;
@@ -523,25 +668,29 @@ body{
             letter-spacing: 3px;
             transition: 1000ms;
             position: absolute;
-            #addWrapper{
+
+            #addWrapper {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                padding: 50px 10px 20px 10px;
+                padding: 50px 10px 20px;
                 background: rgba(0, 0, 0, 0.7);
                 border-radius: 10px;
                 max-width: 500px;
                 margin: auto;
-                p{
+
+                p {
                     margin: 0;
                 }
-                form{
+
+                form {
                     display: flex;
                     flex-wrap: wrap;
                     justify-content: center;
                     margin-top: 30px;
                     max-width: 500px;
-                    input{
+
+                    input {
                         font-size: 0.7em;
                         width: 200px;
                         letter-spacing: 1px;
@@ -549,7 +698,8 @@ body{
                         border: none;
                         margin: 10px;
                     }
-                    button{
+
+                    button {
                         width: 216px;
                         padding: 8px;
                         margin: 10px;
@@ -562,17 +712,20 @@ body{
                         background: #d3790a;
                         transition: 300ms;
                     }
-                    button:hover{
+
+                    button:hover {
                         background: $accentColor;
                     }
                 }
-                #importCloseButton{
+
+                #importCloseButton {
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     margin: 10px;
                 }
-                button{
+
+                button {
                     width: 40%;
                     padding: 8px;
                     color: white;
@@ -580,14 +733,16 @@ body{
                     letter-spacing: 2px;
                     font-size: 0.7em;
                     height: 50px;
-                    img{
+
+                    img {
                         height: 15px;
                         margin-right: 5px;
                     }
                 }
             }
         }
-        .messagePopupBox{
+
+        .messagePopupBox {
             width: 80%;
             position: absolute;
             margin-left: auto;
@@ -595,42 +750,49 @@ body{
             left: 0;
             right: 0;
             text-align: center;
-            padding: 50px 10px 50px 10px;
+            padding: 50px 10px;
             background: black;
             border-radius: 10px;
             max-width: 400px;
             margin: auto;
             z-index: 1;
+
             #messageButtonWrapper {
                 margin-top: 20px;
             }
+
             button#errorOkButton,
-            button#yesButton,
-            button#noButton {
+            button#noButton,
+            button#yesButton {
                 @include orangeButton;
             }
-            button#yesButton{
-            }
-            button#noButton{
+
+            button#yesButton {}
+
+            button#noButton {
                 display: inline-block;
                 background: red;
             }
-            button#noButton:hover{
+
+            button#noButton:hover {
                 background: rgb(255, 88, 88);
             }
-            p{
+
+            p {
                 font-size: 0.8em;
                 letter-spacing: 2px;
                 font-weight: 700;
             }
         }
     }
-    footer{
+
+    footer {
         display: flex;
         justify-content: center;
         margin-top: 20px;
         margin-bottom: 30px;
-        button{
+
+        button {
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -640,7 +802,8 @@ body{
             font-weight: 600;
             letter-spacing: 1px;
             margin: 20px;
-            img{
+
+            img {
                 height: 60px;
                 margin-bottom: 10px;
             }
