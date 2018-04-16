@@ -10,8 +10,8 @@ class Init {
         for (let i = 0; i < searchButton.length; i++) {
             searchButton[i].addEventListener('click', function() {
                 const activateButton = new DOMHandle();
-                activateButton.activateSearchButton(this);
                 const newFetch = new FetchHandle();
+                activateButton.activateSearchButton(this);
                 mainOutput.innerHTML = '<div id="searchResults"></div>';
                 switch (this.value) {
                     case 'all':
@@ -74,6 +74,7 @@ class FetchHandle {
         this.headers = { 'Accept': 'application/json', 'Content-Type': 'application/json' };
         this.body = JSON.stringify(body);
     }
+
     fetchAll() {
         this.fetchAlbums()
         this.fetchTracks()
@@ -111,6 +112,7 @@ class FetchHandle {
                 displayTrack.filterSearch();
             });
     }
+
     fetchArtists() {
         fetch(`https://folksa.ga/api/artists?limit=999&key=flat_eric`)
             .then((response) => response.json())
@@ -120,6 +122,7 @@ class FetchHandle {
                 displayArtist.filterSearch();
             });
     }
+
     fetchPlaylists() {
         fetch(`https://folksa.ga/api/playlists?limit=999&key=flat_eric`)
             .then((response) => response.json())
@@ -129,6 +132,7 @@ class FetchHandle {
                 displayPlaylist.filterSearch();
             });
     }
+
     fetchTopPlaylists() {
         fetch(`https://folksa.ga/api/playlists?limit=999&key=flat_eric`)
             .then((response) => response.json())
@@ -139,6 +143,7 @@ class FetchHandle {
                 displayTop.displayTopPlaylist(sortedList);
             });
     }
+
     fetchAlbumById(albumId) {
         fetch(`https://folksa.ga/api/albums/${albumId}?key=flat_eric`)
             .then((response) => response.json())
@@ -150,6 +155,7 @@ class FetchHandle {
                 displaySpecificAlbum.displaySpecificAlbum(album);
             });
     }
+
     fetchTrackById(trackId) {
         fetch(`https://folksa.ga/api/tracks/${trackId}?key=flat_eric`)
             .then((response) => response.json())
@@ -161,6 +167,7 @@ class FetchHandle {
                 displaySpecificTrack.displaySpecificTrack(track);
             });
     }
+
     fetchArtistById(artistId) {
         fetch(`https://folksa.ga/api/artists/${artistId}?key=flat_eric`)
             .then((response) => response.json())
@@ -209,6 +216,7 @@ class FetchHandle {
                     });
             });
     }
+
     addPlayListComment(body, user, playlistId, comments) {
         let comment = {
           playlist: playlistId,
@@ -232,6 +240,7 @@ class FetchHandle {
           });
 
     }
+
     rateStuff(apiPath, id, rating) {
         const display = new DOMHandle;
         fetch(`https://folksa.ga/api/${apiPath}/${id}/vote?key=flat_eric`, {
@@ -363,12 +372,9 @@ class DOMHandle {
                 }, mainAnimationTime)
             })
         }
-
-
     }
 
     displayTracks(allTracks) {
-
         const newFetch = new FetchHandle();
         const deActivate = new DOMHandle();
         const searchResult = document.getElementById('searchResults');
@@ -399,7 +405,7 @@ class DOMHandle {
             });
         }
    }
-    //CLEANED
+    
     displayArtists(allArtists) {
 
         const deActivate = new DOMHandle();
@@ -431,7 +437,7 @@ class DOMHandle {
         }
 
     }
-    //CLEANED
+    
     displayPlaylists(allPlaylists) {
 
         const newFetch = new FetchHandle();
@@ -463,7 +469,7 @@ class DOMHandle {
         }
 
     }
-    //CLEANED
+    
     displayTopPlaylist(list) {
 
         const newDOM = new DOMHandle();
@@ -499,7 +505,7 @@ class DOMHandle {
             })
         }
     }
-    //CLEANED
+    
     displaySpecificAlbum(album) {
         const fetchRating = new Logic();
         const newDOM = new DOMHandle();
@@ -599,7 +605,7 @@ class DOMHandle {
 
         newDOM.everyOtherButton(albumTrackButton);
     }
-    //CLEANED
+    
     displaySpecificTrack(track) {
 
         const fetchRating = new Logic();
@@ -671,7 +677,7 @@ class DOMHandle {
 
         });
     }
-    //CLEANED
+    
     displaySpecificArtist(artist, albums){
         const newDOM = new DOMHandle();
         const newFetch = new FetchHandle();
@@ -762,7 +768,7 @@ class DOMHandle {
 
         newDOM.everyOtherButton(artistAlbumButtons);
     }
-    //CLEANED
+    
     displaySpecificPlaylist(playlist, comments){
 
         const fetchRating = new Logic();
@@ -858,7 +864,7 @@ class DOMHandle {
 
         newDOM.everyOtherButton(playlistTracklist.children);
     }
-    //CLEANED
+    
     displayPlaylistComments(comments, playlistID){
 
         const commentsOutput = document.getElementById('commentsOutput');
@@ -971,10 +977,8 @@ class DOMHandle {
                 commentsOutput.innerHTML=commentContent;
             }, mainAnimationTime);
         });
-
-
     }
-    //CLEANED
+    
     filterSearch() {
         for (let sbutton of searchButton) {
             /* If a search-choice is activated, initiate the search. */
@@ -1029,7 +1033,6 @@ class DOMHandle {
         }
     }
     addTrackToPlaylist (trackId) {
-        //event.preventDefault();
         const addedTracks = [];
         const errorMessages = [];
 
@@ -1038,8 +1041,7 @@ class DOMHandle {
         const trackFetch = new FetchHandle;
 
         const playlistTitle = trackController.getInputValue('inputPlaylistTitle');
-
-        console.log(playlistTitle);
+        /* Title is the only required parameter */
         const isTitleEmpty = trackController.isEmpty(playlistTitle);
 
         if (isTitleEmpty) {
@@ -1048,14 +1050,13 @@ class DOMHandle {
         if (errorMessages.length > 0) {
             trackDom.displayPopup(errorMessages);
         } else {
+            /* Fetch playlist ID because it's needed to add tracks to playlist */
             trackFetch.fetchItemByChosenParameter('playlists', 'title', playlistTitle)
             .then((fetchedPlaylist) => {
                 const playlistId = fetchedPlaylist[0]._id;
-                console.log(fetchedPlaylist[0]._id);
                 const trackToPost = {
                     tracks: trackId
                 };
-                console.log(trackToPost);
 
                 const playlistPostRequest = new FetchHandle('POST', trackToPost);
                 const postTrack = new Playlist();
@@ -1080,35 +1081,28 @@ class DOMHandle {
         const trackController = new Controller();
 
         const selector = document.getElementById('trackSelector');
-
         const selectedTracks = [];
 
         trackFetch.fetchItemByChosenParameter('tracks', 'limit', '999')
             .then((fetchedTracks) => {
                 for (let track of fetchedTracks) {
-                    var option = document.createElement('option');
-
+                    let option = document.createElement('option');
+                    
                     if (!track.artists[0]) {
                         track.artists[0] = { name: 'No name', _id: false };
                     }
 
                     option.text = `${track.artists[0].name} - ${track.title}`;
-
                     option.value = track._id;
-
                     selector.add(option);
-                    //trackDom.addTrackToPlaylist(title);
                 }
             addButton.addEventListener('click', function() {
-                var selectedIndex = selector.selectedIndex;
+                let selectedIndex = selector.selectedIndex;
 
                 const trackId = document.getElementsByTagName('option')[selectedIndex].value;
-                console.log(trackId);
-
                 const selectedTrack =  document.getElementsByTagName('option')[selectedIndex].innerHTML;
 
                 selectedTracks.push(selectedTrack);
-                console.log(selectedTrack);
                 trackDom.addTrackToPlaylist(trackId);
                 trackDom.displayAddedTracks(selectedTracks, 'addWrapper');
             });
@@ -1133,30 +1127,11 @@ class DOMHandle {
         albumFetch.fetchItemByChosenParameter('albums', 'limit', '999')
             .then((fetchedAlbums) => {
                 for (let album of fetchedAlbums) {
-                    var option = document.createElement('option');
-
-                    /*if (!album.title[0]) {
-                        track.artists[0] = { name: 'No name', _id: false };
-                    }*/
-
+                    let option = document.createElement('option');
                     option.text = `${album.title}`;
                     option.value = album._id;
-
                     selector.add(option);
-                    //trackDom.addTrackToPlaylist(title);
                 }
-            /*addButton.addEventListener('click', function() {
-                var selectedIndex = selector.selectedIndex;
-
-                const albumId = document.getElementsByTagName('option')[selectedIndex].value;
-                console.log(albumId);
-                
-                const selectedAlbum =  document.getElementsByTagName('option')[selectedIndex].innerHTML;
-
-                console.log(selectedAlbum);
-                //albumDom.addTrackToPlaylist(trackId);
-                //albumDom.displayAddedTracks(selectedTracks, 'addWrapper');
-            });*/
         });
     }
 
@@ -1173,7 +1148,7 @@ class DOMHandle {
         const newTrackArtist = trackController.getInputValue('inputTrackArtist');
 
         const albumSelector = document.getElementById('albumSelector');
-        var selectedIndex = albumSelector.selectedIndex;   
+        let selectedIndex = albumSelector.selectedIndex;   
         const selectedAlbum =  document.getElementsByTagName('option')[selectedIndex].innerHTML;
 
         const isArtistEmpty = trackController.isEmpty(newTrackArtist);
@@ -1246,13 +1221,8 @@ class DOMHandle {
 
         addDiv.innerHTML = createAlbumContent;
 
-        /* Get buttons */
-        const importCloseButton = document.getElementById('importCloseButton');
-        const postAlbumButton = document.
-        getElementById('postAlbumButton');
-        const addTrackToExistingAlbumLink = document.getElementById('addTrackToExistingAlbum');
-
         /* Go back-button */
+        const importCloseButton = document.getElementById('importCloseButton');
         importCloseButton.addEventListener('click',function(){
             albumDom.fadeOutAnimation(addDiv, 'add');
             setTimeout( () => {
@@ -1261,6 +1231,7 @@ class DOMHandle {
         });
 
         /* Add track to existing album link */
+        const addTrackToExistingAlbumLink = document.getElementById('addTrackToExistingAlbum');
         addTrackToExistingAlbumLink.addEventListener('click', function() {
             event.preventDefault();
             const addToExistingAlbumContent = `
@@ -1285,13 +1256,11 @@ class DOMHandle {
             `;
             
             addDiv.innerHTML = addToExistingAlbumContent;
-            
             /* Printing album selector */
             albumDom.chooseAlbumSelector('addTrackToExistingAlbum');
             
-            /* Go to create new album link */
+            /* Create new album link */
             const createAlbumLink = document.getElementById('createAlbum');
-
             createAlbumLink.addEventListener('click', function(){
                 event.preventDefault();
                 addDiv.innerHTML = createAlbumContent;
@@ -1299,14 +1268,12 @@ class DOMHandle {
 
             const addTrackButton = document.
             getElementById('addTrackButton');
-
             addTrackButton.addEventListener('click', function(){
                 albumDom.addTrackToAlbumEventListener();
             });
 
             /* Go back-button */
             const importCloseButton = document.getElementById('importCloseButton');
-
             importCloseButton.addEventListener('click', function(){
                 albumDom.fadeOutAnimation(addDiv, 'add');
                 setTimeout( () => {
@@ -1315,14 +1282,15 @@ class DOMHandle {
             });
         });
 
-        /* -----------ADDED BY ERIKA------------- */
+        const postAlbumButton = document.
+        getElementById('postAlbumButton');
         postAlbumButton.addEventListener('click', function() {
             event.preventDefault();
 
             /* Gets the input values. */
             const albumArtistName = albumController.getInputValue('inputAlbumArtist');
             const albumTitle = albumController.getInputValue('inputAlbumTitle');
-            var albumGenres = albumController.getInputValue('inputAlbumGenres');
+            let albumGenres = albumController.getInputValue('inputAlbumGenres');
             const albumReleaseDate = albumController.getInputValue('inputAlbumReleaseDate');
             const albumSpotifyURL = albumController.getInputValue('inputAlbumSpotifyURL');
             const albumCoverImageURL = albumController.getInputValue('inputAlbumCoverImage');
@@ -1346,11 +1314,6 @@ class DOMHandle {
                 const isReleaseDateEmpty = albumController.isEmpty(albumReleaseDate);
                 const isSpotifyURLEmpty = albumController.isEmpty(albumSpotifyURL);
                 const isCoverImageEmpty = albumController.isEmpty(albumCoverImageURL);
-
-                console.log(isGenresEmpty);
-                console.log(isReleaseDateEmpty);
-                console.log(isSpotifyURLEmpty);
-                console.log(isCoverImageEmpty);
 
                 /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres */
                 if (!isGenresEmpty) {
@@ -1387,24 +1350,26 @@ class DOMHandle {
                 albumFetch.fetchItemByChosenParameter('artists', 'name', albumArtistName)
                     .then((artist) => {
                         const albumToPost = new Album(albumTitle, artist[0]._id, albumGenres, albumReleaseDate, albumSpotifyURL, albumCoverImageURL);
-                        console.log(albumToPost);
                         const albumPostRequest = new FetchHandle('POST', albumToPost);
-
-                        //albumPostRequest.postItem('albums', albumPostRequest);
                     });
 
                 /* Display alternative popup */
                 albumDom.displayQuestionPopup('Do you want to add tracks now?');
 
-                const yesButton = document.getElementById('yesButton');
                 const noButton = document.getElementById('noButton');
+                noButton.addEventListener('click', function(){
+                    const popupDom = new DOMHandle;
+                    messagePopupBox.innerHTML = ``;
+                    messagePopupBox.className = 'hidden';
+                    popupDom.fadeOutAnimation(addDiv, 'add');
+                    addDiv.innerHTML = ``;
+                });
 
-                const messagePopupBox = document.getElementById('messagePopupBox');
-                const parentElement = document.getElementById('addWrapper');
-
+                const yesButton = document.getElementById('yesButton');
                 yesButton.addEventListener('click', function(){
                     event.preventDefault();
-                    albumDomHandle.hideElement('messagePopupBox');
+                    const messagePopupBox = document.getElementById('messagePopupBox');
+                    albumDom.hideElement('messagePopupBox');
 
                     const addTrackContent = `
                     <form id="postTrack">
@@ -1416,34 +1381,27 @@ class DOMHandle {
                     </form>
                     <div id="addTrackTracklist"></div>
                     `;
+
+                    const parentElement = document.getElementById('addWrapper');
                     parentElement.insertAdjacentHTML('beforeend', addTrackContent);
 
                     const addTrackButton = document.
                     getElementById('addTrackButton');
-
                     addTrackButton.addEventListener('click', function(){
-                        albumDomHandle.addTrackToAlbumEventListener();
+                        albumDom.addTrackToAlbumEventListener();
                     });
-                });
-                noButton.addEventListener('click', function(){
-                    const popupDom = new DOMHandle;
-                    messagePopupBox.innerHTML = ``;
-                    messagePopupBox.className = 'hidden';
-                    popupDom.fadeOutAnimation(addDiv, 'add');
-                    addDiv.innerHTML = ``;
                 });
             }
         });
     }
+
     createArtistContent(){
         const artistDom = new DOMHandle();
         const artistFetch = new FetchHandle();
         const artistController = new Controller();
 
         const addDiv = document.getElementById('addDiv');
-
         addDiv.innerHTML=``;
-
         artistDom.fadeOutAnimation(addDiv, 'remove');
 
         let createArtistContent =`
@@ -1464,18 +1422,18 @@ class DOMHandle {
 
         addDiv.innerHTML=createArtistContent;
 
-        /* ---------ADDED BY ERIKA--------- */
+        const postArtistButton = document.getElementById('postArtistButton');
         postArtistButton.addEventListener('click', function() {
             event.preventDefault();
             /* Gets the input values */
             const artistController = new Controller;
             const artistName = artistController.getInputValue('inputArtistName');
-            var artistGenres = artistController.getInputValue('inputArtistGenres');
+            let artistGenres = artistController.getInputValue('inputArtistGenres');
             const artistCoverImageURL = artistController.getInputValue('inputArtistCoverImage');
             const isNameEmpty = artistController.isEmpty(artistName);
 
             /* Checking the imported values before creating a new artist. */
-            var errorMessages = [];
+            let errorMessages = [];
 
             /* Name is the only parameter required so checking that first */
             if (isNameEmpty) {
@@ -1510,9 +1468,6 @@ class DOMHandle {
                 artistPostRequest.postItem('artists', artistPostRequest);
             }
         });
-        /* -----collapse------ */
-
-        //artistDom.fadeOutAnimation(addDiv, 'remove');
 
         /* Go back-button */
         importCloseButton.addEventListener('click',function(){
@@ -1522,10 +1477,11 @@ class DOMHandle {
             }, mainAnimationTime)
         });
     }
-    displayGenres(object) {
+
+    displayGenres(item) {
         let genres = '';
-        if (object.genres.length != 0) {
-            object.genres.forEach((element) => {
+        if (item.genres.length != 0) {
+            item.genres.forEach((element) => {
                 genres += element + ' ';
             })
             return genres;
@@ -1533,8 +1489,8 @@ class DOMHandle {
         genres += 'none';
         return genres;
     }
+    
     slideShowBanner(){
-
         const slideShowBannerDiv = document.
         getElementById('slideShow');
 
@@ -1597,6 +1553,7 @@ class DOMHandle {
         let i = 0;
         startSlide(i)
     }
+
     createPlaylistContent(){
         const addDiv = document.getElementById('addDiv');
         const playlistController = new Controller();
@@ -1627,8 +1584,8 @@ class DOMHandle {
         playlistDom.fadeOutAnimation(addDiv, 'remove');
         addDiv.innerHTML = createPlaylistForm;
 
+        /* Go back-button */
         const importCloseButton = document.getElementById('importCloseButton');
-
         importCloseButton.addEventListener('click', function(){
             playlistDom.fadeOutAnimation(addDiv, 'add');
             setTimeout( () => {
@@ -1636,9 +1593,8 @@ class DOMHandle {
             }, mainAnimationTime);
         });
 
-        const addToExistingPlaylistLink = document.getElementById('addToExistingPlaylist');
-
         /* Add track to existing album link */
+        const addToExistingPlaylistLink = document.getElementById('addToExistingPlaylist');
         addToExistingPlaylistLink.addEventListener('click', function() {
             event.preventDefault();
             const addToExistingPlaylist = `
@@ -1659,8 +1615,8 @@ class DOMHandle {
             `;
             addDiv.innerHTML = addToExistingPlaylist;
 
+            /* Go back-button */
             const importCloseButton = document.getElementById('importCloseButton');
-
             importCloseButton.addEventListener('click', function(){
                 playlistDom.fadeOutAnimation(addDiv, 'add');
                 setTimeout( () => {
@@ -1668,32 +1624,26 @@ class DOMHandle {
                 }, mainAnimationTime);
             });
 
+            /* Create new playlist link */
             const createPlaylistLink = document.getElementById('createPlaylist');
-
             createPlaylistLink.addEventListener('click', function(){
                 event.preventDefault();
                 addDiv.innerHTML = createPlaylistForm;
             });
-            const parentElement = document.getElementById('addTrackToExistingPlaylist');
 
+            const parentElement = document.getElementById('addTrackToExistingPlaylist');
             playlistDom.chooseTrackSelector(parentElement);
             const selector = document.getElementById('trackSelector');
-        
-            selector.classList.add('annanKlass');
-            console.log(selector)
-
+            selector.classList.add('addToExistingPlaylistSelector');
         });
 
-         /* Get buttons */
          const addPlaylistButton = document.
          getElementById('addPlaylistButton');
-         const addTrackToExistingPlaylist = document.getElementById('addTrackToExistingPlaylist');
-
          addPlaylistButton.addEventListener('click', function(){
              event.preventDefault();
              /* Gets the input values. */
              const playlistTitle = playlistController.getInputValue('inputPlaylistTitle');
-             var playlistGenres = playlistController.getInputValue('inputPlaylistGenres');
+             let playlistGenres = playlistController.getInputValue('inputPlaylistGenres');
              const playlistImageURL = playlistController.getInputValue('inputPlaylistCoverImage');
              const playlistCreator = playlistController.getInputValue('inputPlaylistCreator');
 
@@ -1733,7 +1683,6 @@ class DOMHandle {
             }
             else {
                     const playlistToPost = new Playlist(playlistTitle, playlistGenres, playlistImageURL, playlistCreator);
-                    console.log(playlistToPost);
                     const playlistPostRequest = new FetchHandle('POST', playlistToPost);
 
                     playlistPostRequest.postItem('playlists', playlistPostRequest);
@@ -1766,6 +1715,7 @@ class DOMHandle {
             }
         });
     }
+
     fadeOutAnimation(div, addRemove){
         if(addRemove === 'remove'){
             div.classList.remove('fadeOut');
@@ -1773,14 +1723,17 @@ class DOMHandle {
             div.classList.add('fadeOut');
         }
     }
+
     hideElement (elementId) {
         const element = document.getElementById(elementId);
         element.innerHTML = ``;
         element.classList.add('hidden');
     }
+
     displayElement (elementId) {
         const element = document.getElementById(elementId).style.display = "block";
     }
+
     displayPopup (errorMessages, div = 'popUpWindow') {
         const parentElement = document.getElementById(div);
         const popupBox = document.createElement('div');
@@ -1806,7 +1759,8 @@ class DOMHandle {
             const hide = new DOMHandle;
             hide.hideElement('popUpWindow');
         });
-}
+    }
+
     displayQuestionPopup (question) {
         const parentElement = document.getElementById('addWrapper');
         const popupBox = document.createElement('div');
@@ -1847,7 +1801,7 @@ class Controller {
     }
     /* If multiple genres are filled in the parameter have to be without ' ' and include ',' in between the genres. This does not yet support if the user types in 'hip hop' instead of 'hiphop' f.e */
     editGenresParameter (genresParameter) {
-        var editedGenresParameter = '';
+        let editedGenresParameter = '';
         if (genresParameter.includes(', ')) {
             const splitGenresParameter = genresParameter.split(', ');
             editedGenresParameter = splitGenresParameter[0].concat(',', splitGenresParameter[1]);
@@ -1861,7 +1815,7 @@ class Controller {
             return editedGenresParameter;
         }
         checkURL(URLaddress) {
-            var isValid = false;
+            let isValid = false;
             const notAllowedCharacters = ['å', 'ä', 'ö', ' '];
             if (URLaddress.includes('http://') || URLaddress.includes('https://')) {
                 for (let character of notAllowedCharacters) {
@@ -1970,15 +1924,12 @@ class Playlist {
         }
     }
     addTrack (httpRequest, playlistId) {
-        console.log(httpRequest);
         fetch(` https://folksa.ga/api/playlists/${playlistId}/tracks?key=flat_eric`, httpRequest)
             .then((response) => response.json())
                 .then((postedTrack) => {
                 })
                     .catch((errorMessage) => {
-                        //const displayError = new DOMHandle;
-                        console.log(errorMessage);
-                        //displayError.displayErrorPopup(errorMessage);
+                        /* Because the track is selected from the selector we already know it exists, therefore no error message popup is required */
                     });
     }
     setCoverImage (coverImage) {
