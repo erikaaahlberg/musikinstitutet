@@ -539,11 +539,18 @@ body {
                     margin-bottom: 50px;
                 }
                 #commentsOutput{
-                    position: absolute;
+                    position: fixed;
+                    left: 50%;
+                    top: 40%;
+                    opacity: 0.9;
+                    transform: translate(-50%, -50%);
                     background: rgba(0, 0, 0, 0.9);
                     max-width: 420px;
+                    max-height: 600px;
                     border-radius: 20px;
                     transition: 500ms;
+                    overflow: scroll;
+                    z-index: 999999999;
                     #commentForm{
                         display: flex;
                         flex-direction: column;
