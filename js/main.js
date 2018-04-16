@@ -472,8 +472,13 @@ class DOMHandle {
 
     }
     displayTopPlaylist(list) {
-        let topPlaylistsButtons = `<div class="topFivePlayLists">
-                                   <p>THE HIGHEST RATED PLAYLISTS</p>`;
+        
+        const newDOM = new DOMHandle();
+        const newFetch = new FetchHandle();
+        
+        let topPlaylistsButtons = `
+            <div class="topFivePlayLists">
+            <p>THE HIGHEST RATED PLAYLISTS</p>`;
 
         for (let i = 0; i < list.length; i++) {
             if (i == 5) { break; }
@@ -493,13 +498,15 @@ class DOMHandle {
 
         for (i = 0; i < playListButtons.length; i++) {
             playListButtons[i].addEventListener('click', function() {
-                const newFetch = new FetchHandle();
-                newFetch.fetchPlaylistById(this.id);
-                const deActivate = new DOMHandle();
-                deActivate.deactivateSearchButtons();
+                newDOM.fadeOutAnimation(mainOutput, 'add');
+                setTimeout( () => {
+                    newFetch.fetchPlaylistById(this.id);
+                    newDOM.deactivateSearchButtons();
+                },500)
             })
         }
     }
+    //CLEANED
     displaySpecificAlbum(album) {
 
         const fetchRating = new Logic();
@@ -734,6 +741,7 @@ class DOMHandle {
         
         newDOM.everyOtherButton(artistAlbumButtons);
     }
+    //CLEANED
     displaySpecificPlaylist(playlist, comments){
 
         const fetchRating = new Logic();
@@ -793,14 +801,13 @@ class DOMHandle {
         });
 
         const playlistTracklist = document.getElementById('playlistTracklist');
-
+        
         let trackButton = "";
         for (let i = 0; i < playlist.tracks.length; i++){
             trackButton +=`
-                <button class="playlistTrackButton">
+                <button class="playlistTrackButton" id="${playlist.tracks[0]._id}">
                     ${playlist.tracks[i].artists[0].name} -
                     ${playlist.tracks[i].title}
-                    <img src="images/rightArrow.svg">
                 </button>
             `;
         }

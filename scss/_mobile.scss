@@ -389,6 +389,7 @@ body{
                     width: 100%;
                     .playlistTrackButton{
                         @include listButtons;
+                        justify-content: center;
                         font-weight: 400;
                     }
                 }
