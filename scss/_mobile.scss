@@ -162,6 +162,7 @@ body{
                     text-align: center;
                     text-decoration: underline;
                     font-weight: 700;
+                    letter-spacing: 3px;
                     font-size: 1.1em;
                     margin-bottom: 30px;
                 }
@@ -367,13 +368,16 @@ body{
                     }
                 }
                 #buttonWrapper{
-                    margin-bottom: 60px;
+                    margin-bottom: 20px;
                     input{
                         @include ratingStyling;
                     }
                     button{
                         @include displaySpecificButtons;
                     }
+                }
+                button{
+                    @include displaySpecificButtons;
                 }
                 .underline{
                     @include displaySpecificUnderline;
@@ -385,65 +389,128 @@ body{
                     width: 100%;
                     .playlistTrackButton{
                         @include listButtons;
+                        font-weight: 400;
                     }
                 }
-                #commentForm{
-                    display: flex;
-                    flex-direction: column;
-                    width: 300px;
-                    #commentField{
-                        padding: 8px;
-                        border: none;
-                    }
-                    #commentBottom{
+                #displayComments{
+                    margin-bottom: 50px;
+                }
+                #commentsOutput{
+                    position: absolute;
+                    background: rgba(0, 0, 0, 0.9);
+                    max-width: 420px;
+                    border-radius: 20px;
+                    transition: 500ms;
+                    #commentForm{
                         display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        margin-top: 15px;
-                        width: 100%;
-                        #commentUser{
-                            width: 100%;
-                            border: none;
-                            padding: 8px;
-                        }
-                        #addCommentButton{
-                            border-radius: $mainRadius;
-                            padding: 0;
-
-                            img{
-                                margin-left: 10px;
-                                height: 30px;
-                            }
-                        }
-                    }
-                }
-                #playlistComments{
-                    .playlistComment{
-                        letter-spacing: 2px;
-                        padding: 10px 20px;
-                        border-radius: $mainRadius;
-                        margin: 5px 0 0 5px;
-                        background: rgba(255, 255, 255, 0.1);
-                        header{
-                            display: flex;
-                            justify-content: space-between;
-                            .commenter{
+                        flex-direction: column;
+                        padding: 30px 60px;
+                        #wrongMessageComment{
+                            transition: 500ms;
+                            p{
+                                font-size: 0.9em;
                                 font-weight: 700;
+                                letter-spacing: 1px;
+                                text-align: center;
+                                background: rgba(255, 0, 0, 0.4);
+                                padding: 10px 5px;
+                                border-radius: $mainRadius;
+                                margin: 0 0 15px 0;
                             }
-                            button{
+                        }
+                        #commentCloseButton{
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            background: none;
+                            color: $textColor;
+                            height: 35px;
+                            margin-bottom: 20px;
+                            padding: 0;
+                            img{
+                                height: 15px;
+                                margin-right: 5px;
+                            }
+                        }
+                        #commentField{
+                            padding: 8px;
+                            letter-spacing: 1px;
+                            border: none;
+                            width: 280px;
+                        }
+                        #commentBottom{
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            margin: 15px 0;
+                            width: 100%;
+                            #commentUser{
+                                width: 100%;
+                                border: none;
+                                padding: 8px;
+                                letter-spacing: 1px;
+                            }
+                            #addCommentButton{
+                                background: none;
+                                border-radius: $mainRadius;
+                                padding: 0;
+
                                 img{
-                                    height: 15px;
+                                    margin-left: 10px;
+                                    height: 30px;
                                 }
                             }
                         }
-                        .underline{
-                            border-bottom: 1px solid white;
-                            width: 100%;
-                        }
-                        .comment{
-
-                        }
                     }
+                    #playlistComments{
+                        padding: 0px 60px 30px 60px;
+                        margin-top: -20px;
+                        transition: 500ms;
+                        #commentMessage{
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            img{
+                                height: 50px;
+                                padding: 10px;
+                                margin: 20px;
+                                border-radius: 100px;
+                                background: #72db55;
+                            }
+                            p{
+                                letter-spacing: 2px;
+                                font-weight: 700;
+                            }
+                        }
+                        .playlistComment{
+                            background: $backgroundColor;
+                            padding: 15px;
+                            border-radius: $mainRadius;
+                            letter-spacing: 2px;
+                            margin: 5px 0;
+                            header{
+                                display: flex;
+                                justify-content: space-between;
+                                .commenter{
+                                    font-weight: 700;
+                                }
+                                button{
+                                    background: none;
+                                    img{
+                                        height: 15px;
+                                    }
+                                }
+                            }
+                            .underline{
+                                border-bottom: 1px solid white;
+                                width: 100%;
+                            }
+                            .comment{
+
+                            }
+                        }
+                        }
+                    }   
                 }
             }
         }
@@ -578,4 +645,3 @@ body{
             }
         }
     }
-}
