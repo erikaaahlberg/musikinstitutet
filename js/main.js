@@ -180,7 +180,6 @@ class FetchHandle {
         });
     }
 
-    /* ----- ADDED BY ERIKA ----- */
     fetchItemByChosenParameter(item, parameter, itemName) {
         return fetch(`https://folksa.ga/api/${item}?${parameter}=${itemName}&key=flat_eric`)
             .then((response) => response.json())
@@ -188,7 +187,6 @@ class FetchHandle {
                     return fetchedItem;
                 });
     }
-    /* -------------- */
 
     fetchPlaylistById(playlistId) {
         fetch(`https://folksa.ga/api/playlists/${playlistId}?key=flat_eric`)
@@ -256,7 +254,7 @@ class FetchHandle {
                         display.displayPopup([error]);
                     });
     }
-    /*--------ADDED BY ERIKA----------- */
+    
     postItem (itemToPost, HttpRequest) {
         const theItem = itemToPost.slice(0, -1);
         const display = new DOMHandle;
@@ -269,6 +267,7 @@ class FetchHandle {
                         display.displayPopup([errorMessage]);
                     });
     }
+
     deleteItem (itemToDelete, idToDelete) {
         const theItem = itemToDelete.slice(0, -1);
         fetch(`https://folksa.ga/api/${itemToDelete}/${idToDelete}?&key=flat_eric`,
@@ -289,7 +288,6 @@ class FetchHandle {
                         displayError.displayPopup([errorMessage]);
                     });
     }
-    /*---------------- */
 }
 
 /* Handles the DOM. */
@@ -364,18 +362,7 @@ class DOMHandle {
 
 
     }
-    displayTracksInSelector(allTracks) {
-        const selector = document.getElementById('trackSelector');
-        let i = 0;
-        for (let track of allTracks) {
-            const option = document.createElement('option');
-            var artist = track[i].artists; //[i].name;
-            var title = track[i].title;
-            option.text = `${artist} - ${title}`;
-            selector.add(option);
-            i++;
-        }
-    }
+
     displayTracks(allTracks) {
 
         const newFetch = new FetchHandle();
@@ -1533,17 +1520,16 @@ createPlaylistContent(){
             </button>
         </div>
         `;
+
     addDiv.innerHTML = createPlaylistForm;
 
     const importCloseButton = document.getElementById('importCloseButton');
-
     importCloseButton.addEventListener('click', function(){
         playlistDom.fadeOutAnimation(addDiv, 'add');
         addDiv.innerHTML = ``;
     });
 
     const addToExistingPlaylistLink = document.getElementById('addToExistingPlaylist');
-
     /* Add track to existing album link */
     addToExistingPlaylistLink.addEventListener('click', function() {
         event.preventDefault();
@@ -1666,35 +1652,7 @@ createPlaylistContent(){
                 yesButton.addEventListener('click', function() {
                     playlistDom.hideElement('messagePopupBox');
                     playlistDom.choseTrackSelector(parentElement);
-                    /*const addTrackContent = `
-                    <form id="addTrackToPlaylist">
-                        <select id = "trackSelector"></select>
-                        <button type="button" id="addTrackButton">
-                            <i class="far fa-plus-square"></i>
-                        </button>
-                    </form>
-                    <div id="addTrackTracklist"></div>
-                    `;
-                parentElement.insertAdjacentHTML('beforeend', addTrackContent);
-                const trackFetch = new FetchHandle();
-                trackFetch.fetchItemByChosenParameter('tracks', 'limit', '999')
-                    .then((fetchedTracks) => {
-                        const selector = document.getElementById('trackSelector');
-                        let i = 0;
-                        for (let track of fetchedTracks) {
-                            /*console.log(track.title);
-                            console.log(track.artists[0].name);
-                            console.log(i);
-                            const option = document.createElement('option');
-                            var artist = track.artists[0].name;
-                            var title = track.title;
-                            option.text = `${track.artists[0].name} - ${track.title}`;
-                            selector.add(option);
-                            i++;
-                        }
-                    //playlistDom.displayTracksInSelector(fetchedTracks);
-                });*/
-
+                    
                 const addTrackButton = document.getElementById('addTrackButton');
 
                 addTrackButton.addEventListener('click', function() {
