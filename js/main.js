@@ -58,6 +58,7 @@ class Init {
             createPlaylist.createPlaylistContent();
         });
     }
+    
 }
 
 /* Handles all fetch queries. */
@@ -313,7 +314,6 @@ class DOMHandle {
             sbutton.classList.remove('activeButton');
         }
     }
-
     displayAll(allAlbums, allTracks, allArtists, allPlaylists) {
         this.displayAlbums(allAlbums);
         this.displayTracks(allTracks);
@@ -364,7 +364,6 @@ class DOMHandle {
 
 
     }
-
     displayTracks(allTracks) {
 
         const newFetch = new FetchHandle();
@@ -397,7 +396,6 @@ class DOMHandle {
             });
         }
    }
-    //CLEANED
     displayArtists(allArtists) {
 
         const deActivate = new DOMHandle();
@@ -429,7 +427,6 @@ class DOMHandle {
         }
 
     }
-    //CLEANED
     displayPlaylists(allPlaylists) {
 
         const newFetch = new FetchHandle();
@@ -461,7 +458,6 @@ class DOMHandle {
         }
 
     }
-    //CLEANED
     displayTopPlaylist(list) {
 
         const newDOM = new DOMHandle();
@@ -497,7 +493,6 @@ class DOMHandle {
             })
         }
     }
-    //CLEANED
     displaySpecificAlbum(album) {
 
         const fetchRating = new Logic();
@@ -583,7 +578,6 @@ class DOMHandle {
 
         newDOM.everyOtherButton(albumTrackButton);
     }
-    //CLEANED
     displaySpecificTrack(track) {
 
         const fetchRating = new Logic();
@@ -655,7 +649,6 @@ class DOMHandle {
 
         });
     }
-    //CLEANED
     displaySpecificArtist(artist, albums){
 
         const newDOM = new DOMHandle();
@@ -732,7 +725,6 @@ class DOMHandle {
 
         newDOM.everyOtherButton(artistAlbumButtons);
     }
-    //CLEANED
     displaySpecificPlaylist(playlist, comments){
 
         const fetchRating = new Logic();
@@ -820,7 +812,6 @@ class DOMHandle {
 
         newDOM.everyOtherButton(playlistTracklist.children);
     }
-    //CLEANED
     displayPlaylistComments(comments, playlistID){
 
         const commentsOutput = document.getElementById('commentsOutput');
@@ -936,7 +927,6 @@ class DOMHandle {
 
 
     }
-    //CLEANED
     filterSearch() {
         for (let sbutton of searchButton) {
             if (sbutton.classList.contains('activeButton')) {
@@ -1071,7 +1061,6 @@ class DOMHandle {
             });
         });
     }
-
     addTrackToAlbumEventListener() {
         event.preventDefault();
         const addedTracks = [];
@@ -1117,7 +1106,6 @@ class DOMHandle {
             });
         }
     }
-
     createAlbumContent(){
         const addDiv = document.getElementById('addDiv');
 
@@ -1145,7 +1133,8 @@ class DOMHandle {
                     </button>
                 </form>
                 <a href = "#" id = "addTrackToExistingAlbum" class = "mainLink">
-                Add track to existing album
+                    ADD TRACK TO EXISTING ALBUM
+                    <img src="images/rightArrow.svg">
                 </a>
                 <button type="button" id="importCloseButton">
                     <img src="images/x-circle.svg">
@@ -1183,7 +1172,8 @@ class DOMHandle {
                     </button>
                 </form>
                 <a href = "#" id="createAlbum" class = "mainLink">
-                Add new album
+                    <img src="images/arrow-left-circle.svg">
+                    ADD NEW ALBUM
                 </a>
                 <button type="button" id="importCloseButton">
                     <img src="images/x-circle.svg">
@@ -1332,7 +1322,6 @@ class DOMHandle {
             }
         });
     }
-
     createArtistContent(){
         const artistDom = new DOMHandle();
         const artistFetch = new FetchHandle();
@@ -1428,7 +1417,6 @@ class DOMHandle {
         genres += 'none';
         return genres;
     }
-
     slideShowBanner(){
 
     const slideShowBannerDiv = document.
@@ -1494,185 +1482,186 @@ class DOMHandle {
     let i = 0;
     startSlide(i)
 }
-createPlaylistContent(){
-    const addDiv = document.getElementById('addDiv');
-    const playlistController = new Controller();
-    const playlistDom = new DOMHandle();
-    const playlistFetch = new FetchHandle();
+    createPlaylistContent(){
+        const addDiv = document.getElementById('addDiv');
+        const playlistController = new Controller();
+        const playlistDom = new DOMHandle();
+        const playlistFetch = new FetchHandle();
 
-    addDiv.innerHTML = ``;
-    playlistDom.fadeOutAnimation(addDiv, 'remove');
-
-    const createPlaylistForm =`
-        <div id="addWrapper">
-            <p>CREATE PLAYLIST</p>
-            <form id = "createPlaylist">
-                <input type="text" id="inputPlaylistTitle" placeholder="PLAYLIST TITLE..">
-                <input type="text" id="inputPlaylistGenres" placeholder="GENRES..">
-                <input type="text" id="inputPlaylistCoverImage" placeholder="PLAYLIST IMAGE URL..">
-                <input type="text" id="inputPlaylistCreator" placeholder="CREATED BY..">
-                <button id="addPlaylistButton">ADD PLAYLIST</button>
-            </form>
-            <a href = "#" id="addToExistingPlaylist" class = "mainLink">
-                Add tracks to existing playlist
-            </a>
-            <button type="button" id="importCloseButton">
-                <img src="images/x-circle.svg">
-                BACK
-            </button>
-        </div>
-        `;
-
-    addDiv.innerHTML = createPlaylistForm;
-
-    const importCloseButton = document.getElementById('importCloseButton');
-    importCloseButton.addEventListener('click', function(){
-        playlistDom.fadeOutAnimation(addDiv, 'add');
         addDiv.innerHTML = ``;
-    });
+        playlistDom.fadeOutAnimation(addDiv, 'remove');
 
-    const addToExistingPlaylistLink = document.getElementById('addToExistingPlaylist');
-    /* Add track to existing album link */
-    addToExistingPlaylistLink.addEventListener('click', function() {
-        event.preventDefault();
-        const addToExistingPlaylist = `
-        <div id="addWrapper">
-            <p>ADD TRACK TO EXISTING PLAYLIST</p>
-            <form id="addTrackToExistingPlaylist">
-                <input type="text" id="inputPlaylistTitle" placeholder="PLAYLIST TITLE..">
-            </form>
-            <button type ="button" id="addTrackButton">
-                ADD TRACK
-            </button>
-            <a href = "#" id="createPlaylist" class = "mainLink">
-            Add new playlist
-            </a>
-            <button type="button" id="importCloseButton">
-                <img src="images/x-circle.svg">
-                BACK
-            </button>
-        </div>
-        `;
-        addDiv.innerHTML = addToExistingPlaylist;
+        const createPlaylistForm =`
+            <div id="addWrapper">
+                <p>CREATE PLAYLIST</p>
+                <form id = "createPlaylist">
+                    <input type="text" id="inputPlaylistTitle" placeholder="PLAYLIST TITLE..">
+                    <input type="text" id="inputPlaylistGenres" placeholder="GENRES..">
+                    <input type="text" id="inputPlaylistCoverImage" placeholder="PLAYLIST IMAGE URL..">
+                    <input type="text" id="inputPlaylistCreator" placeholder="CREATED BY..">
+                    <button id="addPlaylistButton">ADD PLAYLIST</button>
+                </form>
+                <a href = "#" id="addToExistingPlaylist" class = "mainLink">
+                    ADD TRACKS TO EXISTING PLAYLIST
+                    <img src="images/rightArrow.svg">
+                </a>
+                <button type="button" id="importCloseButton">
+                    <img src="images/x-circle.svg">
+                    BACK
+                </button>
+            </div>
+            `;
+
+        addDiv.innerHTML = createPlaylistForm;
 
         const importCloseButton = document.getElementById('importCloseButton');
-
         importCloseButton.addEventListener('click', function(){
             playlistDom.fadeOutAnimation(addDiv, 'add');
             addDiv.innerHTML = ``;
         });
 
-        const createPlaylistLink = document.getElementById('createPlaylist');
-
-        createPlaylistLink.addEventListener('click', function(){
+        const addToExistingPlaylistLink = document.getElementById('addToExistingPlaylist');
+        /* Add track to existing album link */
+        addToExistingPlaylistLink.addEventListener('click', function() {
             event.preventDefault();
-            addDiv.innerHTML = createPlaylistForm;
+            const addToExistingPlaylist = `
+            <div id="addWrapper">
+                <p>ADD TRACK TO EXISTING PLAYLIST</p>
+                <form id="addTrackToExistingPlaylist">
+                    <input type="text" id="inputPlaylistTitle" placeholder="PLAYLIST TITLE..">
+                </form>
+                <button type ="button" id="addTrackButton">
+                    ADD TRACK
+                </button>
+                <a href = "#" id="createPlaylist" class = "mainLink">
+                <img src="images/arrow-left-circle.svg">
+                ADD NEW PLAYLIST
+                </a>
+                <button type="button" id="importCloseButton">
+                    <img src="images/x-circle.svg">
+                    BACK
+                </button>
+            </div>
+            `;
+            addDiv.innerHTML = addToExistingPlaylist;
+
+            const importCloseButton = document.getElementById('importCloseButton');
+
+            importCloseButton.addEventListener('click', function(){
+                playlistDom.fadeOutAnimation(addDiv, 'add');
+                addDiv.innerHTML = ``;
+            });
+
+            const createPlaylistLink = document.getElementById('createPlaylist');
+
+            createPlaylistLink.addEventListener('click', function(){
+                event.preventDefault();
+                addDiv.innerHTML = createPlaylistForm;
+            });
+            const parentElement = document.getElementById('addTrackToExistingPlaylist');
+
+            playlistDom.choseTrackSelector(parentElement);
+
+            importCloseButton.addEventListener('click', function(){
+                albumDom.fadeOutAnimation(addDiv, 'add');
+                addDiv.innerHTML = ``;
+            });
+            /*const addTrackButton = document.
+            getElementById('addTrackButton');
+
+            addTrackButton.addEventListener('click', function(){
+                albumDom.addTrackEventListener();
+            });*/
         });
-        const parentElement = document.getElementById('addTrackToExistingPlaylist');
 
-        playlistDom.choseTrackSelector(parentElement);
+         /* Get buttons */
+         const addPlaylistButton = document.
+         getElementById('addPlaylistButton');
+         const addTrackToExistingPlaylist = document.getElementById('addTrackToExistingPlaylist');
 
-        importCloseButton.addEventListener('click', function(){
-            albumDom.fadeOutAnimation(addDiv, 'add');
+         /* Go back-button */
+         importCloseButton.addEventListener('click',function(){
+            playlistDom.fadeOutAnimation(addDiv, 'add');
             addDiv.innerHTML = ``;
-        });
-        /*const addTrackButton = document.
-        getElementById('addTrackButton');
+         });
 
-        addTrackButton.addEventListener('click', function(){
-            albumDom.addTrackEventListener();
-        });*/
-    });
+         addPlaylistButton.addEventListener('click', function(){
+             event.preventDefault();
+             /* Gets the input values. */
+             const playlistTitle = playlistController.getInputValue('inputPlaylistTitle');
+             var playlistGenres = playlistController.getInputValue('inputPlaylistGenres');
+             const playlistImageURL = playlistController.getInputValue('inputPlaylistCoverImage');
+             const playlistCreator = playlistController.getInputValue('inputPlaylistCreator');
 
-     /* Get buttons */
-     const addPlaylistButton = document.
-     getElementById('addPlaylistButton');
-     const addTrackToExistingPlaylist = document.getElementById('addTrackToExistingPlaylist');
+             /* Title and creator are required parameters */
+             const isTitleEmpty = playlistController.isEmpty(playlistTitle);
+             const isCreatorEmpty = playlistController.isEmpty(playlistCreator);
 
-     /* Go back-button */
-     importCloseButton.addEventListener('click',function(){
-        playlistDom.fadeOutAnimation(addDiv, 'add');
-        addDiv.innerHTML = ``;
-     });
+             /* Checking the imported values before creating a new album. */
+             const errorMessages = [];
 
-     addPlaylistButton.addEventListener('click', function(){
-         event.preventDefault();
-         /* Gets the input values. */
-         const playlistTitle = playlistController.getInputValue('inputPlaylistTitle');
-         var playlistGenres = playlistController.getInputValue('inputPlaylistGenres');
-         const playlistImageURL = playlistController.getInputValue('inputPlaylistCoverImage');
-         const playlistCreator = playlistController.getInputValue('inputPlaylistCreator');
-
-         /* Title and creator are required parameters */
-         const isTitleEmpty = playlistController.isEmpty(playlistTitle);
-         const isCreatorEmpty = playlistController.isEmpty(playlistCreator);
-
-         /* Checking the imported values before creating a new album. */
-         const errorMessages = [];
-
-        if (isTitleEmpty) {
-            errorMessages.push('Playlist title is required.');
-        }
-        if (isCreatorEmpty) {
-            errorMessages.push('Creator name is required.');
-        }
-
-        /* Checking which other input fields are filled in to see which parameters we have to check if valid */
-        if (!isTitleEmpty && !isCreatorEmpty) {
-            const isGenresEmpty = playlistController.isEmpty(playlistGenres);
-            const isCoverImageEmpty = playlistController.isEmpty(playlistImageURL);
-
-            if (!isGenresEmpty) {
-                const editedGenresParameter = playlistController.editGenresParameter(playlistGenres);
-                playlistGenres = editedGenresParameter;
+            if (isTitleEmpty) {
+                errorMessages.push('Playlist title is required.');
             }
-            if (!isCoverImageEmpty) {
-                const isImageURLValid = playlistController.checkURL(playlistImageURL);
-                if (!isImageURLValid) {
-                    errorMessages.push('The image URL is not valid.');
+            if (isCreatorEmpty) {
+                errorMessages.push('Creator name is required.');
+            }
+
+            /* Checking which other input fields are filled in to see which parameters we have to check if valid */
+            if (!isTitleEmpty && !isCreatorEmpty) {
+                const isGenresEmpty = playlistController.isEmpty(playlistGenres);
+                const isCoverImageEmpty = playlistController.isEmpty(playlistImageURL);
+
+                if (!isGenresEmpty) {
+                    const editedGenresParameter = playlistController.editGenresParameter(playlistGenres);
+                    playlistGenres = editedGenresParameter;
                 }
+                if (!isCoverImageEmpty) {
+                    const isImageURLValid = playlistController.checkURL(playlistImageURL);
+                    if (!isImageURLValid) {
+                        errorMessages.push('The image URL is not valid.');
+                    }
+                }
+            } /* --- if (!isTitleEmpty && !isCreatorEmpty) collapse --- */
+
+            if (errorMessages.length > 0) {
+                    playlistDom.displayPopup(errorMessages);
             }
-        } /* --- if (!isTitleEmpty && !isCreatorEmpty) collapse --- */
+            else {
+                    const playlistToPost = new Playlist(playlistTitle, playlistGenres, playlistImageURL, playlistCreator);
+                    console.log(playlistToPost);
+                    const playlistPostRequest = new FetchHandle('POST', playlistToPost);
 
-        if (errorMessages.length > 0) {
-                playlistDom.displayPopup(errorMessages);
-        }
-        else {
-                const playlistToPost = new Playlist(playlistTitle, playlistGenres, playlistImageURL, playlistCreator);
-                console.log(playlistToPost);
-                const playlistPostRequest = new FetchHandle('POST', playlistToPost);
+                    playlistPostRequest.postItem('playlists', playlistPostRequest);
+                    /* Display alternative popup */
+                    playlistDom.displayQuestionPopup('Do you want to add tracks now?');
 
-                playlistPostRequest.postItem('playlists', playlistPostRequest);
-                /* Display alternative popup */
-                playlistDom.displayQuestionPopup('Do you want to add tracks now?');
+                    const yesButton = document.getElementById('yesButton');
+                    const noButton = document.getElementById('noButton');
+                    const messagePopupBox = document.getElementById('messagePopupBox');
+                    const parentElement = document.getElementById('createPlaylist');
 
-                const yesButton = document.getElementById('yesButton');
-                const noButton = document.getElementById('noButton');
-                const messagePopupBox = document.getElementById('messagePopupBox');
-                const parentElement = document.getElementById('createPlaylist');
+                    yesButton.addEventListener('click', function() {
+                        playlistDom.hideElement('messagePopupBox');
+                        playlistDom.choseTrackSelector(parentElement);
 
-                yesButton.addEventListener('click', function() {
-                    playlistDom.hideElement('messagePopupBox');
-                    playlistDom.choseTrackSelector(parentElement);
-                    
-                const addTrackButton = document.getElementById('addTrackButton');
+                    const addTrackButton = document.getElementById('addTrackButton');
 
-                addTrackButton.addEventListener('click', function() {
-                    playlistDom.addTrackToPlaylist();
-                });
-                });
-                noButton.addEventListener('click', function(){
-                    const popupDom = new DOMHandle;
-                    messagePopupBox.innerHTML = ``;
-                    messagePopupBox.className = 'hidden';
+                    addTrackButton.addEventListener('click', function() {
+                        playlistDom.addTrackToPlaylist();
+                    });
+                    });
+                    noButton.addEventListener('click', function(){
+                        const popupDom = new DOMHandle;
+                        messagePopupBox.innerHTML = ``;
+                        messagePopupBox.className = 'hidden';
 
-                    popupDom.fadeOutAnimation(addDiv, 'add');
-                    addDiv.innerHTML = ``;
-                });
-        }
-    });
-}
-
+                        popupDom.fadeOutAnimation(addDiv, 'add');
+                        addDiv.innerHTML = ``;
+                    });
+            }
+        });
+    }
     fadeOutAnimation(div, addRemove){
         if(addRemove === 'remove'){
             div.classList.remove('fadeOut');
@@ -1680,69 +1669,68 @@ createPlaylistContent(){
             div.classList.add('fadeOut');
         }
     }
-    //CLEANED
 
-/* --------ADDED BY ERIKA--------- */
-hideElement (elementId) {
-    const element = document.getElementById(elementId);
-    element.innerHTML = ``;
-    element.className = 'hidden';
-}
-displayElement (elementId) {
-    const element = document.getElementById(elementId).style.display = "block";
-}
-/* -------under construction-------- */
-displayPopup (errorMessages, div = 'popUpWindow') {
-    const parentElement = document.getElementById(div);
-    console.log(parentElement);
-    const popupBox = document.createElement('div');
-    popupBox.className = 'messagePopupBox';
-    popupBox.setAttribute('id', 'messagePopupBox');
-
-    for (let errorMessage of errorMessages) {
-        const errorMessageParagraph = document.createElement('p');
-        errorMessageParagraph.className = 'errorMessage';
-        const errorMessageNode = document.createTextNode(errorMessage);
-        errorMessageParagraph.appendChild(errorMessageNode);
-        popupBox.appendChild(errorMessageParagraph);
+    /* --------ADDED BY ERIKA--------- */
+    hideElement (elementId) {
+        const element = document.getElementById(elementId);
+        element.innerHTML = ``;
+        element.className = 'hidden';
     }
-    popupBox.insertAdjacentHTML('beforeend',
-        `<div id = "messageButtonWrapper">
-            <button id = "errorOkButton"> Ok </button>
-        </div>`
-    );
-    parentElement.appendChild(popupBox);
-    const okButton = document.getElementById('errorOkButton');
+    displayElement (elementId) {
+        const element = document.getElementById(elementId).style.display = "block";
+    }
+    /* -------under construction-------- */
+    displayPopup (errorMessages, div = 'popUpWindow') {
+        const parentElement = document.getElementById(div);
+        console.log(parentElement);
+        const popupBox = document.createElement('div');
+        popupBox.className = 'messagePopupBox';
+        popupBox.setAttribute('id', 'messagePopupBox');
 
-    okButton.addEventListener('click', function() {
-        const hide = new DOMHandle;
-        hide.hideElement('messagePopupBox');
-    });
-}
-displayQuestionPopup (question) {
-    const parentElement = document.getElementById('addWrapper');
-    const popupBox = document.createElement('div');
-    popupBox.className = 'messagePopupBox';
-    popupBox.setAttribute('id', 'messagePopupBox');
+        for (let errorMessage of errorMessages) {
+            const errorMessageParagraph = document.createElement('p');
+            errorMessageParagraph.className = 'errorMessage';
+            const errorMessageNode = document.createTextNode(errorMessage);
+            errorMessageParagraph.appendChild(errorMessageNode);
+            popupBox.appendChild(errorMessageParagraph);
+        }
+        popupBox.insertAdjacentHTML('beforeend',
+            `<div id = "messageButtonWrapper">
+                <button id = "errorOkButton"> Ok </button>
+            </div>`
+        );
+        parentElement.appendChild(popupBox);
+        const okButton = document.getElementById('errorOkButton');
 
-    popupBox.innerHTML = `
-        <p>${question}</p>
-        <div id = "messageButtonWrapper">
-            <button id = "yesButton"> Yes </button>
-            <button id = "noButton"> No </button>
-        </div>
-    `;
-    parentElement.appendChild(popupBox);
-}
-displayAddedTracks (addedTracks, parentElementId) {
-    for (let track of addedTracks) {
-        const parentElement = document.getElementById(parentElementId);
-        const p = document.createElement('p');
-        const addedTrack = document.createTextNode(track);
-        p.appendChild(addedTrack);
-        parentElement.appendChild(p);
-    }    
-}
+        okButton.addEventListener('click', function() {
+            const hide = new DOMHandle;
+            hide.hideElement('messagePopupBox');
+        });
+    }
+    displayQuestionPopup (question) {
+        const parentElement = document.getElementById('addWrapper');
+        const popupBox = document.createElement('div');
+        popupBox.className = 'messagePopupBox';
+        popupBox.setAttribute('id', 'messagePopupBox');
+
+        popupBox.innerHTML = `
+            <p>${question}</p>
+            <div id = "messageButtonWrapper">
+                <button id = "yesButton"> Yes </button>
+                <button id = "noButton"> No </button>
+            </div>
+        `;
+        parentElement.appendChild(popupBox);
+    }
+    displayAddedTracks (addedTracks, parentElementId) {
+        for (let track of addedTracks) {
+            const parentElement = document.getElementById(parentElementId);
+            const p = document.createElement('p');
+            const addedTrack = document.createTextNode(track);
+            p.appendChild(addedTrack);
+            parentElement.appendChild(p);
+        }    
+    }
 }/* --- Class DOMHandle collapse --- */
 
 class Controller {
