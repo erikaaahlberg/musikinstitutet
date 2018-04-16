@@ -1742,7 +1742,7 @@ class DOMHandle {
 
         okButton.addEventListener('click', function() {
             const hide = new DOMHandle;
-            hide.hideElement('messagePopupBox');
+            hide.hideElement('popUpWindow');
         });
 }
     displayQuestionPopup (question) {
