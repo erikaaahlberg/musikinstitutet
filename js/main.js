@@ -2,6 +2,7 @@ const searchButton = document.getElementsByClassName('searchButton');
 const mainOutput = document.getElementById('mainOutput');
 const searchResults = document.getElementById('searchResults');
 const searchField = document.getElementById('searchField');
+const mainAnimationTime = 400;
 
 class Init {
     initiateEventListeners() {
@@ -437,11 +438,11 @@ class DOMHandle {
                 }, mainAnimationTime);
             });
         }
-        
+
     }
     //CLEANED
     displayPlaylists(allPlaylists) {
-        
+
         const newFetch = new FetchHandle();
         const deActivate = new DOMHandle();
         const searchResult = document.getElementById('searchResults');
@@ -735,7 +736,7 @@ class DOMHandle {
             button.addEventListener('click', function() {
                 newDOM.fadeOutAnimation(mainOutput, 'add');
                 setTimeout(() => {
-                    newFetch.fetchAlbumById(this.id);  
+                    newFetch.fetchAlbumById(this.id);
                 }, mainAnimationTime);
             });
         }
@@ -944,8 +945,8 @@ class DOMHandle {
             }, mainAnimationTime);
         });
 
-        
-    } 
+
+    }
     //CLEANED
     filterSearch() {
         for (let sbutton of searchButton) {
@@ -973,7 +974,7 @@ class DOMHandle {
         }
     }
     everyOtherButton(buttons) {
-        /* THIS FUNCTION LIGHTER COLOR TO 
+        /* THIS FUNCTION LIGHTER COLOR TO
          * EVERY OTHER BUTTON + ADDS HOVER EFFECT */
         for (let i = 0; i < buttons.length; i++) {
             if (i % 2 == 0) {
@@ -1008,7 +1009,7 @@ class DOMHandle {
 
         console.log(playlistTitle);
         const isTitleEmpty = trackController.isEmpty(playlistTitle);
-        
+
         if (isTitleEmpty) {
             errorMessages.push('Title is required.');
         }
@@ -1027,7 +1028,7 @@ class DOMHandle {
                 const playlistPostRequest = new FetchHandle('POST', trackToPost);
                 const postTrack = new Playlist();
                 postTrack.addTrack(playlistPostRequest, playlistId);
-            });   
+            });
         }
     }
     choseTrackSelector(parentElement){
@@ -1045,7 +1046,7 @@ class DOMHandle {
         const trackDom = new DOMHandle();
         const trackFetch = new FetchHandle();
         const trackController = new Controller();
-        
+
         const selector = document.getElementById('trackSelector');
 
         const selectedTracks = [];
@@ -1137,7 +1138,7 @@ class DOMHandle {
 
         addDiv.innerHTML = ``;
         albumDom.fadeOutAnimation(addDiv, 'remove');
-        
+
         let createAlbumContent =`
             <div id="addWrapper">
                 <p>ADD AN ALBUM</p>
@@ -1652,7 +1653,7 @@ createPlaylistContent(){
                 const playlistToPost = new Playlist(playlistTitle, playlistGenres, playlistImageURL, playlistCreator);
                 console.log(playlistToPost);
                 const playlistPostRequest = new FetchHandle('POST', playlistToPost);
-                    
+
                 playlistPostRequest.postItem('playlists', playlistPostRequest);
                 /* Display alternative popup */
                 playlistDom.displayQuestionPopup('Do you want to add tracks now?');
