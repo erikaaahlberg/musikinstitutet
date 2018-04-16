@@ -83,8 +83,9 @@ body {
     }
 
     #popUpWindow {
-        position: fixed;
         width: 400px;
+        position: fixed;
+        z-index: 99999999999;
         left: 50%;
         top: 40%;
         opacity: 0.9;
@@ -538,11 +539,17 @@ body {
                     margin-bottom: 50px;
                 }
                 #commentsOutput{
-                    position: absolute;
+                    position: fixed;
+                    left: 50%;
+                    top: 50%;
+                    transform: translate(-50%, -50%);
                     background: rgba(0, 0, 0, 0.9);
                     max-width: 420px;
+                    max-height: 400px;
                     border-radius: 20px;
                     transition: 500ms;
+                    overflow: scroll;
+                    z-index: 999999999;
                     #commentForm{
                         display: flex;
                         flex-direction: column;
@@ -667,11 +674,16 @@ body {
             transition: 1000ms;
             position: absolute;
             #addWrapper {
+                z-index: 99999999;
+                position: fixed;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 padding: 50px 10px 20px;
-                background: rgba(0, 0, 0, 0.7);
+                background: rgba(0, 0, 0, 0.9);
                 border-radius: 10px;
                 max-width: 500px;
                 margin: auto;
