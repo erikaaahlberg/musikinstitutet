@@ -62,14 +62,11 @@ class Init {
 
 /* Handles all fetch queries. */
 class FetchHandle {
-
-    /* ----ADDED BY ERIKA----- */
     constructor (method, body) {
         this.method = method;
         this.headers = { 'Accept': 'application/json', 'Content-Type': 'application/json' };
         this.body = JSON.stringify(body);
     }
-    /*---------- */
     fetchAll() {
         this.fetchAlbums()
         this.fetchTracks()
@@ -299,13 +296,11 @@ class DOMHandle {
         checkButton.classList.add('activeButton');
     }
     loadingIndicator(div) {
-        const loading = `
-            <div class="spinner">
-                <div class="bounce1"></div>
-                <div class="bounce2"></div>
-                <div class="bounce3"></div>
-            </div>
-        `;
+        const loading = `<div class="spinner">
+                            <div class="bounce1"></div>
+                            <div class="bounce2"></div>
+                            <div class="bounce3"></div>
+                        </div>`
         return loading;
     }
     deactivateSearchButtons() {
@@ -1562,16 +1557,19 @@ createPlaylistContent(){
                 BACK
             </button>
         </div>
-    `;
+        `;
+        
     addDiv.innerHTML = createPlaylistForm;
 
     const importCloseButton = document.getElementById('importCloseButton');
+
     importCloseButton.addEventListener('click', function(){
         playlistDom.fadeOutAnimation(addDiv, 'add');
         addDiv.innerHTML = ``;
     });
 
     const addToExistingPlaylistLink = document.getElementById('addToExistingPlaylist');
+
     /* Add track to existing album link */
     addToExistingPlaylistLink.addEventListener('click', function() {
         event.preventDefault();
