@@ -994,14 +994,8 @@ class DOMHandle {
             }
         }
     }
-<<<<<<< HEAD
     addTrackToPlaylist (trackId) {
         //event.preventDefault();
-=======
-    //CLEANED
-    addTrackToPlaylistEventListener () {
-        event.preventDefault();
->>>>>>> master
         const addedTracks = [];
         const errorMessages = [];
 
@@ -1550,6 +1544,13 @@ createPlaylistContent(){
         </div>
         `;
         addDiv.innerHTML = addToExistingPlaylist;
+
+        const createPlaylistLink = document.getElementById('createPlaylist');
+
+        createPlaylistLink.addEventListener('click', function(){
+            event.preventDefault();
+            addDiv.innerHTML = createPlaylistForm;
+        });
         const parentElement = document.getElementById('addTrackToExistingPlaylist');
 
         playlistDom.choseTrackSelector(parentElement);
