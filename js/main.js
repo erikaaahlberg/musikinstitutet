@@ -1714,7 +1714,7 @@ class DOMHandle {
     hideElement (elementId) {
         const element = document.getElementById(elementId);
         element.innerHTML = ``;
-        element.className = 'hidden';
+        element.classList.add('hidden');
     }
     displayElement (elementId) {
         const element = document.getElementById(elementId).style.display = "block";
