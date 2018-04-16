@@ -996,9 +996,8 @@ class DOMHandle {
             }
         }
     }
-
-    addTrackToPlaylistEventListener () {
-        event.preventDefault();
+    addTrackToPlaylist (trackId) {
+        //event.preventDefault();
         const addedTracks = [];
         const errorMessages = [];
 
@@ -1528,6 +1527,7 @@ createPlaylistContent(){
 
     /* Add track to existing album link */
     addToExistingPlaylistLink.addEventListener('click', function(){
+        event.preventDefault();
         const addToExistingPlaylist = `
         <div id="addWrapper">
             <p>ADD TRACK TO EXISTING PLAYLIST</p>
@@ -1547,6 +1547,20 @@ createPlaylistContent(){
         </div>
         `;
         addDiv.innerHTML = addToExistingPlaylist;
+
+        const importCloseButton = document.getElementById('importCloseButton');
+
+        importCloseButton.addEventListener('click', function(){
+            playlistDom.fadeOutAnimation(addDiv, 'add');
+            addDiv.innerHTML = ``;
+        });
+
+        const createPlaylistLink = document.getElementById('createPlaylist');
+
+        createPlaylistLink.addEventListener('click', function(){
+            event.preventDefault();
+            addDiv.innerHTML = createPlaylistForm;
+        });
         const parentElement = document.getElementById('addTrackToExistingPlaylist');
 
         playlistDom.choseTrackSelector(parentElement);
