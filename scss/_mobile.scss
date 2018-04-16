@@ -186,14 +186,6 @@ body {
             margin: 0 20px;
             padding-top: 50px;
 
-            #messageBox {
-                display: none;
-                /*padding: 20px 0;
-                letter-spacing: 2px;
-                font-weight: 700;
-                color: $accentColor;*/
-            }
-
             #searchField {
                 border: none;
                 font-size: 1.1em;
@@ -558,6 +550,7 @@ body {
                                 letter-spacing: 1px;
                                 text-align: center;
                                 background: rgba(255, 0, 0, 0.4);
+                                background: rgba(255, 0, 0, 0.4);
                                 padding: 10px 5px;
                                 border-radius: $mainRadius;
                                 margin: 0 0 15px 0;
@@ -668,7 +661,6 @@ body {
             letter-spacing: 3px;
             transition: 1000ms;
             position: absolute;
-
             #addWrapper {
                 display: flex;
                 flex-direction: column;
@@ -678,27 +670,23 @@ body {
                 border-radius: 10px;
                 max-width: 500px;
                 margin: auto;
-
                 p {
                     margin: 0;
                 }
-
                 form {
                     display: flex;
                     flex-wrap: wrap;
                     justify-content: center;
                     margin-top: 30px;
                     max-width: 500px;
-
                     input {
                         font-size: 0.7em;
-                        width: 200px;
+                        width: 216px;
                         letter-spacing: 1px;
-                        padding: 8px;
+                        padding: 10px;
                         border: none;
                         margin: 10px;
                     }
-
                     button {
                         width: 216px;
                         padding: 8px;
@@ -712,9 +700,17 @@ body {
                         background: #d3790a;
                         transition: 300ms;
                     }
-
                     button:hover {
                         background: $accentColor;
+                    }
+                    select{
+                        outline: none;
+                        padding: 10px;
+                        width: 45%;
+                        height: 32px;
+                        border: none;
+                        letter-spacing: 1px;
+                        font-size: 0.8em;
                     }
                 }
 
@@ -737,6 +733,24 @@ body {
                     img {
                         height: 15px;
                         margin-right: 5px;
+                    }
+                }
+                #addTrackToExistingPlaylist{
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                }
+                a{
+                    display: flex;
+                    align-items: center;
+                    text-decoration: none;
+                    font-size: 0.7em;
+                    letter-spacing: 1px;
+                    margin-top: 20px;
+                    img{
+                        height: 18px;
+                        margin-right: 5px;
+                        margin-left: 5px;
                     }
                 }
             }
