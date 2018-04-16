@@ -62,14 +62,11 @@ class Init {
 
 /* Handles all fetch queries. */
 class FetchHandle {
-
-    /* ----ADDED BY ERIKA----- */
     constructor (method, body) {
         this.method = method;
         this.headers = { 'Accept': 'application/json', 'Content-Type': 'application/json' };
         this.body = JSON.stringify(body);
     }
-    /*---------- */
     fetchAll() {
         this.fetchAlbums()
         this.fetchTracks()
@@ -1157,7 +1154,7 @@ class DOMHandle {
             </div>
         `;
 
-        addDiv.innerHTML=createAlbumContent;
+        addDiv.innerHTML = createAlbumContent;
 
         /* Get buttons */
         const importCloseButton = document.getElementById('importCloseButton');
