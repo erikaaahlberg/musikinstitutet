@@ -1,6 +1,7 @@
 const searchButton = document.getElementsByClassName('searchButton');
 const mainOutput = document.getElementById('mainOutput');
-const searchResults = document.getElementById('searchResults')
+const searchResult = document.getElementById('searchResults');
+const mainAnimationTime = 400;
 /* Loops thru the searchRadioButtons then runs Fetch class. */
 for (i = 0; i < searchButton.length; i++) {
     searchButton[i].addEventListener('click', function() {
@@ -350,7 +351,7 @@ class DOMHandle {
                     console.log(id)
                     const newFetch = new FetchHandle();
                     newFetch.fetchAlbumById(id);
-                },500)
+                }, mainAnimationTime)
             })
         }
 
@@ -399,15 +400,16 @@ class DOMHandle {
                 setTimeout(function(){
                     const newFetch = new FetchHandle();
                     newFetch.fetchTrackById(id);
-                },500)
+                }, mainAnimationTime)
 
             });
         }
    }
     displayArtists(allArtists) {
 
-
-        const searchResult = document.getElementById('searchResults')
+        const deActivate = new DOMHandle();
+        const newFetch = new FetchHandle();
+        const searchResult = document.getElementById('searchResults');
 
         let searchedArtistButtons = '';
         for (let i = 0; i < allArtists.length; i++) {
@@ -425,22 +427,21 @@ class DOMHandle {
         getElementsByClassName('showByIdButton');
         for (i = 0; i < showByIdButton.length; i++) {
             showByIdButton[i].addEventListener('click', function() {
-                                let id = this.id
-                const deActivate = new DOMHandle();
                 deActivate.deactivateSearchButtons();
                 deActivate.fadeOutAnimation(mainOutput, 'add');
-
-                setTimeout(function(){
-                    const newFetch = new FetchHandle();
-                    newFetch.fetchArtistById(id);
-                },500)
-            })
+                setTimeout( () => {
+                    newFetch.fetchArtistById(this.id);
+                }, mainAnimationTime);
+            });
         }
-
+        
     }
+    //CLEANED
     displayPlaylists(allPlaylists) {
-
-        const searchResult = document.getElementById('searchResults')
+        
+        const newFetch = new FetchHandle();
+        const deActivate = new DOMHandle();
+        const searchResult = document.getElementById('searchResults');
 
         let searchedPlaylistButtons = '';
         for (let i = 0; i < allPlaylists.length; i++) {
@@ -458,19 +459,16 @@ class DOMHandle {
         getElementsByClassName('showByIdButton');
         for (i = 0; i < showByIdButton.length; i++) {
             showByIdButton[i].addEventListener('click', function() {
-                                let id = this.id
-                const deActivate = new DOMHandle();
                 deActivate.deactivateSearchButtons();
                 deActivate.fadeOutAnimation(mainOutput, 'add');
-
-                setTimeout(function(){
-                    const newFetch = new FetchHandle();
-                    newFetch.fetchPlaylistById(id);
-                },500)
-            })
+                setTimeout( () => {
+                    newFetch.fetchPlaylistById(this.id);
+                }, mainAnimationTime);
+            });
         }
 
     }
+    //CLEANED
     displayTopPlaylist(list) {
         
         const newDOM = new DOMHandle();
@@ -502,7 +500,7 @@ class DOMHandle {
                 setTimeout( () => {
                     newFetch.fetchPlaylistById(this.id);
                     newDOM.deactivateSearchButtons();
-                },500)
+                }, mainAnimationTime)
             })
         }
     }
@@ -552,7 +550,7 @@ class DOMHandle {
                 mainOutput.innerHTML='<div id="searchResults"></div>';
                 this.activateSearchButton(albumsButton);
                 newFetch.fetchAlbums();
-            }, 500);
+            }, mainAnimationTime);
         });
 
         let trackTitles = "";
@@ -578,7 +576,7 @@ class DOMHandle {
                 newDOM.fadeOutAnimation(mainOutput, 'add');
                 setTimeout( () => {
                     newFetch.fetchTrackById(this.id);
-                }, 500)
+                }, mainAnimationTime)
             })
         }
 
@@ -639,7 +637,7 @@ class DOMHandle {
                 newDOM.fadeOutAnimation(mainOutput, 'add');
                 setTimeout( () => {
                 newFetch.fetchAlbumById(button.id);
-                }, 500);
+                }, mainAnimationTime);
             });
         }
 
@@ -653,7 +651,7 @@ class DOMHandle {
                 mainOutput.innerHTML = '<div id="searchResults"></div>';
                 this.activateSearchButton(tracksButton);
                 deleteTrack.fetchTracks();
-            }, 500);
+            }, mainAnimationTime);
         });
 
         const rateTrack = document.getElementById('rateTrack');
@@ -710,7 +708,7 @@ class DOMHandle {
                 mainOutput.innerHTML = '<div id="searchResults"></div>';
                 this.activateSearchButton(artistsButton);
                 newFetch.fetchArtists();
-            }, 500);
+            }, mainAnimationTime);
         });
 
         let artistAlbum = "";
@@ -735,7 +733,7 @@ class DOMHandle {
                 newDOM.fadeOutAnimation(mainOutput, 'add');
                 setTimeout(() => {
                     newFetch.fetchAlbumById(this.id);  
-                }, 500);
+                }, mainAnimationTime);
             });
         }
         
@@ -797,7 +795,7 @@ class DOMHandle {
                 this.activateSearchButton(playlistsButton);
                 deletePlaylist.fetchPlaylists();
                 deletePlaylist.fetchTopPlaylists();
-            }, 500)
+            }, mainAnimationTime)
         });
 
         const playlistTracklist = document.getElementById('playlistTracklist');
@@ -915,8 +913,8 @@ class DOMHandle {
                     setTimeout( () => {
                         newFetch.addPlayListComment(commentFieldDiv.value, commentUser.value, playlistID)
                         newDOM.fadeOutAnimation(commentsOutput, 'add');
-                    }, 500);
-                }, 500);
+                    }, 400);
+                }, mainAnimationTime);
             }
         });
 
@@ -939,8 +937,8 @@ class DOMHandle {
                         newFetch.deleteItem('comments', this.id);
                         newDOM.fadeOutAnimation(commentsOutput, 'add');
                         newFetch.fetchPlaylistById(playlistID)
-                    }, 500);
-                }, 500);
+                    }, 400);
+                }, mainAnimationTime);
             });
         }
         
@@ -951,12 +949,11 @@ class DOMHandle {
             newDOM.fadeOutAnimation(commentsOutput, 'add');
             setTimeout( () => {
                 commentsOutput.innerHTML=commentContent;
-            }, 1000);
+            }, mainAnimationTime);
         });
         
     } 
     // CLEANED
-
     filterSearch() {
         for (let sbutton of searchButton) {
             if (sbutton.classList.contains('activeButton')) {
@@ -983,6 +980,8 @@ class DOMHandle {
         }
     }
     everyOtherButton(buttons) {
+        /* THIS FUNCTION LIGHTER COLOR TO 
+         * EVERY OTHER BUTTON + ADDS HOVER EFFECT */
         for (let i = 0; i < buttons.length; i++) {
             if (i % 2 == 0) {
                 buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
@@ -992,8 +991,7 @@ class DOMHandle {
                 buttons[i].addEventListener('mouseleave', () => {
                     buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
                 });
-            }
-            else {
+            } else {
                 buttons[i].style.backgroundColor = '#191919';
                 buttons[i].addEventListener('mouseover', () => {
                     buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.07)';
@@ -1004,6 +1002,7 @@ class DOMHandle {
             }
         }
     }
+    //CLEANED
     addTrackToPlaylistEventListener () {
         event.preventDefault();
         const addedTracks = [];
