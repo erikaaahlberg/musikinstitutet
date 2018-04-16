@@ -351,16 +351,13 @@ class DOMHandle {
 
                 const deActivate = new DOMHandle();
                 deActivate.deactivateSearchButtons();
-               let id = this.id
-
                deActivate.fadeOutAnimation(mainOutput, 'add');
 
-                setTimeout(function(){
-                    console.log(id)
+                setTimeout( () =>{
                     const newFetch = new FetchHandle();
-                    newFetch.fetchAlbumById(id);
+                    newFetch.fetchAlbumById(this.id);
                     mainOutput.innerHTML = deActivate.loadingIndicator();
-                },500)
+                }, mainAnimationTime)
             })
         }
 
@@ -380,8 +377,9 @@ class DOMHandle {
     }
     displayTracks(allTracks) {
 
-
-        const searchResult = document.getElementById('searchResults')
+        const newFetch = new FetchHandle();
+        const deActivate = new DOMHandle();
+        const searchResult = document.getElementById('searchResults');
 
         let searchedTrackButtons = '';
         for (let i = 0; i < allTracks.length; i++) {
@@ -401,23 +399,20 @@ class DOMHandle {
 
         for (let i = 0; i < showByIdButton.length; i++) {
             showByIdButton[i].addEventListener('click', function() {
-                let id = this.id
-                const deActivate = new DOMHandle();
+                deActivate.deactivateSearchButtons();
                 deActivate.fadeOutAnimation(mainOutput, 'add');
-
-                setTimeout(function(){
-                    const newFetch = new FetchHandle();
-                    newFetch.fetchTrackById(id);
-                    mainOutput.innerHTML = deActivate.loadingIndicator();
-                },500);
-
+                setTimeout( () => {
+                    newFetch.fetchTrackById(this.id);
+                }, mainAnimationTime);
             });
         }
    }
+    //CLEANED
     displayArtists(allArtists) {
 
-
-        const searchResult = document.getElementById('searchResults')
+        const deActivate = new DOMHandle();
+        const newFetch = new FetchHandle();
+        const searchResult = document.getElementById('searchResults');
 
         let searchedArtistButtons = '';
         for (let i = 0; i < allArtists.length; i++) {
@@ -435,23 +430,21 @@ class DOMHandle {
         getElementsByClassName('showByIdButton');
         for (let i = 0; i < showByIdButton.length; i++) {
             showByIdButton[i].addEventListener('click', function() {
-                                let id = this.id
-                const deActivate = new DOMHandle();
                 deActivate.deactivateSearchButtons();
                 deActivate.fadeOutAnimation(mainOutput, 'add');
-
-                setTimeout(function(){
-                    const newFetch = new FetchHandle();
-                    newFetch.fetchArtistById(id);
-                    mainOutput.innerHTML = deActivate.loadingIndicator();
-                },500)
-            })
+                setTimeout( () => {
+                    newFetch.fetchArtistById(this.id);
+                }, mainAnimationTime);
+            });
         }
-
+        
     }
+    //CLEANED
     displayPlaylists(allPlaylists) {
-
-        const searchResult = document.getElementById('searchResults')
+        
+        const newFetch = new FetchHandle();
+        const deActivate = new DOMHandle();
+        const searchResult = document.getElementById('searchResults');
 
         let searchedPlaylistButtons = '';
         for (let i = 0; i < allPlaylists.length; i++) {
@@ -469,20 +462,16 @@ class DOMHandle {
         getElementsByClassName('showByIdButton');
         for (let i = 0; i < showByIdButton.length; i++) {
             showByIdButton[i].addEventListener('click', function() {
-                                let id = this.id
-                const deActivate = new DOMHandle();
                 deActivate.deactivateSearchButtons();
                 deActivate.fadeOutAnimation(mainOutput, 'add');
-
-                setTimeout(function(){
-                    const newFetch = new FetchHandle();
-                    newFetch.fetchPlaylistById(id);
-                    mainOutput.innerHTML = deActivate.loadingIndicator();
-                },500)
-            })
+                setTimeout( () => {
+                    newFetch.fetchPlaylistById(this.id);
+                }, mainAnimationTime);
+            });
         }
 
     }
+    //CLEANED
     displayTopPlaylist(list) {
 
         const newDOM = new DOMHandle();
@@ -514,7 +503,7 @@ class DOMHandle {
                 setTimeout( () => {
                     newFetch.fetchPlaylistById(this.id);
                     newDOM.deactivateSearchButtons();
-                },500)
+                }, mainAnimationTime)
             })
         }
     }
@@ -564,7 +553,7 @@ class DOMHandle {
                 mainOutput.innerHTML='<div id="searchResults"></div>';
                 this.activateSearchButton(albumsButton);
                 newFetch.fetchAlbums();
-            }, 500);
+            }, mainAnimationTime);
         });
 
         let trackTitles = "";
@@ -590,7 +579,7 @@ class DOMHandle {
                 newDOM.fadeOutAnimation(mainOutput, 'add');
                 setTimeout( () => {
                     newFetch.fetchTrackById(this.id);
-                }, 500)
+                }, mainAnimationTime)
             })
         }
 
@@ -651,7 +640,7 @@ class DOMHandle {
                 newDOM.fadeOutAnimation(mainOutput, 'add');
                 setTimeout( () => {
                 newFetch.fetchAlbumById(button.id);
-                }, 500);
+                }, mainAnimationTime);
             });
         }
 
@@ -665,7 +654,7 @@ class DOMHandle {
                 mainOutput.innerHTML = '<div id="searchResults"></div>';
                 this.activateSearchButton(tracksButton);
                 deleteTrack.fetchTracks();
-            }, 500);
+            }, mainAnimationTime);
         });
 
         const rateTrack = document.getElementById('rateTrack');
@@ -722,7 +711,7 @@ class DOMHandle {
                 mainOutput.innerHTML = '<div id="searchResults"></div>';
                 this.activateSearchButton(artistsButton);
                 newFetch.fetchArtists();
-            }, 500);
+            }, mainAnimationTime);
         });
 
         let artistAlbum = "";
@@ -746,8 +735,8 @@ class DOMHandle {
             button.addEventListener('click', function() {
                 newDOM.fadeOutAnimation(mainOutput, 'add');
                 setTimeout(() => {
-                    newFetch.fetchAlbumById(this.id);
-                }, 500);
+                    newFetch.fetchAlbumById(this.id);  
+                }, mainAnimationTime);
             });
         }
 
@@ -809,7 +798,7 @@ class DOMHandle {
                 this.activateSearchButton(playlistsButton);
                 deletePlaylist.fetchPlaylists();
                 deletePlaylist.fetchTopPlaylists();
-            }, 500)
+            }, mainAnimationTime)
         });
 
         const playlistTracklist = document.getElementById('playlistTracklist');
@@ -841,7 +830,7 @@ class DOMHandle {
 
         newDOM.everyOtherButton(playlistTracklist.children);
     }
-    // CLEANED
+    //CLEANED
     displayPlaylistComments(comments, playlistID){
 
         const commentsOutput = document.getElementById('commentsOutput');
@@ -927,8 +916,8 @@ class DOMHandle {
                     setTimeout( () => {
                         newFetch.addPlayListComment(commentFieldDiv.value, commentUser.value, playlistID)
                         newDOM.fadeOutAnimation(commentsOutput, 'add');
-                    }, 500);
-                }, 500);
+                    }, 400);
+                }, mainAnimationTime);
             }
         });
 
@@ -939,20 +928,9 @@ class DOMHandle {
             deleteCommentButton[i].addEventListener('click', function(){
                 newDOM.fadeOutAnimation(playlistComments, 'add');
                 setTimeout( () => {
-                    playlistComments.innerHTML=`
-                        <div id="commentMessage">
-                            <img src="images/check.svg">
-                            <p> COMMENT HAS BEEN DELETE </p>
-                        </div>
-                    `;
-                    newDOM.fadeOutAnimation(playlistComments, 'remove');
-                    setTimeout( () => {
-                        console.log(this.id)
                         newFetch.deleteItem('comments', this.id);
-                        newDOM.fadeOutAnimation(commentsOutput, 'add');
-                        newFetch.fetchPlaylistById(playlistID)
-                    }, 500);
-                }, 500);
+                        newFetch.fetchPlaylistById(playlistID);
+                    }, 400);
             });
         }
 
@@ -963,12 +941,12 @@ class DOMHandle {
             newDOM.fadeOutAnimation(commentsOutput, 'add');
             setTimeout( () => {
                 commentsOutput.innerHTML=commentContent;
-            }, 1000);
+            }, mainAnimationTime);
         });
 
-    }
-    // CLEANED
-
+        
+    } 
+    //CLEANED
     filterSearch() {
         for (let sbutton of searchButton) {
             if (sbutton.classList.contains('activeButton')) {
@@ -995,6 +973,8 @@ class DOMHandle {
         }
     }
     everyOtherButton(buttons) {
+        /* THIS FUNCTION LIGHTER COLOR TO 
+         * EVERY OTHER BUTTON + ADDS HOVER EFFECT */
         for (let i = 0; i < buttons.length; i++) {
             if (i % 2 == 0) {
                 buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
@@ -1004,8 +984,7 @@ class DOMHandle {
                 buttons[i].addEventListener('mouseleave', () => {
                     buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
                 });
-            }
-            else {
+            } else {
                 buttons[i].style.backgroundColor = '#191919';
                 buttons[i].addEventListener('mouseover', () => {
                     buttons[i].style.backgroundColor = 'rgba(255, 255, 255, 0.07)';
@@ -1016,34 +995,86 @@ class DOMHandle {
             }
         }
     }
+
     addTrackToPlaylistEventListener () {
         event.preventDefault();
         const addedTracks = [];
         const errorMessages = [];
+
         const trackController = new Controller;
         const trackDom = new DOMHandle;
         const trackFetch = new FetchHandle;
-        const newTrackTitle = trackController.getInputValue('inputTrackTitle');
-        const newTrackArtist = trackController.getInputValue('inputTrackArtist');
 
-        const isArtistEmpty = trackController.isEmpty(newTrackArtist);
-        const isTitleEmpty = trackController.isEmpty(newTrackTitle);
+        const playlistTitle = trackController.getInputValue('inputPlaylistTitle');
 
-        if (isArtistEmpty) {
-            errorMessages.push('Artist name is required.');
-        }
+        console.log(playlistTitle);
+        const isTitleEmpty = trackController.isEmpty(playlistTitle);
+        
         if (isTitleEmpty) {
             errorMessages.push('Title is required.');
         }
         if (errorMessages.length > 0) {
             trackDom.displayPopup(errorMessages);
         } else {
-            trackFetch.fetchItemByChosenParameter('playlists', 'title', newTrackTitle)
+            trackFetch.fetchItemByChosenParameter('playlists', 'title', playlistTitle)
             .then((fetchedPlaylist) => {
-                console.log(fetchedPlaylist);
-            });
+                const playlistId = fetchedPlaylist[0]._id;
+                console.log(fetchedPlaylist[0]._id);
+                const trackToPost = {
+                    tracks: trackId
+                };
+                console.log(trackToPost);
+
+                const playlistPostRequest = new FetchHandle('POST', trackToPost);
+                const postTrack = new Playlist();
+                postTrack.addTrack(playlistPostRequest, playlistId);
+            });   
+        }
     }
-}
+    choseTrackSelector(parentElement){
+        const addTrackContent = `
+            <select id = "trackSelector"></select>
+            <button type="button" id="addTrackButton">
+                <i class="far fa-plus-square"></i>
+            </button>
+        <div id="addTrackTracklist"></div>
+        `;
+        parentElement.insertAdjacentHTML('beforeend', addTrackContent);
+
+        const addButton = document.getElementById('addTrackButton');
+
+        const trackDom = new DOMHandle();
+        const trackFetch = new FetchHandle();
+        const trackController = new Controller();
+        
+        const selector = document.getElementById('trackSelector');
+
+        trackFetch.fetchItemByChosenParameter('tracks', 'limit', '999')
+            .then((fetchedTracks) => {
+                for (let track of fetchedTracks) {
+                    var option = document.createElement('option');
+
+                    if (!track.artists[0]) {
+                        track.artists[0] = { name: 'No name', _id: false };
+                    }
+
+                    option.text = `${track.artists[0].name} - ${track.title}`;
+
+                    option.value = track._id;
+
+                    selector.add(option);
+                    //trackDom.addTrackToPlaylist(title);
+                }
+            addButton.addEventListener('click', function() {
+                var selectedIndex = selector.selectedIndex;
+
+                const trackId = (document.getElementsByTagName('option')[selectedIndex].value);
+                console.log(trackId);
+                trackDom.addTrackToPlaylist(trackId);
+            });
+        });
+    }
+
     addTrackToAlbumEventListener() {
         event.preventDefault();
         const addedTracks = [];
@@ -1103,10 +1134,9 @@ class DOMHandle {
         const albumController = new Controller;
         const albumFetch = new FetchHandle;
 
-        setTimeout(function(){
-            albumDom.fadeOutAnimation(addDiv, 'remove')
-        });
-
+        addDiv.innerHTML = ``;
+        albumDom.fadeOutAnimation(addDiv, 'remove');
+        
         let createAlbumContent =`
             <div id="addWrapper">
                 <p>ADD AN ALBUM</p>
@@ -1143,14 +1173,8 @@ class DOMHandle {
 
         /* Go back-button */
         importCloseButton.addEventListener('click',function(){
-
-            let createAlbumContent =``;
             albumDom.fadeOutAnimation(addDiv, 'add');
-
-            setTimeout(function(){
-                addDiv.innerHTML=createAlbumContent;
-            }, 1000);
-
+            addDiv.innerHTML = ``;
         });
 
         /* Add track to existing album link */
@@ -1294,20 +1318,23 @@ class DOMHandle {
                     const popupDom = new DOMHandle;
                     messagePopupBox.innerHTML = ``;
                     messagePopupBox.className = 'hidden';
-                    popupDom.fadeOutAnimation(addDiv, 'out');
+                    popupDom.fadeOutAnimation(addDiv, 'add');
+                    addDiv.innerHTML = ``;
                 });
             }
         });
     }
 
     createArtistContent(){
+        const artistDom = new DOMHandle();
+        const artistFetch = new FetchHandle();
+        const artistController = new Controller();
+
         const addDiv = document.getElementById('addDiv');
 
-        setTimeout(function(){
-            addDiv.classList.remove('fadeOut');
-        })
+        addDiv.innerHTML=``;
 
-        const artistDom = new DOMHandle;
+        artistDom.fadeOutAnimation(addDiv, 'remove');
 
         let createArtistContent =`
             <div id="addWrapper">
@@ -1375,19 +1402,11 @@ class DOMHandle {
         });
         /* -----collapse------ */
 
-        setTimeout(function(){
-            artistDom.fadeOutAnimation(addDiv, 'remove');
-        })
+        //artistDom.fadeOutAnimation(addDiv, 'remove');
 
         importCloseButton.addEventListener('click', function(){
-
-            let createAlbumContent =``;
             artistDom.fadeOutAnimation(addDiv, 'add');
-
-            setTimeout(function(){
-                addDiv.innerHTML=createAlbumContent;
-            }, 1000)
-
+            addDiv.innerHTML = ``;
         });
     }
     displayGenres(object) {
@@ -1473,9 +1492,8 @@ createPlaylistContent(){
     const playlistDom = new DOMHandle();
     const playlistFetch = new FetchHandle();
 
-    setTimeout(function(){
-        addDiv.classList.remove('fadeOut');
-    })
+    addDiv.innerHTML = ``;
+    playlistDom.fadeOutAnimation(addDiv, 'remove');
 
     const createPlaylistForm =`
         <div id="addWrapper">
@@ -1488,7 +1506,7 @@ createPlaylistContent(){
                 <button id="addPlaylistButton">ADD PLAYLIST</button>
             </form>
             <a href = "#" id="addToExistingPlaylist" class = "mainLink">
-            Add tracks to existing playlist
+                Add tracks to existing playlist
             </a>
             <button type="button" id="importCloseButton">
                 <img src="images/x-circle.svg">
@@ -1501,7 +1519,8 @@ createPlaylistContent(){
     const importCloseButton = document.getElementById('importCloseButton');
 
     importCloseButton.addEventListener('click', function(){
-        playlistDom.closeButtonAction();
+        playlistDom.fadeOutAnimation(addDiv, 'add');
+        addDiv.innerHTML = ``;
     });
 
     const addToExistingPlaylistLink = document.getElementById('addToExistingPlaylist');
@@ -1513,11 +1532,10 @@ createPlaylistContent(){
             <p>ADD TRACK TO EXISTING PLAYLIST</p>
             <form id="addTrackToExistingPlaylist">
                 <input type="text" id="inputPlaylistTitle" placeholder="PLAYLIST TITLE..">
-                <input type="text" id="inputTrackTitle" placeholder="TRACK TITLE..">
-                <button type ="button" id="addTrackButton">
-                    ADD TRACK
-                </button>
             </form>
+            <button type ="button" id="addTrackButton">
+                ADD TRACK
+            </button>
             <a href = "#" id="createPlaylist" class = "mainLink">
             Add new playlist
             </a>
@@ -1528,10 +1546,18 @@ createPlaylistContent(){
         </div>
         `;
         addDiv.innerHTML = addToExistingPlaylist;
-        const addTrackButton = document.
+        const parentElement = document.getElementById('addTrackToExistingPlaylist');
+
+        playlistDom.choseTrackSelector(parentElement);
+
+        importCloseButton.addEventListener('click', function(){
+            albumDom.fadeOutAnimation(addDiv, 'add');
+            addDiv.innerHTML = ``;
+        });
+        /*const addTrackButton = document.
         getElementById('addTrackButton');
 
-        /*addTrackButton.addEventListener('click', function(){
+        addTrackButton.addEventListener('click', function(){
             albumDom.addTrackEventListener();
         });*/
     });
@@ -1543,11 +1569,8 @@ createPlaylistContent(){
 
      /* Go back-button */
      importCloseButton.addEventListener('click',function(){
-         let createAlbumContent =``;
-             addDiv.classList.add('fadeOut');
-         setTimeout(function(){
-             addDiv.innerHTML=createAlbumContent;
-         }, 1000)
+        playlistDom.fadeOutAnimation(addDiv, 'add');
+        addDiv.innerHTML = ``;
      });
 
      addPlaylistButton.addEventListener('click', function(){
@@ -1596,20 +1619,20 @@ createPlaylistContent(){
                 const playlistToPost = new Playlist(playlistTitle, playlistGenres, playlistImageURL, playlistCreator);
                 console.log(playlistToPost);
                 const playlistPostRequest = new FetchHandle('POST', playlistToPost);
-
-                //playlistPostRequest.postItem('playlists', playlistPostRequest);
+                    
+                playlistPostRequest.postItem('playlists', playlistPostRequest);
                 /* Display alternative popup */
                 playlistDom.displayQuestionPopup('Do you want to add tracks now?');
 
                 const yesButton = document.getElementById('yesButton');
                 const noButton = document.getElementById('noButton');
                 const messagePopupBox = document.getElementById('messagePopupBox');
-                const parentElement = document.getElementById('addWrapper');
+                const parentElement = document.getElementById('createPlaylist');
 
                 yesButton.addEventListener('click', function() {
-
                     playlistDom.hideElement('messagePopupBox');
-                    const addTrackContent = `
+                    playlistDom.choseTrackSelector(parentElement);
+                    /*const addTrackContent = `
                     <form id="addTrackToPlaylist">
                         <select id = "trackSelector"></select>
                         <button type="button" id="addTrackButton">
@@ -1627,7 +1650,7 @@ createPlaylistContent(){
                         for (let track of fetchedTracks) {
                             /*console.log(track.title);
                             console.log(track.artists[0].name);
-                            console.log(i);*/
+                            console.log(i);
                             const option = document.createElement('option');
                             var artist = track.artists[0].name;
                             var title = track.title;
@@ -1636,18 +1659,21 @@ createPlaylistContent(){
                             i++;
                         }
                     //playlistDom.displayTracksInSelector(fetchedTracks);
-                });
+                });*/
+
                 const addTrackButton = document.getElementById('addTrackButton');
 
                 addTrackButton.addEventListener('click', function() {
-                    playlistDom.addTrackToPlaylistEventListener();
+                    playlistDom.addTrackToPlaylist();
                 });
                 });
                 noButton.addEventListener('click', function(){
                     const popupDom = new DOMHandle;
                     messagePopupBox.innerHTML = ``;
                     messagePopupBox.className = 'hidden';
-                    popupDom.fadeOutAnimation(addDiv, 'out');
+
+                    popupDom.fadeOutAnimation(addDiv, 'add');
+                    addDiv.innerHTML = ``;
                 });
         }
     });
@@ -1713,15 +1739,7 @@ displayQuestionPopup (question) {
         </div>
     `;
     parentElement.appendChild(popupBox);
-}/*
-closeButtonAction() {
-    const addDiv = document.getElementById('addDiv');
-    //let createAlbumContent =``;
-    addDiv.classList.add('fadeOut');
-    setTimeout(function(){
-        addDiv.innerHTML = ``;
-    }, 1000)
-}*/
+}
 }/* --- Class DOMHandle collapse --- */
 
 class Controller {
@@ -1861,8 +1879,18 @@ class Playlist {
             this.createdBy = createdBy;
         }
     }
-    addTracks (trackId) {
-        this.tracks += `,${trackId}`;
+    addTrack (httpRequest, playlistId) {
+        console.log(httpRequest);
+        fetch(` https://folksa.ga/api/playlists/${playlistId}/tracks?key=flat_eric`, httpRequest)
+            .then((response) => response.json())
+                .then((postedTrack) => {
+                    console.log(postedTrack);
+                })
+                    .catch((errorMessage) => {
+                        //const displayError = new DOMHandle;
+                        console.log(errorMessage);
+                        //displayError.displayErrorPopup(errorMessage);
+                    });
     }
     setCoverImage (coverImage) {
         if (coverImage != '') {
