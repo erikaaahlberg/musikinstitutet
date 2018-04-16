@@ -895,7 +895,7 @@ class DOMHandle {
             const commentFieldEmpty = newController.isEmpty(commentFieldDiv.value);
             const commentUserEmpty = newController.isEmpty(commentUser.value);
             const wrongMessageComment = document.getElementById('wrongMessageComment');
-            
+
             if(commentFieldEmpty || commentUserEmpty){
                 let wrongMessage='<p> YOU HAVE TO FILL IN THE FIELDS CORRECTLY</p>';
                 wrongMessageComment.innerHTML=wrongMessage;
@@ -950,12 +950,15 @@ class DOMHandle {
     //CLEANED
     filterSearch() {
         for (let sbutton of searchButton) {
+            /* If a search-choice is activated, initiate the search. */
             if (sbutton.classList.contains('activeButton')) {
                 const filter = searchField.value.toUpperCase();
                 const buttons = document.querySelectorAll('.showByIdButton');
-
+                /* All matching items are sent to an array */
                 let visibleButtons = [];
                 for (let i = 0; i < buttons.length; i++) {
+                    /* If the value from searchField matches either the
+                     * innerHTML or the data-genre it will be displayed. */
                     let dataGenre = buttons[i].getAttribute('data-genre').toUpperCase();
                     if (buttons[i].innerHTML.toUpperCase().indexOf(filter) > -1 || dataGenre.indexOf(filter) > -1 && dataGenre != 'NONE') {
                         buttons[i].style.display = 'flex';
@@ -969,6 +972,8 @@ class DOMHandle {
                         buttons[i].style.display = 'none';
                     }
                 }
+                /* Every other buttons are a different color. The array
+                 * is sent to the function. */
                 this.everyOtherButton(visibleButtons);
             }
         }
