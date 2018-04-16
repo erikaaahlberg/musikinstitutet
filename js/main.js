@@ -1,66 +1,67 @@
 const searchButton = document.getElementsByClassName('searchButton');
 const mainOutput = document.getElementById('mainOutput');
-const searchResults = document.getElementById('searchResults')
-/* Loops thru the searchRadioButtons then runs Fetch class. */
-for (i = 0; i < searchButton.length; i++) {
-    searchButton[i].addEventListener('click', function() {
-        const activateButton = new DOMHandle();
-        activateButton.activateSearchButton(this);
-        const newFetch = new FetchHandle();
-        mainOutput.innerHTML = '<div id="searchResults"></div>'
-        switch (this.value) {
-            case 'all':
-                newFetch.fetchAll();
-                break;
-            case 'albums':
-                newFetch.fetchAlbums();
-                break;
-            case 'tracks':
-                newFetch.fetchTracks();
-                break;
-            case 'artists':
-                newFetch.fetchArtists();
-                break;
-            case 'playlists':
-                newFetch.fetchPlaylists();
-                newFetch.fetchTopPlaylists();
-                break;
-        }
-    });
-}
-
-
+const searchResults = document.getElementById('searchResults');
 const searchField = document.getElementById('searchField');
-searchField.addEventListener('keyup', () => {
-    const filterRequest = new DOMHandle();
-    filterRequest.filterSearch();
-});
 
-const createAlbumButton = document.
-getElementById('createAlbumButton');
+class Init {
+    initiateEventListeners() {
+        /* Loops thru the searchRadioButtons then runs Fetch class. */
+        for (let i = 0; i < searchButton.length; i++) {
+            searchButton[i].addEventListener('click', function() {
+                const activateButton = new DOMHandle();
+                activateButton.activateSearchButton(this);
+                const newFetch = new FetchHandle();
+                mainOutput.innerHTML = '<div id="searchResults"></div>';
+                switch (this.value) {
+                    case 'all':
+                        newFetch.fetchAll();
+                        break;
+                    case 'albums':
+                        newFetch.fetchAlbums();
+                        break;
+                    case 'tracks':
+                        newFetch.fetchTracks();
+                        break;
+                    case 'artists':
+                        newFetch.fetchArtists();
+                        break;
+                    case 'playlists':
+                        newFetch.fetchPlaylists();
+                        newFetch.fetchTopPlaylists();
+                        break;
+                }
+            });
+        }
 
-createAlbumButton.addEventListener('click', function(){
-    const createAlbum = new DOMHandle();
-    createAlbum.createAlbumContent();
-})
+        searchField.addEventListener('keyup', () => {
+            const filterRequest = new DOMHandle();
+            filterRequest.filterSearch();
+        });
 
-const createArtistButton = document.getElementById('createArtistButton');
+        const createAlbumButton = document.getElementById('createAlbumButton');
 
-createArtistButton.addEventListener('click', function(){
-    const createArtist = new DOMHandle();
-    createArtist.createArtistContent();
-});
+        createAlbumButton.addEventListener('click', function(){
+            const createAlbum = new DOMHandle();
+            createAlbum.createAlbumContent();
+        });
 
-const createPlaylistButton = document.getElementById('createPlaylistButton');
+        const createArtistButton = document.getElementById('createArtistButton');
+        createArtistButton.addEventListener('click', function(){
+            const createArtist = new DOMHandle();
+            createArtist.createArtistContent();
+        });
 
-createPlaylistButton.addEventListener('click', function(){
-    const createPlaylist = new DOMHandle();
-    createPlaylist.createPlaylistContent();
-});
+        const createPlaylistButton = document.getElementById('createPlaylistButton');
+        createPlaylistButton.addEventListener('click', function(){
+            const createPlaylist = new DOMHandle();
+            createPlaylist.createPlaylistContent();
+        });
+    }
+}
 
 /* Handles all fetch queries. */
 class FetchHandle {
-   
+
     /* ----ADDED BY ERIKA----- */
     constructor (method, body) {
         this.method = method;
@@ -221,10 +222,10 @@ class FetchHandle {
           })
           .then((response) => response.json())
           .then((comment) => {
- 
+
             const newFetch = new FetchHandle();
             newFetch.fetchPlaylistById(comment.playlist);
-        
+
           });
 
     }
@@ -345,7 +346,7 @@ class DOMHandle {
         const showByIdButton = document.
         getElementsByClassName('showByIdButton');
 
-        for (i = 0; i < showByIdButton.length; i++) {
+        for (let i = 0; i < showByIdButton.length; i++) {
             showByIdButton[i].addEventListener('click', function() {
 
                 const deActivate = new DOMHandle();
@@ -398,7 +399,7 @@ class DOMHandle {
         const showByIdButton = document.
         getElementsByClassName('showByIdButton');
 
-        for (i = 0; i < showByIdButton.length; i++) {
+        for (let i = 0; i < showByIdButton.length; i++) {
             showByIdButton[i].addEventListener('click', function() {
                 let id = this.id
                 const deActivate = new DOMHandle();
@@ -432,7 +433,7 @@ class DOMHandle {
 
         const showByIdButton = document.
         getElementsByClassName('showByIdButton');
-        for (i = 0; i < showByIdButton.length; i++) {
+        for (let i = 0; i < showByIdButton.length; i++) {
             showByIdButton[i].addEventListener('click', function() {
                                 let id = this.id
                 const deActivate = new DOMHandle();
@@ -466,7 +467,7 @@ class DOMHandle {
 
         const showByIdButton = document.
         getElementsByClassName('showByIdButton');
-        for (i = 0; i < showByIdButton.length; i++) {
+        for (let i = 0; i < showByIdButton.length; i++) {
             showByIdButton[i].addEventListener('click', function() {
                                 let id = this.id
                 const deActivate = new DOMHandle();
@@ -483,10 +484,10 @@ class DOMHandle {
 
     }
     displayTopPlaylist(list) {
-        
+
         const newDOM = new DOMHandle();
         const newFetch = new FetchHandle();
-        
+
         let topPlaylistsButtons = `
             <div class="topFivePlayLists">
             <p>THE HIGHEST RATED PLAYLISTS</p>`;
@@ -600,7 +601,7 @@ class DOMHandle {
             newFetch.rateStuff('albums', thisAlbumId, ratingNumber);
             newFetch.fetchAlbumById(thisAlbumId);
         });
-        
+
         newDOM.everyOtherButton(albumTrackButton);
     }
     //CLEANED
@@ -646,7 +647,7 @@ class DOMHandle {
         const trackAlbumButton = document.getElementsByClassName('trackAlbumButton');
 
         for (let button of trackAlbumButton) {
-            button.addEventListener('click', function() {  
+            button.addEventListener('click', function() {
                 newDOM.fadeOutAnimation(mainOutput, 'add');
                 setTimeout( () => {
                 newFetch.fetchAlbumById(button.id);
@@ -677,7 +678,7 @@ class DOMHandle {
     }
     //CLEANED
     displaySpecificArtist(artist, albums){
-        
+
         const newDOM = new DOMHandle();
         const newFetch = new FetchHandle();
 
@@ -745,11 +746,11 @@ class DOMHandle {
             button.addEventListener('click', function() {
                 newDOM.fadeOutAnimation(mainOutput, 'add');
                 setTimeout(() => {
-                    newFetch.fetchAlbumById(this.id);  
+                    newFetch.fetchAlbumById(this.id);
                 }, 500);
             });
         }
-        
+
         newDOM.everyOtherButton(artistAlbumButtons);
     }
     //CLEANED
@@ -758,7 +759,7 @@ class DOMHandle {
         const fetchRating = new Logic();
         const newDOM = new DOMHandle();
         const newFetch = new FetchHandle();
-        
+
         const createdDate = playlist.createdAt.substring(0,10);
         const createdTime = playlist.createdAt.substring(11,16);
         const updatedDate = playlist.updatedAt.substring(0,10);
@@ -796,7 +797,7 @@ class DOMHandle {
 
         mainOutput.innerHTML=contentOfSpecificPlaylist;
         newDOM.fadeOutAnimation(mainOutput, 'remove');
-        
+
         const deleteButton = document.getElementById('deletePlaylist');
         deleteButton.addEventListener('click', () => {
             newFetch.deleteItem('playlists', playlist._id);
@@ -812,7 +813,7 @@ class DOMHandle {
         });
 
         const playlistTracklist = document.getElementById('playlistTracklist');
-        
+
         let trackButton = "";
         for (let i = 0; i < playlist.tracks.length; i++){
             trackButton +=`
@@ -824,9 +825,9 @@ class DOMHandle {
         }
 
         playlistTracklist.innerHTML=trackButton;
-           
+
         const displayCommentsButton = document.getElementById('displayComments');
-        
+
         displayCommentsButton.addEventListener('click', () => {
             newDOM.displayPlaylistComments(comments, playlist._id);
         })
@@ -837,19 +838,19 @@ class DOMHandle {
             const thisPlaylistId = playlist._id;
             newFetch.rateStuff('playlists', thisPlaylistId, ratingNumber);
         });
-        
+
         newDOM.everyOtherButton(playlistTracklist.children);
     }
     // CLEANED
     displayPlaylistComments(comments, playlistID){
-        
+
         const commentsOutput = document.getElementById('commentsOutput');
         const newFetch = new FetchHandle();
         const newDOM = new DOMHandle();
         const newController = new Controller();
-        
+
         newDOM.fadeOutAnimation(commentsOutput, 'remove');
-        
+
         let commentField = `
             <form id="commentForm">
                 <button type="button" id="commentCloseButton">
@@ -865,14 +866,14 @@ class DOMHandle {
             </form>
             <div id="playlistComments"></div>
         `;
-        
+
         commentsOutput.innerHTML=commentField;
-        
+
         const playlistComments = document.getElementById('playlistComments');
-        
+
         let commentContent = "";
-        
-        if(!comments.length == 0){       
+
+        if(!comments.length == 0){
             for(let i = 0; i < comments[0].length; i++){
                  commentContent +=`
                     <div class="playlistComment">
@@ -890,21 +891,21 @@ class DOMHandle {
                         </p>
                     </div>
                 `;
-            }           
+            }
         } //END OF IF NOT NULL STATEMENT
-         
+
         playlistComments.innerHTML=commentContent;
-        
+
         const addCommentButton = document.getElementById('addCommentButton');
         const commentFieldDiv = document.getElementById('commentField');
         const commentUser = document.getElementById('commentUser');
 
         addCommentButton.addEventListener('click', function(){
-            
+
             const commentFieldEmpty = newController.isEmpty(commentFieldDiv.value);
             const commentUserEmpty = newController.isEmpty(commentUser.value);
             const wrongMessageComment = document.getElementById('wrongMessageComment');
-            
+
             if(commentFieldEmpty && commentUserEmpty){
                 let wrongMessage='<p> YOU HAVE TO FILL IN THE FIELDS CORRECTLY</p>';
                 wrongMessageComment.innerHTML=wrongMessage;
@@ -934,7 +935,7 @@ class DOMHandle {
         const deleteCommentButton = document.
         getElementsByClassName('deleteComment');
 
-        for (i = 0; i < deleteCommentButton.length; i++) {
+        for (let i = 0; i < deleteCommentButton.length; i++) {
             deleteCommentButton[i].addEventListener('click', function(){
                 newDOM.fadeOutAnimation(playlistComments, 'add');
                 setTimeout( () => {
@@ -954,18 +955,18 @@ class DOMHandle {
                 }, 500);
             });
         }
-        
+
         const commentCloseButton = document.getElementById('commentCloseButton');
-        
-        commentCloseButton.addEventListener('click', () => {    
+
+        commentCloseButton.addEventListener('click', () => {
             let commentContent ='';
             newDOM.fadeOutAnimation(commentsOutput, 'add');
             setTimeout( () => {
                 commentsOutput.innerHTML=commentContent;
             }, 1000);
         });
-        
-    } 
+
+    }
     // CLEANED
 
     filterSearch() {
@@ -1418,7 +1419,7 @@ class DOMHandle {
     getElementById('slideDotsWrapper')
 
     let dots = "";
-    for(i = 0; i < bannerImages.length; i++){
+    for(let i = 0; i < bannerImages.length; i++){
         dots +=`<div class="slideDot"></div>`;
     }
 
@@ -1463,7 +1464,7 @@ class DOMHandle {
         }
     }
 
-    i = 0;
+    let i = 0;
     startSlide(i)
 }
 createPlaylistContent(){
@@ -1920,8 +1921,10 @@ class Logic {
     roundNumber(number) {
         return Math.round( number * 10 ) / 10;
     }
-
 }
+const initiate = new Init();
+initiate.initiateEventListeners();
+
 const runSlideShow = new DOMHandle();
 runSlideShow.slideShowBanner();
 
