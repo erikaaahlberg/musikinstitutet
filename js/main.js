@@ -1142,10 +1142,9 @@ class DOMHandle {
         const albumController = new Controller;
         const albumFetch = new FetchHandle;
 
-        setTimeout(function(){
-            albumDom.fadeOutAnimation(addDiv, 'remove')
-        });
-
+        addDiv.innerHTML = ``;
+        albumDom.fadeOutAnimation(addDiv, 'remove');
+        
         let createAlbumContent =`
             <div id="addWrapper">
                 <p>ADD AN ALBUM</p>
@@ -1182,14 +1181,8 @@ class DOMHandle {
 
         /* Go back-button */
         importCloseButton.addEventListener('click',function(){
-
-            let createAlbumContent =``;
             albumDom.fadeOutAnimation(addDiv, 'add');
-
-            setTimeout(function(){
-                addDiv.innerHTML=createAlbumContent;
-            }, 1000);
-
+            addDiv.innerHTML = ``;
         });
 
         /* Add track to existing album link */
@@ -1333,20 +1326,23 @@ class DOMHandle {
                     const popupDom = new DOMHandle;
                     messagePopupBox.innerHTML = ``;
                     messagePopupBox.className = 'hidden';
-                    popupDom.fadeOutAnimation(addDiv, 'out');
+                    popupDom.fadeOutAnimation(addDiv, 'add');
+                    addDiv.innerHTML = ``;
                 });
             }
         });
     }
 
     createArtistContent(){
+        const artistDom = new DOMHandle();
+        const artistFetch = new FetchHandle();
+        const artistController = new Controller();
+
         const addDiv = document.getElementById('addDiv');
 
-        setTimeout(function(){
-            addDiv.classList.remove('fadeOut');
-        })
+        addDiv.innerHTML=``;
 
-        const artistDom = new DOMHandle;
+        artistDom.fadeOutAnimation(addDiv, 'remove');
 
         let createArtistContent =`
             <div id="addWrapper">
@@ -1414,19 +1410,11 @@ class DOMHandle {
         });
         /* -----collapse------ */
 
-        setTimeout(function(){
-            artistDom.fadeOutAnimation(addDiv, 'remove');
-        })
+        //artistDom.fadeOutAnimation(addDiv, 'remove');
 
         importCloseButton.addEventListener('click', function(){
-
-            let createAlbumContent =``;
             artistDom.fadeOutAnimation(addDiv, 'add');
-
-            setTimeout(function(){
-                addDiv.innerHTML=createAlbumContent;
-            }, 1000)
-
+            addDiv.innerHTML = ``;
         });
     }
     displayGenres(object) {
@@ -1512,9 +1500,8 @@ createPlaylistContent(){
     const playlistDom = new DOMHandle();
     const playlistFetch = new FetchHandle();
 
-    setTimeout(function(){
-        addDiv.classList.remove('fadeOut');
-    })
+    addDiv.innerHTML = ``;
+    playlistDom.fadeOutAnimation(addDiv, 'remove');
 
     const createPlaylistForm =`
         <div id="addWrapper">
@@ -1540,7 +1527,8 @@ createPlaylistContent(){
     const importCloseButton = document.getElementById('importCloseButton');
 
     importCloseButton.addEventListener('click', function(){
-        playlistDom.closeButtonAction();
+        playlistDom.fadeOutAnimation(addDiv, 'add');
+        addDiv.innerHTML = ``;
     });
 
     const addToExistingPlaylistLink = document.getElementById('addToExistingPlaylist');
@@ -1571,7 +1559,8 @@ createPlaylistContent(){
         playlistDom.choseTrackSelector(parentElement);
 
         importCloseButton.addEventListener('click', function(){
-            playlistDom.closeButtonAction();
+            albumDom.fadeOutAnimation(addDiv, 'add');
+            addDiv.innerHTML = ``;
         });
         /*const addTrackButton = document.
         getElementById('addTrackButton');
@@ -1588,11 +1577,8 @@ createPlaylistContent(){
 
      /* Go back-button */
      importCloseButton.addEventListener('click',function(){
-         let createAlbumContent =``;
-             addDiv.classList.add('fadeOut');
-         setTimeout(function(){
-             addDiv.innerHTML=createAlbumContent;
-         }, 1000)
+        playlistDom.fadeOutAnimation(addDiv, 'add');
+        addDiv.innerHTML = ``;
      });
 
      addPlaylistButton.addEventListener('click', function(){
@@ -1693,7 +1679,9 @@ createPlaylistContent(){
                     const popupDom = new DOMHandle;
                     messagePopupBox.innerHTML = ``;
                     messagePopupBox.className = 'hidden';
-                    popupDom.fadeOutAnimation(addDiv, 'out');
+
+                    popupDom.fadeOutAnimation(addDiv, 'add');
+                    addDiv.innerHTML = ``;
                 });
         }
     });
@@ -1759,14 +1747,6 @@ displayQuestionPopup (question) {
         </div>
     `;
     parentElement.appendChild(popupBox);
-}
-closeButtonAction() {
-    const addDiv = document.getElementById('addDiv');
-    //let createAlbumContent =``;
-    addDiv.classList.add('fadeOut');
-    setTimeout(function(){
-        addDiv.innerHTML = ``;
-    }, 1000)
 }
 }/* --- Class DOMHandle collapse --- */
 
