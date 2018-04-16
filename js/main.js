@@ -371,8 +371,9 @@ class DOMHandle {
     }
     displayTracks(allTracks) {
 
-
-        const searchResult = document.getElementById('searchResults')
+        const newFetch = new FetchHandle();
+        const deActivate = new DOMHandle();
+        const searchResult = document.getElementById('searchResults');
 
         let searchedTrackButtons = '';
         for (let i = 0; i < allTracks.length; i++) {
@@ -392,19 +393,16 @@ class DOMHandle {
 
         for (i = 0; i < showByIdButton.length; i++) {
             showByIdButton[i].addEventListener('click', function() {
-                let id = this.id
-                const deActivate = new DOMHandle();
                 deActivate.deactivateSearchButtons();
                 deActivate.fadeOutAnimation(mainOutput, 'add');
-
-                setTimeout(function(){
-                    const newFetch = new FetchHandle();
-                    newFetch.fetchTrackById(id);
-                }, mainAnimationTime)
+                setTimeout( () => {
+                    newFetch.fetchTrackById(this.id);
+                }, mainAnimationTime);
 
             });
         }
    }
+    //CLEANED
     displayArtists(allArtists) {
 
         const deActivate = new DOMHandle();
@@ -827,7 +825,7 @@ class DOMHandle {
         
         newDOM.everyOtherButton(playlistTracklist.children);
     }
-    // CLEANED
+    //CLEANED
     displayPlaylistComments(comments, playlistID){
         
         const commentsOutput = document.getElementById('commentsOutput');
@@ -953,7 +951,7 @@ class DOMHandle {
         });
         
     } 
-    // CLEANED
+    //CLEANED
     filterSearch() {
         for (let sbutton of searchButton) {
             if (sbutton.classList.contains('activeButton')) {
