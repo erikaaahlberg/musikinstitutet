@@ -227,6 +227,7 @@ class FetchHandle {
 
     }
     rateStuff(apiPath, id, rating) {
+        const display = new DOMHandle;
         fetch(`https://folksa.ga/api/${apiPath}/${id}/vote?key=flat_eric`, {
             method: 'POST',
             headers: {
@@ -235,37 +236,37 @@ class FetchHandle {
             },
             body: JSON.stringify({ rating: rating })
         })
-        .then((response) => response.json())
-        .then((vote) => {
-            if (apiPath == 'albums') {
-                this.fetchAlbumById(id);
-            }
-            if (apiPath == 'playlists') {
-                this.fetchPlaylistById(id);
-            }
-            if (apiPath == 'tracks') {
-                this.fetchTrackById(id);
-            }
-        })
-        .catch((error) => {
-            //console.log(error);
-        });
+            .then((response) => response.json())
+                .then((vote) => {
+                    if (apiPath == 'albums') {
+                        this.fetchAlbumById(id);
+                    }
+                    if (apiPath == 'playlists') {
+                        this.fetchPlaylistById(id);
+                    }
+                    if (apiPath == 'tracks') {
+                        this.fetchTrackById(id);
+                    }
+                })
+                    .catch((error) => {
+                        display.displayPopup([error]);
+                    });
     }
     /*--------ADDED BY ERIKA----------- */
     postItem (itemToPost, HttpRequest) {
-        console.log(HttpRequest);
+        const theItem = itemToPost.slice(0, -1);
+        const display = new DOMHandle;
         fetch(`https://folksa.ga/api/${itemToPost}?&key=flat_eric`, HttpRequest)
             .then((response) => response.json())
                 .then((postedItem) => {
-                    console.log(postedItem);
+                    display.displayPopup([`The ${theItem} was successfully added!`]);
                 })
                     .catch((errorMessage) => {
-                        const displayError = new DOMHandle;
-                        console.log(errorMessage);
-                        displayError.displayErrorPopup(errorMessage);
+                        display.displayPopup([errorMessage]);
                     });
     }
     deleteItem (itemToDelete, idToDelete) {
+        const theItem = itemToDelete.slice(0, -1);
         fetch(`https://folksa.ga/api/${itemToDelete}/${idToDelete}?&key=flat_eric`,
         {
             method: 'DELETE',
@@ -276,8 +277,13 @@ class FetchHandle {
         })
             .then((response) => response.json())
                 .then((deletedItem) => {
-                    console.log(deletedItem);
-                });
+                    const display = new DOMHandle;
+                    display.displayPopup([`The ${theItem} was successfully deleted!`]);
+                })
+                    .catch((errorMessage) => {
+                        const displayError = new DOMHandle;
+                        displayError.displayPopup([errorMessage]);
+                    });
     }
     /*---------------- */
 }
@@ -331,13 +337,13 @@ class DOMHandle {
 
         for (i = 0; i < showByIdButton.length; i++) {
             showByIdButton[i].addEventListener('click', function() {
-            
+
                 const deActivate = new DOMHandle();
                 deActivate.deactivateSearchButtons();
-               let id = this.id    
-            
+               let id = this.id
+
                deActivate.fadeOutAnimation(mainOutput, 'add');
-                
+
                 setTimeout(function(){
                     console.log(id)
                     const newFetch = new FetchHandle();
@@ -387,12 +393,12 @@ class DOMHandle {
                 const deActivate = new DOMHandle();
                 deActivate.deactivateSearchButtons();
                 deActivate.fadeOutAnimation(mainOutput, 'add');
-                
+
                 setTimeout(function(){
                     const newFetch = new FetchHandle();
                     newFetch.fetchTrackById(id);
                 },500)
-            
+
             });
         }
    }
@@ -421,7 +427,7 @@ class DOMHandle {
                 const deActivate = new DOMHandle();
                 deActivate.deactivateSearchButtons();
                 deActivate.fadeOutAnimation(mainOutput, 'add');
-                
+
                 setTimeout(function(){
                     const newFetch = new FetchHandle();
                     newFetch.fetchArtistById(id);
@@ -455,7 +461,7 @@ class DOMHandle {
                 const deActivate = new DOMHandle();
                 deActivate.deactivateSearchButtons();
                 deActivate.fadeOutAnimation(mainOutput, 'add');
-                
+
                 setTimeout(function(){
                     const newFetch = new FetchHandle();
                     newFetch.fetchPlaylistById(id);
@@ -465,9 +471,9 @@ class DOMHandle {
 
     }
     displaySpecificAlbum(album) {
-        
+
         runSlideShow.fadeOutAnimation(mainOutput, 'remove')
-        
+
         const fetchRating = new Logic();
 
         let contentOfSpecificAlbum = `
@@ -497,15 +503,19 @@ class DOMHandle {
             </div>
         `
         mainOutput.innerHTML = contentOfSpecificAlbum;
-        
+
         const deleteButton = document.getElementById('deleteAlbum');
         deleteButton.addEventListener('click', () => {
             const deleteAlbum = new FetchHandle();
             deleteAlbum.deleteItem('albums', album._id);
             const albumsButton = document.getElementById('albumsButton');
-            mainOutput.innerHTML = '<div id="searchResults"></div>';
-            this.activateSearchButton(albumsButton);
-            deleteAlbum.fetchAlbums();
+            const albumDiv = document.getElementById('contentOfSpecificAlbum')
+            this.fadeOutAnimation(albumDiv, 'add');
+            setTimeout(() => {
+                mainOutput.innerHTML = '<div id="searchResults"></div>';
+                this.activateSearchButton(albumsButton);
+                deleteAlbum.fetchAlbums();
+            }, 500);
         });
 
         let trackTitles = "";
@@ -547,9 +557,9 @@ class DOMHandle {
 
     }
     displaySpecificTrack(track) {
-        
+
         runSlideShow.fadeOutAnimation(mainOutput, 'remove')
-        
+
         const fetchRating = new Logic();
 
         let contentOfSpecificTrack = `
@@ -602,9 +612,13 @@ class DOMHandle {
             const deleteTrack = new FetchHandle();
             deleteTrack.deleteItem('tracks', track._id);
             const tracksButton = document.getElementById('tracksButton');
-            mainOutput.innerHTML = '<div id="searchResults"></div>';
-            this.activateSearchButton(tracksButton);
-            deleteTrack.fetchTracks();
+            const trackDiv = document.getElementById('contentOfSpecificTrack');
+            this.fadeOutAnimation(trackDiv, 'add');
+            setTimeout(() => {
+                mainOutput.innerHTML = '<div id="searchResults"></div>';
+                this.activateSearchButton(tracksButton);
+                deleteTrack.fetchTracks();
+            }, 500)
         });
 
         const rateTrack = document.getElementById('rateTrack');
@@ -617,9 +631,9 @@ class DOMHandle {
     });
 }
     displaySpecificArtist(artist, albums){
-        
+
         runSlideShow.fadeOutAnimation(mainOutput, 'remove')
-        
+
         let convertedDated = '';
         if (artist.born) {
           convertedDated = artist.born.substring(0,4);
@@ -654,9 +668,13 @@ class DOMHandle {
             const deleteArtist = new FetchHandle();
             deleteArtist.deleteItem('artists', artist._id);
             const artistsButton = document.getElementById('artistsButton');
-            mainOutput.innerHTML = '<div id="searchResults"></div>';
-            this.activateSearchButton(artistsButton);
-            deleteArtist.fetchArtists();
+            const artistDiv = document.getElementById('contentOfSpecificArtist');
+            this.fadeOutAnimation(artistDiv, 'add');
+            setTimeout(() => {
+                mainOutput.innerHTML = '<div id="searchResults"></div>';
+                this.activateSearchButton(artistsButton);
+                deleteArtist.fetchArtists();
+            }, 500);
         });
 
         let artistAlbum = "";
@@ -689,9 +707,9 @@ class DOMHandle {
 
     }
     displaySpecificPlaylist(playlist, comments){
-        
+
         runSlideShow.fadeOutAnimation(mainOutput, 'remove')
-        
+
         const fetchRating = new Logic();
 
         const createdDate = playlist.createdAt.substring(0,10)
@@ -741,10 +759,14 @@ class DOMHandle {
             const deletePlaylist = new FetchHandle();
             deletePlaylist.deleteItem('playlists', playlist._id);
             const playlistsButton = document.getElementById('playlistsButton');
-            mainOutput.innerHTML = '<div id="searchResults"></div>';
-            this.activateSearchButton(playlistsButton);
-            deletePlaylist.fetchPlaylists();
-            deletePlaylist.fetchTopPlaylists();
+            const playlistDiv = document.getElementById('contentOfSpecificPlaylist');
+            this.fadeOutAnimation(playlistDiv, 'add');
+            setTimeout(() => {
+                mainOutput.innerHTML = '<div id="searchResults"></div>';
+                this.activateSearchButton(playlistsButton);
+                deletePlaylist.fetchPlaylists();
+                deletePlaylist.fetchTopPlaylists();
+            }, 500)
         });
 
         const playlistTracklist = document.getElementById('playlistTracklist');
@@ -931,12 +953,12 @@ class DOMHandle {
             errorMessages.push('Title is required.');
         }
         if (errorMessages.length > 0) {
-            trackDom.displayErrorPopup(errorMessages);
+            trackDom.displayPopup(errorMessages);
         } else {
             trackFetch.fetchItemByChosenParameter('playlists', 'title', newTrackTitle)
             .then((fetchedPlaylist) => {
                 console.log(fetchedPlaylist);
-            });   
+            });
     }
 }
     addTrackToAlbumEventListener() {
@@ -964,7 +986,7 @@ class DOMHandle {
             errorMessages.push('Title is required.');
         }
         if (errorMessages.length > 0) {
-            trackDom.displayErrorPopup(errorMessages);
+            trackDom.displayPopup(errorMessages);
         } else {
             /* Fetching id's for album and artist to create a track to post */
             trackFetch.fetchItemByChosenParameter('albums', 'title', newTrackAlbum)
@@ -1038,14 +1060,14 @@ class DOMHandle {
 
         /* Go back-button */
         importCloseButton.addEventListener('click',function(){
-            
+
             let createAlbumContent =``;
             albumDom.fadeOutAnimation(addDiv, 'add');
-            
+
             setTimeout(function(){
                 addDiv.innerHTML=createAlbumContent;
             }, 1000);
-            
+
         });
 
         /* Add track to existing album link */
@@ -1144,7 +1166,7 @@ class DOMHandle {
             } /* --- if (!isTitleEmpty && !isArtistEmpty) collapse --- */
 
             if (errorMessages.length > 0) {
-                    albumDom.displayErrorPopup(errorMessages);
+                    albumDom.displayPopup(errorMessages);
             }
             else {
                 albumFetch.fetchItemByChosenParameter('artists', 'name', albumArtistName)
@@ -1203,7 +1225,7 @@ class DOMHandle {
         })
 
         const artistDom = new DOMHandle;
-        
+
         let createArtistContent =`
             <div id="addWrapper">
                 <p>ADD ARTIST</p>
@@ -1260,7 +1282,7 @@ class DOMHandle {
             /* A DOM-function to print error-messages should be called for here */
             if (errorMessages.length > 0) {
                 const popupMessage = new DOMHandle;
-                popupMessage.displayErrorPopup(errorMessages);
+                popupMessage.displayPopup(errorMessages);
             }
             else {
                 const artistToPost = new Artist(artistName, artistGenres, artistCoverImageURL);
@@ -1275,10 +1297,10 @@ class DOMHandle {
         })
 
         importCloseButton.addEventListener('click', function(){
-            
+
             let createAlbumContent =``;
             artistDom.fadeOutAnimation(addDiv, 'add');
-            
+
             setTimeout(function(){
                 addDiv.innerHTML=createAlbumContent;
             }, 1000)
@@ -1367,7 +1389,7 @@ createPlaylistContent(){
     const playlistController = new Controller();
     const playlistDom = new DOMHandle();
     const playlistFetch = new FetchHandle();
-    
+
     setTimeout(function(){
         addDiv.classList.remove('fadeOut');
     })
@@ -1392,13 +1414,13 @@ createPlaylistContent(){
         </div>
         `;
     addDiv.innerHTML = createPlaylistForm;
-    
+
     const importCloseButton = document.getElementById('importCloseButton');
-    
+
     importCloseButton.addEventListener('click', function(){
         playlistDom.closeButtonAction();
     });
-        
+
     const addToExistingPlaylistLink = document.getElementById('addToExistingPlaylist');
 
     /* Add track to existing album link */
@@ -1459,7 +1481,7 @@ createPlaylistContent(){
 
          /* Checking the imported values before creating a new album. */
          const errorMessages = [];
-         
+
         if (isTitleEmpty) {
             errorMessages.push('Playlist title is required.');
         }
@@ -1471,27 +1493,27 @@ createPlaylistContent(){
         if (!isTitleEmpty && !isCreatorEmpty) {
             const isGenresEmpty = playlistController.isEmpty(playlistGenres);
             const isCoverImageEmpty = playlistController.isEmpty(playlistImageURL);
-            
+
             if (!isGenresEmpty) {
                 const editedGenresParameter = playlistController.editGenresParameter(playlistGenres);
-                playlistGenres = editedGenresParameter;    
+                playlistGenres = editedGenresParameter;
             }
             if (!isCoverImageEmpty) {
                 const isImageURLValid = playlistController.checkURL(playlistImageURL);
                 if (!isImageURLValid) {
                     errorMessages.push('The image URL is not valid.');
-                }    
+                }
             }
         } /* --- if (!isTitleEmpty && !isCreatorEmpty) collapse --- */
 
         if (errorMessages.length > 0) {
-                playlistDom.displayErrorPopup(errorMessages);
+                playlistDom.displayPopup(errorMessages);
         }
         else {
                 const playlistToPost = new Playlist(playlistTitle, playlistGenres, playlistImageURL, playlistCreator);
                 console.log(playlistToPost);
                 const playlistPostRequest = new FetchHandle('POST', playlistToPost);
-                    
+
                 //playlistPostRequest.postItem('playlists', playlistPostRequest);
                 /* Display alternative popup */
                 playlistDom.displayQuestionPopup('Do you want to add tracks now?');
@@ -1502,7 +1524,7 @@ createPlaylistContent(){
                 const parentElement = document.getElementById('addWrapper');
 
                 yesButton.addEventListener('click', function() {
-                    
+
                     playlistDom.hideElement('messagePopupBox');
                     const addTrackContent = `
                     <form id="addTrackToPlaylist">
@@ -1547,14 +1569,14 @@ createPlaylistContent(){
         }
     });
 }
-    
+
     fadeOutAnimation(div, addRemove){
         console.log(div)
         console.log(addRemove)
         if(addRemove === 'remove'){
             div.classList.remove('fadeOut');
         } else {
-            div.classList.add('fadeOut');   
+            div.classList.add('fadeOut');
         }
     }
 
@@ -1568,8 +1590,9 @@ displayElement (elementId) {
     const element = document.getElementById(elementId).style.display = "block";
 }
 /* -------under construction-------- */
-displayErrorPopup (errorMessages) {
-    const parentElement = document.getElementById('addWrapper');
+displayPopup (errorMessages, div = 'mainOutput') {
+    const parentElement = document.getElementById(div);
+    console.log(parentElement);
     const popupBox = document.createElement('div');
     popupBox.className = 'messagePopupBox';
     popupBox.setAttribute('id', 'messagePopupBox');
@@ -1582,8 +1605,7 @@ displayErrorPopup (errorMessages) {
         popupBox.appendChild(errorMessageParagraph);
     }
     popupBox.insertAdjacentHTML('beforeend',
-        `<p>Please try again!</p>
-        <div id = "messageButtonWrapper">
+        `<div id = "messageButtonWrapper">
             <button id = "errorOkButton"> Ok </button>
         </div>`
     );
