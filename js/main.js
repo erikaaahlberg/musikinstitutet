@@ -824,8 +824,8 @@ class DOMHandle {
             setTimeout(() => {
                 mainOutput.innerHTML = '<div id="searchResults"></div>';
                 this.activateSearchButton(playlistsButton);
-                deletePlaylist.fetchPlaylists();
-                deletePlaylist.fetchTopPlaylists();
+                newFetch.fetchPlaylists();
+                newFetch.fetchTopPlaylists();
             }, mainAnimationTime)
         });
 
@@ -1677,6 +1677,10 @@ class DOMHandle {
             const parentElement = document.getElementById('addTrackToExistingPlaylist');
 
             playlistDom.chooseTrackSelector(parentElement);
+            const selector = document.getElementById('trackSelector');
+        
+            selector.classList.add('annanKlass');
+            console.log(selector)
 
         });
 
