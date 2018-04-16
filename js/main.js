@@ -1048,6 +1048,8 @@ class DOMHandle {
         
         const selector = document.getElementById('trackSelector');
 
+        const selectedTracks = [];
+
         trackFetch.fetchItemByChosenParameter('tracks', 'limit', '999')
             .then((fetchedTracks) => {
                 for (let track of fetchedTracks) {
@@ -1067,9 +1069,15 @@ class DOMHandle {
             addButton.addEventListener('click', function() {
                 var selectedIndex = selector.selectedIndex;
 
-                const trackId = (document.getElementsByTagName('option')[selectedIndex].value);
+                const trackId = document.getElementsByTagName('option')[selectedIndex].value;
                 console.log(trackId);
+                
+                const selectedTrack =  document.getElementsByTagName('option')[selectedIndex].innerHTML;
+
+                selectedTracks.push(selectedTrack);
+                console.log(selectedTrack);
                 trackDom.addTrackToPlaylist(trackId);
+                trackDom.displayAddedTracks(selectedTracks, 'addWrapper');
             });
         });
     }
@@ -1114,14 +1122,8 @@ class DOMHandle {
                 const postTrackRequest = new FetchHandle('POST', trackToPost);
                 postTrackRequest.postItem('tracks', postTrackRequest);
 
-                /* Printing added tracks */
-                for (let track of addedTracks) {
-                    const parentElement = document.getElementById('addWrapper');
-                    const p = document.createElement('p');
-                    const addedTrack = document.createTextNode(track);
-                    p.appendChild(addedTrack);
-                    parentElement.appendChild(p);
-                }
+                /* Printing added tracks*/
+                trackDom.displayAddedTracks(addedTracks, 'addWrapper'); 
             });
         }
     }
@@ -1177,32 +1179,46 @@ class DOMHandle {
         });
 
         /* Add track to existing album link */
-        addTrackToExistingAlbum.addEventListener('click', function(){
+        addTrackToExistingAlbum.addEventListener('click', function() {
+            event.preventDefault();
             addDiv.innerHTML = `
             <div id="addWrapper">
-            <p>ADD TRACK TO EXISTING ALBUM</p>
-            <form id="addTrackToExistingAlbum">
-                <input type="text" id="inputAlbumTitle" placeholder="ALBUM TITLE..">
-                <input type="text" id="inputTrackTitle" placeholder="TRACK TITLE..">
-                <input type="text" id="inputTrackArtist" placeholder="ARTIST..">
-                <button type ="button" id="addTrackButton">
-                    ADD TRACK
+                <p>ADD TRACK TO EXISTING ALBUM</p>
+                <form id="addTrackToExistingAlbum">
+                    <input type="text" id="inputAlbumTitle" placeholder="ALBUM TITLE..">
+                    <input type="text" id="inputTrackTitle" placeholder="TRACK TITLE..">
+                    <input type="text" id="inputTrackArtist" placeholder="ARTIST..">
+                    <button type ="button" id="addTrackButton">
+                        ADD TRACK
+                    </button>
+                </form>
+                <a href = "#" id="createAlbum" class = "mainLink">
+                Add new album
+                </a>
+                <button type="button" id="importCloseButton">
+                    <img src="images/x-circle.svg">
+                    BACK
                 </button>
-            </form>
-            <a href = "#" id="createAlbum" class = "mainLink">
-            Add new album
-            </a>
-            <button type="button" id="importCloseButton">
-                <img src="images/x-circle.svg">
-                BACK
-            </button>
-        </div>
+            </div>
             `;
+            
+            const createAlbumLink = document.getElementById('createAlbum');
+
+            createAlbumLink.addEventListener('click', function(){
+                event.preventDefault();
+                addDiv.innerHTML = createAlbumContent;
+            });
             const addTrackButton = document.
             getElementById('addTrackButton');
 
             addTrackButton.addEventListener('click', function(){
                 albumDom.addTrackToAlbumEventListener();
+            });
+            const importCloseButton = document.getElementById('importCloseButton');
+            
+            importCloseButton.addEventListener('click',function(){
+                albumDom.fadeOutAnimation(addDiv, 'add');
+                addDiv.innerHTML = ``;
             });
         });
 
@@ -1294,7 +1310,9 @@ class DOMHandle {
                 const parentElement = document.getElementById('addWrapper');
 
                 yesButton.addEventListener('click', function(){
+                    event.preventDefault();
                     albumDomHandle.hideElement('messagePopupBox');
+
                     const addTrackContent = `
                     <form id="postTrack">
                         <input text="text" id="inputTrackArtist" placeholder="ARTIST..">
@@ -1306,6 +1324,7 @@ class DOMHandle {
                     <div id="addTrackTracklist"></div>
                     `;
                     parentElement.insertAdjacentHTML('beforeend', addTrackContent);
+
                     const addTrackButton = document.
                     getElementById('addTrackButton');
 
@@ -1525,7 +1544,7 @@ createPlaylistContent(){
     const addToExistingPlaylistLink = document.getElementById('addToExistingPlaylist');
 
     /* Add track to existing album link */
-    addToExistingPlaylistLink.addEventListener('click', function(){
+    addToExistingPlaylistLink.addEventListener('click', function() {
         event.preventDefault();
         const addToExistingPlaylist = `
         <div id="addWrapper">
@@ -1753,6 +1772,15 @@ displayQuestionPopup (question) {
         </div>
     `;
     parentElement.appendChild(popupBox);
+}
+displayAddedTracks (addedTracks, parentElementId) {
+    for (let track of addedTracks) {
+        const parentElement = document.getElementById(parentElementId);
+        const p = document.createElement('p');
+        const addedTrack = document.createTextNode(track);
+        p.appendChild(addedTrack);
+        parentElement.appendChild(p);
+    }    
 }
 }/* --- Class DOMHandle collapse --- */
 
