@@ -1383,69 +1383,72 @@ class DOMHandle {
 
     slideShowBanner(){
 
-    const slideShowBannerDiv = document.
-    getElementById('slideShow');
+        const slideShowBannerDiv = document.getElementById('slideShow');
+        const newDOM = DOMHandle();
+        
+        const bannerImages = [
+            "image1.jpg",
+            "image2.jpg",
+            "image3.jpg",
+            "image4.jpg",
+            "image5.jpg",
+        ];
 
-    const bannerImages = [
-        "image1.jpg",
-        "image2.jpg",
-        "image3.jpg",
-        "image4.jpg",
-        "image5.jpg",
-    ];
+        const dotWrapper = document.getElementById('slideDotsWrapper')
 
-    const dotWrapper = document.
-    getElementById('slideDotsWrapper')
-
-    let dots = "";
-    for(i = 0; i < bannerImages.length; i++){
-        dots +=`<div class="slideDot"></div>`;
-    }
-
-    dotWrapper.innerHTML=dots;
-
-    function startSlide(i){
-        if(i <= bannerImages.length-1){
-             let addSlide = `
-                <div class="slideWrapper fadeSlide">
-                    <img src="images/${bannerImages[i]}"
-                </div>
-            `;
-            const dot = `<div id="slideDotsWrapper"></div>`
-
-            slideShowBannerDiv.innerHTML=addSlide+dot
-
-            slideShowBannerDiv.
-            nextElementSibling.children[i].
-            classList.add('activeDot');
-
-            setTimeout(function(){
-            slideShowBannerDiv.
-            nextElementSibling.children[i].
-            classList.remove('activeDot');
-            }, 2500)
-
-            setTimeout(function(){
-                slideShowBannerDiv.firstElementChild.
-                classList.remove('fadeSlide');
-            })
-
-            setTimeout(function(){
-
-                if(i === bannerImages.length-1){
-                    i = 0;
-                } else {
-                    i++
-                }
-
-                startSlide(i)
-            }, 2500)
+        let dots = "";
+        for(i = 0; i < bannerImages.length; i++){
+            dots +=`<div class="slideDot"></div>`;
         }
-    }
 
-    i = 0;
-    startSlide(i)
-}
+        dotWrapper.innerHTML=dots;
+
+        function startSlide(i){
+            if(i <= bannerImages.length-1){
+                let addSlide = `
+                    <div class="slideWrapper fadeSlide">
+                        <img src="images/${bannerImages[i]}"
+                    </div>
+                `;
+                
+                const dot = `<div id="slideDotsWrapper"></div>`
+                //Adds Slide and dots to div in Header
+                slideShowBannerDiv.innerHTML=addSlide+dot
+                
+                slideShowBannerDiv.nextElementSibling.
+                children[i].classList.add('activeDot');
+
+                setTimeout( () => {
+                    slideShowBannerDiv.
+                    nextElementSibling.children[i].
+                    classList.remove('activeDot');
+                }, 2500)
+
+                setTimeout( () =>{
+                    slideShowBannerDiv.firstElementChild.
+                    classList.remove('fadeSlide');
+                })
+
+                setTimeout( () =>{
+
+                    if(i === bannerImages.length-1){
+                        //If last image, then start over.
+                        i = 0;
+                    } else {
+                        //Else add by 1.
+                        i++
+                    }
+                    //Function calls itself, and will run til user leaves page.
+                    startSlide(i)
+                }, 2500)
+            }
+        }
+        //Sets default index to 1, before calling the function for first time.
+        i = 0;
+        startSlide(i)
+    }
+    //CLEANED
+
 createPlaylistContent(){
     const addDiv = document.getElementById('addDiv');
     const playlistController = new Controller();
