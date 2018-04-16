@@ -2,6 +2,7 @@ $textColor: white;
 $backgroundColor: #191919;
 $accentColor: orange;
 $mainRadius: 5px;
+$mainAnimationTime: 400ms;
 
 @mixin listButtons{
     display: flex;
