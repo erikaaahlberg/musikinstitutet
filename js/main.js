@@ -487,7 +487,7 @@ class DOMHandle {
         const playListButtons = document.getElementsByClassName('topPlaylistsButton');
         this.everyOtherButton(playListButtons);
 
-        for (i = 0; i < playListButtons.length; i++) {
+        for (let i = 0; i < playListButtons.length; i++) {
             playListButtons[i].addEventListener('click', function() {
                 newDOM.fadeOutAnimation(mainOutput, 'add');
                 setTimeout( () => {
@@ -499,10 +499,24 @@ class DOMHandle {
     }
     //CLEANED
     displaySpecificAlbum(album) {
-
         const fetchRating = new Logic();
         const newDOM = new DOMHandle();
         const newFetch = new FetchHandle();
+
+        let releaseDate;
+        if (album.releaseDate) {
+            releaseDate = album.releaseDate;
+        }
+        else {
+            releaseDate = 'No data.'
+        }
+        let genre;
+        if (album.genres.length != 0) {
+            genre = album.genres;
+        }
+        else {
+            genre = 'No data.';
+        }
 
         let contentOfSpecificAlbum = `
             <div id="contentOfSpecificAlbum">
@@ -511,8 +525,8 @@ class DOMHandle {
                     <div id="albumInfo">
                         <h2>${album.title}</h2>
                         <p id="artistName"> ${album.artists[0].name}</p>
-                        <p id="genres"><span>Genres:</span> ${album.genres}</p>
-                        <p id="releaseDate"><span>Released:</span> ${album.releaseDate}</p>
+                        <p id="genres"><span>Genres:</span> ${genre}</p>
+                        <p id="releaseDate"><span>Released:</span> ${releaseDate}</p>
                         <p id="rating">Rating: ${fetchRating.calculateRating(album)}</p>
                         <div id="buttonWrapper">
                             <input type="number" id="ratingNumber" placeholder="+/-" min="1" max="10">
@@ -564,7 +578,7 @@ class DOMHandle {
         const albumTrackButton = document.
         getElementsByClassName('albumTrackButton');
 
-        for (i = 0; i < albumTrackButton.length; i++) {
+        for (let i = 0; i < albumTrackButton.length; i++) {
             albumTrackButton[i].addEventListener('click', function() {
                 newDOM.fadeOutAnimation(mainOutput, 'add');
                 setTimeout( () => {
@@ -657,16 +671,30 @@ class DOMHandle {
     }
     //CLEANED
     displaySpecificArtist(artist, albums){
-
         const newDOM = new DOMHandle();
         const newFetch = new FetchHandle();
 
-        let convertedDated = '';
+        let convertedDated;
         if (artist.born) {
           convertedDated = artist.born.substring(0,4);
         }
         else {
           convertedDated = 'No data.';
+        }
+
+        let countryBorn;
+        if (artist.countryBorn) {
+            countryBorn = artist.countryBorn;
+        }
+        else {
+            countryBorn = 'No data.';
+        }
+        let genres;
+        if (artist.genres.length != 0) {
+            genres = artist.genres;
+        }
+        else {
+            genres = 'No data.';
         }
 
         let contentOfSpecificArtist = `
@@ -675,8 +703,8 @@ class DOMHandle {
                     <img src="${artist.coverImage}">
                     <div id="artistInfo">
                         <h2>${artist.name}</h2>
-                        <p id="genres"><span>Genres:</span> ${artist.genres}</p>
-                        <p id="countryBorn"><span>Country:</span> ${artist.countryBorn}</p>
+                        <p id="genres"><span>Genres:</span> ${genres}</p>
+                        <p id="countryBorn"><span>Country:</span> ${countryBorn}</p>
                         <p id="born"><span>Born:</span> ${convertedDated}</p>
                         <button id="deleteArtist">
                             DELETE ARTIST
@@ -744,11 +772,19 @@ class DOMHandle {
         const updatedDate = playlist.updatedAt.substring(0,10);
         const updatedTime = playlist.updatedAt.substring(11,16);
 
+        let genre;
+        if (playlist.genres.length != 0) {
+            genre = playlist.genres;
+        }
+        else {
+            genre = 'No data.';
+        }
+
         let contentOfSpecificPlaylist =`
             <div id="contentOfSpecificPlaylist">
                 <div id="playlistTopContent">
                     <h2>${playlist.title}</h2>
-                    <p><span>Genres: </span> ${playlist.genres}</p>
+                    <p><span>Genres: </span> ${genre}</p>
                     <p><span>Rating:</span> ${fetchRating.calculateRating(playlist)}</p>
                     <p id="createdBy"><span>Created by: </span>${playlist.createdBy}</p>
                     <br>
