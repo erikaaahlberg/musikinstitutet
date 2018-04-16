@@ -254,7 +254,7 @@ class FetchHandle {
                         display.displayPopup([error]);
                     });
     }
-    
+
     postItem (itemToPost, HttpRequest) {
         const theItem = itemToPost.slice(0, -1);
         const display = new DOMHandle;
@@ -1100,7 +1100,7 @@ class DOMHandle {
 
                 const trackId = document.getElementsByTagName('option')[selectedIndex].value;
                 console.log(trackId);
-                
+
                 const selectedTrack =  document.getElementsByTagName('option')[selectedIndex].innerHTML;
 
                 selectedTracks.push(selectedTrack);
@@ -1152,7 +1152,7 @@ class DOMHandle {
                 postTrackRequest.postItem('tracks', postTrackRequest);
 
                 /* Printing added tracks*/
-                trackDom.displayAddedTracks(addedTracks, 'addWrapper'); 
+                trackDom.displayAddedTracks(addedTracks, 'addWrapper');
             });
         }
     }
@@ -1230,7 +1230,7 @@ class DOMHandle {
                 </button>
             </div>
             `;
-            
+
             const createAlbumLink = document.getElementById('createAlbum');
 
             createAlbumLink.addEventListener('click', function(){
@@ -1244,7 +1244,7 @@ class DOMHandle {
                 albumDom.addTrackToAlbumEventListener();
             });
             const importCloseButton = document.getElementById('importCloseButton');
-            
+
             importCloseButton.addEventListener('click',function(){
                 albumDom.fadeOutAnimation(addDiv, 'add');
                 addDiv.innerHTML = ``;
@@ -1561,7 +1561,7 @@ createPlaylistContent(){
             </button>
         </div>
         `;
-        
+
     addDiv.innerHTML = createPlaylistForm;
 
     const importCloseButton = document.getElementById('importCloseButton');
@@ -1686,7 +1686,7 @@ createPlaylistContent(){
                 yesButton.addEventListener('click', function() {
                     playlistDom.hideElement('messagePopupBox');
                     playlistDom.choseTrackSelector(parentElement);
-                    
+
                 const addTrackButton = document.getElementById('addTrackButton');
 
                 addTrackButton.addEventListener('click', function() {
@@ -1764,14 +1764,14 @@ displayQuestionPopup (question) {
     parentElement.appendChild(popupBox);
 }
 displayAddedTracks (addedTracks, parentElementId) {
-    for (let track of addedTracks) {
+        const lastTrack = addedTracks.slice(-1)[0];
         const parentElement = document.getElementById(parentElementId);
         const p = document.createElement('p');
-        const addedTrack = document.createTextNode(track);
+        const addedTrack = document.createTextNode(lastTrack);
         p.appendChild(addedTrack);
         parentElement.appendChild(p);
-    }    
-}
+
+    }
 }/* --- Class DomHandle collapse --- */
 
 class Controller {
@@ -1912,15 +1912,12 @@ class Playlist {
         }
     }
     addTrack (httpRequest, playlistId) {
-        console.log(httpRequest);
         fetch(` https://folksa.ga/api/playlists/${playlistId}/tracks?key=flat_eric`, httpRequest)
             .then((response) => response.json())
-                .then((postedTrack) => {
-                })
+                .then((postedTrack) => {})
                     .catch((errorMessage) => {
-                        //const displayError = new DOMHandle;
-                        console.log(errorMessage);
-                        //displayError.displayErrorPopup(errorMessage);
+                        const displayError = new DOMHandle;
+                        displayError.displayPopup([errorMessage]);
                     });
     }
     setCoverImage (coverImage) {
