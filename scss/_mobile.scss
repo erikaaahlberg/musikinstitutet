@@ -401,22 +401,36 @@ body{
                         display: flex;
                         flex-direction: column;
                         padding: 30px 60px;
-                            #commentCloseButton{
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                background: none;
-                                color: $textColor;
-                                height: 35px;
-                                margin-bottom: 20px;
-                                padding: 0;
-                                img{
-                                    height: 15px;
-                                    margin-right: 5px;
-                                }
+                        #wrongMessageComment{
+                            transition: 500ms;
+                            p{
+                                font-size: 0.9em;
+                                font-weight: 700;
+                                letter-spacing: 1px;
+                                text-align: center;
+                                background: rgba(255, 0, 0, 0.4);
+                                padding: 10px 5px;
+                                border-radius: $mainRadius;
+                                margin: 0 0 15px 0;
                             }
+                        }
+                        #commentCloseButton{
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            background: none;
+                            color: $textColor;
+                            height: 35px;
+                            margin-bottom: 20px;
+                            padding: 0;
+                            img{
+                                height: 15px;
+                                margin-right: 5px;
+                            }
+                        }
                         #commentField{
                             padding: 8px;
+                            letter-spacing: 1px;
                             border: none;
                             width: 280px;
                         }
@@ -430,6 +444,7 @@ body{
                                 width: 100%;
                                 border: none;
                                 padding: 8px;
+                                letter-spacing: 1px;
                             }
                             #addCommentButton{
                                 background: none;

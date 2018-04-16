@@ -452,6 +452,36 @@ class DOMHandle {
         }
 
     }
+    displayTopPlaylist(list) {
+        let topPlaylistsButtons = `<div class="topFivePlayLists">
+                                   <p>THE HIGHEST RATED PLAYLISTS</p>`;
+
+        for (let i = 0; i < list.length; i++) {
+            if (i == 5) { break; }
+            /* Storing the albums in a button */
+            topPlaylistsButtons += `
+                    <button class="topPlaylistsButton" id="${list[i].id}">
+                        ${list[i].title} -
+                        ${list[i].rating}
+                        <img src="images/rightArrow.svg">
+                    </button>
+            `;
+        }
+        topPlaylistsButtons += '</div>';
+        mainOutput.insertAdjacentHTML('beforeend', topPlaylistsButtons);
+        const playListButtons = document.getElementsByClassName('topPlaylistsButton');
+        this.everyOtherButton(playListButtons);
+
+        for (i = 0; i < playListButtons.length; i++) {
+            playListButtons[i].addEventListener('click', function() {
+                const newFetch = new FetchHandle();
+                newFetch.fetchPlaylistById(this.id);
+                const deActivate = new DOMHandle();
+                deActivate.deactivateSearchButtons();
+            })
+        }
+
+    }
     displaySpecificAlbum(album) {
         
         runSlideShow.fadeOutAnimation(mainOutput, 'remove')
@@ -761,43 +791,13 @@ class DOMHandle {
         });
 
     }
-    //CLEANED
-    displayTopPlaylist(list) {
-        let topPlaylistsButtons = `<div class="topFivePlayLists">
-                                   <p>THE HIGHEST RATED PLAYLISTS</p>`;
-
-        for (let i = 0; i < list.length; i++) {
-            if (i == 5) { break; }
-            /* Storing the albums in a button */
-            topPlaylistsButtons += `
-                    <button class="topPlaylistsButton" id="${list[i].id}">
-                        ${list[i].title} -
-                        ${list[i].rating}
-                        <img src="images/rightArrow.svg">
-                    </button>
-            `;
-        }
-        topPlaylistsButtons += '</div>';
-        mainOutput.insertAdjacentHTML('beforeend', topPlaylistsButtons);
-        const playListButtons = document.getElementsByClassName('topPlaylistsButton');
-        this.everyOtherButton(playListButtons);
-
-        for (i = 0; i < playListButtons.length; i++) {
-            playListButtons[i].addEventListener('click', function() {
-                const newFetch = new FetchHandle();
-                newFetch.fetchPlaylistById(this.id);
-                const deActivate = new DOMHandle();
-                deActivate.deactivateSearchButtons();
-            })
-        }
-
-    }
-
+    // CLEANED
     displayPlaylistComments(comments, playlistID){
         
         const commentsOutput = document.getElementById('commentsOutput');
         const newFetch = new FetchHandle();
         const newDOM = new DOMHandle();
+        const newController = new Controller();
         
         newDOM.fadeOutAnimation(commentsOutput, 'remove');
         
@@ -807,9 +807,10 @@ class DOMHandle {
                 <img src="images/x-circle.svg">
                 BACK
             </button>
-                <input placeholder="Comment.." type="text" id="commentField">
+                <div id="wrongMessageComment" class="fadeOut"></div>
+                <input placeholder="COMMENT.." type="text" id="commentField">
                 <div id="commentBottom">
-                    <input placeholder="Name.." type="text" id="commentUser">
+                    <input placeholder="NAME.." type="text" id="commentUser">
                     <button type="button" id="addCommentButton"><img src="images/plus-circle.svg"></button>
                 </div>
             </form>
@@ -849,21 +850,36 @@ class DOMHandle {
         const commentFieldDiv = document.getElementById('commentField');
         const commentUser = document.getElementById('commentUser');
 
-        addCommentButton.addEventListener('click', function(){       
-            newDOM.fadeOutAnimation(playlistComments, 'add');
-            setTimeout( () =>{
-                playlistComments.innerHTML=`
-                    <div id="commentMessage">
-                        <img src="images/check.svg">
-                        <p> THANK YOU FOR LEAVING A COMMENT</p>
-                    </div>
-                `;
-                newDOM.fadeOutAnimation(playlistComments, 'remove');
-                setTimeout( () => {
-                    newFetch.addPlayListComment(commentFieldDiv.value, commentUser.value, playlistID)
-                    newDOM.fadeOutAnimation(commentsOutput, 'add');
+        addCommentButton.addEventListener('click', function(){
+            
+            const commentFieldEmpty = newController.isEmpty(commentFieldDiv.value);
+            const commentUserEmpty = newController.isEmpty(commentUser.value);
+            const wrongMessageComment = document.getElementById('wrongMessageComment');
+            
+            if(commentFieldEmpty && commentUserEmpty){
+                let wrongMessage='<p> YOU HAVE TO FILL IN THE FIELDS CORRECTLY</p>';
+                wrongMessageComment.innerHTML=wrongMessage;
+                setTimeout(() => {
+                    newDOM.fadeOutAnimation(wrongMessageComment, 'remove');
+                })
+            } else {
+                wrongMessageComment.innerHTML='';
+                newDOM.fadeOutAnimation(wrongMessageComment, 'add');
+                newDOM.fadeOutAnimation(playlistComments, 'add');
+                setTimeout( () =>{
+                    playlistComments.innerHTML=`
+                        <div id="commentMessage">
+                            <img src="images/check.svg">
+                            <p> THANK YOU FOR LEAVING A COMMENT</p>
+                        </div>
+                    `;
+                    newDOM.fadeOutAnimation(playlistComments, 'remove');
+                    setTimeout( () => {
+                        newFetch.addPlayListComment(commentFieldDiv.value, commentUser.value, playlistID)
+                        newDOM.fadeOutAnimation(commentsOutput, 'add');
+                    }, 500);
                 }, 500);
-            }, 500);
+            }
         });
 
         const deleteCommentButton = document.
@@ -900,7 +916,8 @@ class DOMHandle {
             }, 1000);
         });
         
-    } // CLEANED
+    } 
+    // CLEANED
 
     filterSearch() {
         for (let sbutton of searchButton) {
@@ -1472,8 +1489,6 @@ createPlaylistContent(){
 
     
     fadeOutAnimation(div, addRemove){
-        console.log(div)
-        console.log(addRemove)
         if(addRemove === 'remove'){
             div.classList.remove('fadeOut');
         } else {
