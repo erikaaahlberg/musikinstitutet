@@ -6,7 +6,7 @@ for (i = 0; i < searchButton.length; i++) {
     searchButton[i].addEventListener('click', function() {
         const activateButton = new DOMHandle();
         activateButton.activateSearchButton(this);
-        const newFetch = new FetchHandle(this.value);
+        const newFetch = new FetchHandle();
         mainOutput.innerHTML = '<div id="searchResults"></div>'
         switch (this.value) {
             case 'all':
