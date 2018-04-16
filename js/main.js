@@ -889,8 +889,7 @@ class DOMHandle {
         const playlistComments = document.getElementById('playlistComments');
 
         let commentContent = "";
-
-        if(!comments.length == 0){
+        if (comments.length != 0) {
             for(let i = 0; i < comments[0].length; i++){
                  commentContent +=`
                     <div class="playlistComment">
@@ -1150,7 +1149,7 @@ class DOMHandle {
 
                 const albumId = document.getElementsByTagName('option')[selectedIndex].value;
                 console.log(albumId);
-                
+
                 const selectedAlbum =  document.getElementsByTagName('option')[selectedIndex].innerHTML;
 
                 console.log(selectedAlbum);
@@ -1173,7 +1172,7 @@ class DOMHandle {
         const newTrackArtist = trackController.getInputValue('inputTrackArtist');
 
         const albumSelector = document.getElementById('albumSelector');
-        var selectedIndex = albumSelector.selectedIndex;   
+        var selectedIndex = albumSelector.selectedIndex;
         const selectedAlbum =  document.getElementsByTagName('option')[selectedIndex].innerHTML;
 
         const isArtistEmpty = trackController.isEmpty(newTrackArtist);
@@ -1283,12 +1282,12 @@ class DOMHandle {
                 </button>
             </div>
             `;
-            
+
             addDiv.innerHTML = addToExistingAlbumContent;
-            
+
             /* Printing album selector */
             albumDom.chooseAlbumSelector('addTrackToExistingAlbum');
-            
+
             /* Go to create new album link */
             const createAlbumLink = document.getElementById('createAlbum');
 
@@ -1678,7 +1677,7 @@ class DOMHandle {
 
             playlistDom.chooseTrackSelector(parentElement);
             const selector = document.getElementById('trackSelector');
-        
+
             selector.classList.add('annanKlass');
             console.log(selector)
 
