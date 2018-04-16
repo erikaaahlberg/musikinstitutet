@@ -296,6 +296,14 @@ class DOMHandle {
         /* Adds the activeButton class to selected button */
         checkButton.classList.add('activeButton');
     }
+    loadingIndicator(div) {
+        const loading = `<div class="spinner">
+                            <div class="bounce1"></div>
+                            <div class="bounce2"></div>
+                            <div class="bounce3"></div>
+                        </div>`
+        return loading;
+    }
     deactivateSearchButtons() {
         for (let sbutton of searchButton) {
             sbutton.classList.remove('activeButton');
@@ -348,6 +356,7 @@ class DOMHandle {
                     console.log(id)
                     const newFetch = new FetchHandle();
                     newFetch.fetchAlbumById(id);
+                    mainOutput.innerHTML = deActivate.loadingIndicator();
                 },500)
             })
         }
@@ -391,13 +400,13 @@ class DOMHandle {
             showByIdButton[i].addEventListener('click', function() {
                 let id = this.id
                 const deActivate = new DOMHandle();
-                deActivate.deactivateSearchButtons();
                 deActivate.fadeOutAnimation(mainOutput, 'add');
 
                 setTimeout(function(){
                     const newFetch = new FetchHandle();
                     newFetch.fetchTrackById(id);
-                },500)
+                    mainOutput.innerHTML = deActivate.loadingIndicator();
+                },500);
 
             });
         }
@@ -431,6 +440,7 @@ class DOMHandle {
                 setTimeout(function(){
                     const newFetch = new FetchHandle();
                     newFetch.fetchArtistById(id);
+                    mainOutput.innerHTML = deActivate.loadingIndicator();
                 },500)
             })
         }
@@ -465,6 +475,7 @@ class DOMHandle {
                 setTimeout(function(){
                     const newFetch = new FetchHandle();
                     newFetch.fetchPlaylistById(id);
+                    mainOutput.innerHTML = deActivate.loadingIndicator();
                 },500)
             })
         }
@@ -1590,7 +1601,7 @@ displayElement (elementId) {
     const element = document.getElementById(elementId).style.display = "block";
 }
 /* -------under construction-------- */
-displayPopup (errorMessages, div = 'mainOutput') {
+displayPopup (errorMessages, div = 'popUpWindow') {
     const parentElement = document.getElementById(div);
     console.log(parentElement);
     const popupBox = document.createElement('div');
