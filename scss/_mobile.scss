@@ -541,12 +541,11 @@ body {
                 #commentsOutput{
                     position: fixed;
                     left: 50%;
-                    top: 40%;
-                    opacity: 0.9;
+                    top: 50%;
                     transform: translate(-50%, -50%);
                     background: rgba(0, 0, 0, 0.9);
                     max-width: 420px;
-                    max-height: 600px;
+                    max-height: 400px;
                     border-radius: 20px;
                     transition: 500ms;
                     overflow: scroll;
