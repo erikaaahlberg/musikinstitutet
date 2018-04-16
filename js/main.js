@@ -184,7 +184,7 @@ class FetchHandle {
         });
     }
 
-    fetchItemByChosenParameter(item, parameter, itemName) {
+    fetchItemByChoosenParameter(item, parameter, itemName) {
         return fetch(`https://folksa.ga/api/${item}?${parameter}=${itemName}&key=flat_eric`)
             .then((response) => response.json())
                 .then((fetchedItem) => {
@@ -1048,7 +1048,7 @@ class DOMHandle {
         if (errorMessages.length > 0) {
             trackDom.displayPopup(errorMessages);
         } else {
-            trackFetch.fetchItemByChosenParameter('playlists', 'title', playlistTitle)
+            trackFetch.fetchItemByChoosenParameter('playlists', 'title', playlistTitle)
             .then((fetchedPlaylist) => {
                 const playlistId = fetchedPlaylist[0]._id;
                 console.log(fetchedPlaylist[0]._id);
@@ -1063,7 +1063,7 @@ class DOMHandle {
             });
         }
     }
-    choseTrackSelector(parentElement){
+    chooseTrackSelector(parentElement){
         const addTrackContent = `
             <select id = "trackSelector"></select>
             <button type="button" id="addTrackButton">
@@ -1083,7 +1083,7 @@ class DOMHandle {
 
         const selectedTracks = [];
 
-        trackFetch.fetchItemByChosenParameter('tracks', 'limit', '999')
+        trackFetch.fetchItemByChoosenParameter('tracks', 'limit', '999')
             .then((fetchedTracks) => {
                 for (let track of fetchedTracks) {
                     var option = document.createElement('option');
@@ -1143,7 +1143,7 @@ class DOMHandle {
             trackDom.displayPopup(errorMessages);
         } else {
             /* Fetching id's for album and artist to create a track to post */
-            trackFetch.fetchItemByChosenParameter('albums', 'title', newTrackAlbum)
+            trackFetch.fetchItemByChoosenParameter('albums', 'title', newTrackAlbum)
             .then((fetchedAlbum) => {
                 /* Creating track to post */
                 console.log(fetchedAlbum);
@@ -1197,7 +1197,6 @@ class DOMHandle {
                 </button>
             </div>
         `;
-
         addDiv.innerHTML=createAlbumContent;
 
         /* Get buttons */
@@ -1209,7 +1208,9 @@ class DOMHandle {
         /* Go back-button */
         importCloseButton.addEventListener('click',function(){
             albumDom.fadeOutAnimation(addDiv, 'add');
-            addDiv.innerHTML = ``;
+            setTimeout( () => {
+                addDiv.innerHTML = ``;    
+            }, mainAnimationTime)
         });
 
         /* Add track to existing album link */
@@ -1251,9 +1252,11 @@ class DOMHandle {
             });
             const importCloseButton = document.getElementById('importCloseButton');
             
-            importCloseButton.addEventListener('click',function(){
+            importCloseButton.addEventListener('click', function(){
                 albumDom.fadeOutAnimation(addDiv, 'add');
-                addDiv.innerHTML = ``;
+                setTimeout( () => {
+                    addDiv.innerHTML = ``;    
+                }, mainAnimationTime)
             });
         });
 
@@ -1326,7 +1329,7 @@ class DOMHandle {
                     albumDom.displayPopup(errorMessages);
             }
             else {
-                albumFetch.fetchItemByChosenParameter('artists', 'name', albumArtistName)
+                albumFetch.fetchItemByChoosenParameter('artists', 'name', albumArtistName)
                     .then((artist) => {
                         const albumToPost = new Album(albumTitle, artist[0]._id, albumGenres, albumReleaseDate, albumSpotifyURL, albumCoverImageURL);
                         console.log(albumToPost);
@@ -1542,9 +1545,6 @@ class DOMHandle {
         const playlistDom = new DOMHandle();
         const playlistFetch = new FetchHandle();
 
-        addDiv.innerHTML = ``;
-        playlistDom.fadeOutAnimation(addDiv, 'remove');
-
         const createPlaylistForm =`
             <div id="addWrapper">
                 <p>CREATE PLAYLIST</p>
@@ -1564,15 +1564,18 @@ class DOMHandle {
                     BACK
                 </button>
             </div>
-            `;
-
+        `;
+        
+        playlistDom.fadeOutAnimation(addDiv, 'remove');
         addDiv.innerHTML = createPlaylistForm;
 
         const importCloseButton = document.getElementById('importCloseButton');
 
         importCloseButton.addEventListener('click', function(){
             playlistDom.fadeOutAnimation(addDiv, 'add');
-            addDiv.innerHTML = ``;
+            setTimeout( () => {
+                addDiv.innerHTML = ``;
+            }, mainAnimationTime);
         });
 
         const addToExistingPlaylistLink = document.getElementById('addToExistingPlaylist');
@@ -1602,7 +1605,9 @@ class DOMHandle {
 
             importCloseButton.addEventListener('click', function(){
                 playlistDom.fadeOutAnimation(addDiv, 'add');
-                addDiv.innerHTML = ``;
+                setTimeout( () => {
+                    addDiv.innerHTML = ``;
+                }, mainAnimationTime);
             });
 
             const createPlaylistLink = document.getElementById('createPlaylist');
@@ -1613,24 +1618,14 @@ class DOMHandle {
             });
             const parentElement = document.getElementById('addTrackToExistingPlaylist');
 
-            playlistDom.choseTrackSelector(parentElement);
+            playlistDom.chooseTrackSelector(parentElement);
 
-            importCloseButton.addEventListener('click', function(){
-                albumDom.fadeOutAnimation(addDiv, 'add');
-                addDiv.innerHTML = ``;
-            });
         });
 
          /* Get buttons */
          const addPlaylistButton = document.
          getElementById('addPlaylistButton');
          const addTrackToExistingPlaylist = document.getElementById('addTrackToExistingPlaylist');
-
-         /* Go back-button */
-         importCloseButton.addEventListener('click',function(){
-            playlistDom.fadeOutAnimation(addDiv, 'add');
-            addDiv.innerHTML = ``;
-         });
 
          addPlaylistButton.addEventListener('click', function(){
              event.preventDefault();
@@ -1690,7 +1685,7 @@ class DOMHandle {
 
                     yesButton.addEventListener('click', function() {
                         playlistDom.hideElement('messagePopupBox');
-                        playlistDom.choseTrackSelector(parentElement);
+                        playlistDom.chooseTrackSelector(parentElement);
 
                     const addTrackButton = document.getElementById('addTrackButton');
 
