@@ -299,11 +299,13 @@ class DOMHandle {
         checkButton.classList.add('activeButton');
     }
     loadingIndicator(div) {
-        const loading = `<div class="spinner">
-                            <div class="bounce1"></div>
-                            <div class="bounce2"></div>
-                            <div class="bounce3"></div>
-                        </div>`
+        const loading = `
+            <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+        `;
         return loading;
     }
     deactivateSearchButtons() {
