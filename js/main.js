@@ -429,11 +429,11 @@ class DOMHandle {
                 }, mainAnimationTime);
             });
         }
-        
+
     }
     //CLEANED
     displayPlaylists(allPlaylists) {
-        
+
         const newFetch = new FetchHandle();
         const deActivate = new DOMHandle();
         const searchResult = document.getElementById('searchResults');
@@ -727,7 +727,7 @@ class DOMHandle {
             button.addEventListener('click', function() {
                 newDOM.fadeOutAnimation(mainOutput, 'add');
                 setTimeout(() => {
-                    newFetch.fetchAlbumById(this.id);  
+                    newFetch.fetchAlbumById(this.id);
                 }, mainAnimationTime);
             });
         }
@@ -936,8 +936,8 @@ class DOMHandle {
             }, mainAnimationTime);
         });
 
-        
-    } 
+
+    }
     //CLEANED
     filterSearch() {
         for (let sbutton of searchButton) {
@@ -965,7 +965,7 @@ class DOMHandle {
         }
     }
     everyOtherButton(buttons) {
-        /* THIS FUNCTION LIGHTER COLOR TO 
+        /* THIS FUNCTION LIGHTER COLOR TO
          * EVERY OTHER BUTTON + ADDS HOVER EFFECT */
         for (let i = 0; i < buttons.length; i++) {
             if (i % 2 == 0) {
@@ -987,9 +987,8 @@ class DOMHandle {
             }
         }
     }
-
-    addTrackToPlaylistEventListener () {
-        event.preventDefault();
+    addTrackToPlaylist (trackId) {
+        //event.preventDefault();
         const addedTracks = [];
         const errorMessages = [];
 
@@ -1001,7 +1000,7 @@ class DOMHandle {
 
         console.log(playlistTitle);
         const isTitleEmpty = trackController.isEmpty(playlistTitle);
-        
+
         if (isTitleEmpty) {
             errorMessages.push('Title is required.');
         }
@@ -1020,7 +1019,7 @@ class DOMHandle {
                 const playlistPostRequest = new FetchHandle('POST', trackToPost);
                 const postTrack = new Playlist();
                 postTrack.addTrack(playlistPostRequest, playlistId);
-            });   
+            });
         }
     }
     choseTrackSelector(parentElement){
@@ -1038,7 +1037,7 @@ class DOMHandle {
         const trackDom = new DOMHandle();
         const trackFetch = new FetchHandle();
         const trackController = new Controller();
-        
+
         const selector = document.getElementById('trackSelector');
 
         trackFetch.fetchItemByChosenParameter('tracks', 'limit', '999')
@@ -1128,7 +1127,7 @@ class DOMHandle {
 
         addDiv.innerHTML = ``;
         albumDom.fadeOutAnimation(addDiv, 'remove');
-        
+
         let createAlbumContent =`
             <div id="addWrapper">
                 <p>ADD AN ALBUM</p>
@@ -1516,6 +1515,7 @@ createPlaylistContent(){
 
     /* Add track to existing album link */
     addToExistingPlaylistLink.addEventListener('click', function(){
+        event.preventDefault();
         const addToExistingPlaylist = `
         <div id="addWrapper">
             <p>ADD TRACK TO EXISTING PLAYLIST</p>
@@ -1535,6 +1535,20 @@ createPlaylistContent(){
         </div>
         `;
         addDiv.innerHTML = addToExistingPlaylist;
+
+        const importCloseButton = document.getElementById('importCloseButton');
+
+        importCloseButton.addEventListener('click', function(){
+            playlistDom.fadeOutAnimation(addDiv, 'add');
+            addDiv.innerHTML = ``;
+        });
+
+        const createPlaylistLink = document.getElementById('createPlaylist');
+
+        createPlaylistLink.addEventListener('click', function(){
+            event.preventDefault();
+            addDiv.innerHTML = createPlaylistForm;
+        });
         const parentElement = document.getElementById('addTrackToExistingPlaylist');
 
         playlistDom.choseTrackSelector(parentElement);
@@ -1608,7 +1622,7 @@ createPlaylistContent(){
                 const playlistToPost = new Playlist(playlistTitle, playlistGenres, playlistImageURL, playlistCreator);
                 console.log(playlistToPost);
                 const playlistPostRequest = new FetchHandle('POST', playlistToPost);
-                    
+
                 playlistPostRequest.postItem('playlists', playlistPostRequest);
                 /* Display alternative popup */
                 playlistDom.displayQuestionPopup('Do you want to add tracks now?');
