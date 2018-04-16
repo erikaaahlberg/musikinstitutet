@@ -1108,20 +1108,66 @@ class DOMHandle {
         });
     }
 
+    chooseAlbumSelector(parentElementId){
+        const parentElement = document.getElementById(parentElementId);
+        const addAlbumContent = `
+            <select id = "albumSelector"></select>
+        `;
+        parentElement.insertAdjacentHTML('afterbegin', addAlbumContent);
+
+        const addButton = document.getElementById('addTrackButton');
+
+        const albumDom = new DOMHandle();
+        const albumFetch = new FetchHandle();
+        const albumController = new Controller();
+
+        const selector = document.getElementById('albumSelector');
+
+        albumFetch.fetchItemByChosenParameter('albums', 'limit', '999')
+            .then((fetchedAlbums) => {
+                for (let album of fetchedAlbums) {
+                    var option = document.createElement('option');
+
+                    /*if (!album.title[0]) {
+                        track.artists[0] = { name: 'No name', _id: false };
+                    }*/
+
+                    option.text = `${album.title}`;
+                    option.value = album._id;
+
+                    selector.add(option);
+                    //trackDom.addTrackToPlaylist(title);
+                }
+            /*addButton.addEventListener('click', function() {
+                var selectedIndex = selector.selectedIndex;
+
+                const albumId = document.getElementsByTagName('option')[selectedIndex].value;
+                console.log(albumId);
+                
+                const selectedAlbum =  document.getElementsByTagName('option')[selectedIndex].innerHTML;
+
+                console.log(selectedAlbum);
+                //albumDom.addTrackToPlaylist(trackId);
+                //albumDom.displayAddedTracks(selectedTracks, 'addWrapper');
+            });*/
+        });
+    }
+
     addTrackToAlbumEventListener() {
         event.preventDefault();
         const addedTracks = [];
         const errorMessages = [];
+
         const trackController = new Controller;
         const trackDom = new DOMHandle;
         const trackFetch = new FetchHandle;
+
         const newTrackTitle = trackController.getInputValue('inputTrackTitle');
         const newTrackArtist = trackController.getInputValue('inputTrackArtist');
-        const newTrackAlbum = trackController.getInputValue('inputAlbumTitle');
 
-        console.log(newTrackTitle);
-        console.log(newTrackArtist);
-        console.log(newTrackAlbum);
+        const albumSelector = document.getElementById('albumSelector');
+        var selectedIndex = albumSelector.selectedIndex;   
+        const selectedAlbum =  document.getElementsByTagName('option')[selectedIndex].innerHTML;
 
         const isArtistEmpty = trackController.isEmpty(newTrackArtist);
         const isTitleEmpty = trackController.isEmpty(newTrackTitle);
@@ -1136,13 +1182,13 @@ class DOMHandle {
             trackDom.displayPopup(errorMessages);
         } else {
             /* Fetching id's for album and artist to create a track to post */
-            trackFetch.fetchItemByChosenParameter('albums', 'title', newTrackAlbum)
+            trackFetch.fetchItemByChosenParameter('albums', 'title', selectedAlbum)
             .then((fetchedAlbum) => {
                 /* Creating track to post */
-                console.log(fetchedAlbum);
                 const trackToPost = new Tracks (newTrackTitle, fetchedAlbum[0].artists[0], fetchedAlbum[0]._id, fetchedAlbum[0].genres[0], fetchedAlbum[0].coverImage);
+
+                /* Adding added tracks to array yo display */
                 addedTracks.push(`${newTrackArtist} - ${newTrackTitle}`);
-                console.log(trackToPost);
 
                 /* Posting track */
                 const postTrackRequest = new FetchHandle('POST', trackToPost);
@@ -1196,7 +1242,7 @@ class DOMHandle {
         const importCloseButton = document.getElementById('importCloseButton');
         const postAlbumButton = document.
         getElementById('postAlbumButton');
-        const addTrackToExistingAlbum = document.getElementById('addTrackToExistingAlbum');
+        const addTrackToExistingAlbumLink = document.getElementById('addTrackToExistingAlbum');
 
         /* Go back-button */
         importCloseButton.addEventListener('click',function(){
@@ -1205,13 +1251,12 @@ class DOMHandle {
         });
 
         /* Add track to existing album link */
-        addTrackToExistingAlbum.addEventListener('click', function() {
+        addTrackToExistingAlbumLink.addEventListener('click', function() {
             event.preventDefault();
-            addDiv.innerHTML = `
+            const addToExistingAlbumContent = `
             <div id="addWrapper">
                 <p>ADD TRACK TO EXISTING ALBUM</p>
                 <form id="addTrackToExistingAlbum">
-                    <input type="text" id="inputAlbumTitle" placeholder="ALBUM TITLE..">
                     <input type="text" id="inputTrackTitle" placeholder="TRACK TITLE..">
                     <input type="text" id="inputTrackArtist" placeholder="ARTIST..">
                     <button type ="button" id="addTrackButton">
@@ -1228,20 +1273,28 @@ class DOMHandle {
             </div>
             `;
             
+            addDiv.innerHTML = addToExistingAlbumContent;
+            
+            /* Printing album selector */
+            albumDom.chooseAlbumSelector('addTrackToExistingAlbum');
+            
+            /* Go to create new album link */
             const createAlbumLink = document.getElementById('createAlbum');
 
             createAlbumLink.addEventListener('click', function(){
                 event.preventDefault();
                 addDiv.innerHTML = createAlbumContent;
             });
+
             const addTrackButton = document.
             getElementById('addTrackButton');
 
             addTrackButton.addEventListener('click', function(){
                 albumDom.addTrackToAlbumEventListener();
             });
+
+            /* Go back-button */
             const importCloseButton = document.getElementById('importCloseButton');
-            
             importCloseButton.addEventListener('click',function(){
                 albumDom.fadeOutAnimation(addDiv, 'add');
                 addDiv.innerHTML = ``;
