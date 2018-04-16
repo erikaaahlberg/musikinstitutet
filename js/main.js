@@ -884,7 +884,7 @@ class DOMHandle {
             const commentFieldEmpty = newController.isEmpty(commentFieldDiv.value);
             const commentUserEmpty = newController.isEmpty(commentUser.value);
             const wrongMessageComment = document.getElementById('wrongMessageComment');
-            
+
             if(commentFieldEmpty || commentUserEmpty){
                 let wrongMessage='<p> YOU HAVE TO FILL IN THE FIELDS CORRECTLY</p>';
                 wrongMessageComment.innerHTML=wrongMessage;
@@ -939,12 +939,15 @@ class DOMHandle {
     //CLEANED
     filterSearch() {
         for (let sbutton of searchButton) {
+            /* If a search-choice is activated, initiate the search. */
             if (sbutton.classList.contains('activeButton')) {
                 const filter = searchField.value.toUpperCase();
                 const buttons = document.querySelectorAll('.showByIdButton');
-
+                /* All matching items are sent to an array */
                 let visibleButtons = [];
                 for (let i = 0; i < buttons.length; i++) {
+                    /* If the value from searchField matches either the
+                     * innerHTML or the data-genre it will be displayed. */
                     let dataGenre = buttons[i].getAttribute('data-genre').toUpperCase();
                     if (buttons[i].innerHTML.toUpperCase().indexOf(filter) > -1 || dataGenre.indexOf(filter) > -1 && dataGenre != 'NONE') {
                         buttons[i].style.display = 'flex';
@@ -958,6 +961,8 @@ class DOMHandle {
                         buttons[i].style.display = 'none';
                     }
                 }
+                /* Every other buttons are a different color. The array
+                 * is sent to the function. */
                 this.everyOtherButton(visibleButtons);
             }
         }
@@ -1024,7 +1029,7 @@ class DOMHandle {
         const addTrackContent = `
             <select id = "trackSelector"></select>
             <button type="button" id="addTrackButton">
-                <i class="far fa-plus-square"></i>
+                ADD TRACK
             </button>
         <div id="addTrackTracklist"></div>
         `;
@@ -1521,8 +1526,7 @@ createPlaylistContent(){
                 BACK
             </button>
         </div>
-        `;
-
+    `;
     addDiv.innerHTML = createPlaylistForm;
 
     const importCloseButton = document.getElementById('importCloseButton');
@@ -1541,9 +1545,6 @@ createPlaylistContent(){
             <form id="addTrackToExistingPlaylist">
                 <input type="text" id="inputPlaylistTitle" placeholder="PLAYLIST TITLE..">
             </form>
-            <button type ="button" id="addTrackButton">
-                ADD TRACK
-            </button>
             <a href = "#" id="createPlaylist" class = "mainLink">
             Add new playlist
             </a>
@@ -1576,12 +1577,6 @@ createPlaylistContent(){
             albumDom.fadeOutAnimation(addDiv, 'add');
             addDiv.innerHTML = ``;
         });
-        /*const addTrackButton = document.
-        getElementById('addTrackButton');
-
-        addTrackButton.addEventListener('click', function(){
-            albumDom.addTrackEventListener();
-        });*/
     });
 
      /* Get buttons */
@@ -1682,42 +1677,39 @@ createPlaylistContent(){
     }
     //CLEANED
 
-/* --------ADDED BY ERIKA--------- */
-hideElement (elementId) {
-    const element = document.getElementById(elementId);
-    element.innerHTML = ``;
-    element.className = 'hidden';
-}
-displayElement (elementId) {
-    const element = document.getElementById(elementId).style.display = "block";
-}
-/* -------under construction-------- */
-displayPopup (errorMessages, div = 'popUpWindow') {
-    const parentElement = document.getElementById(div);
-    console.log(parentElement);
-    const popupBox = document.createElement('div');
-    popupBox.className = 'messagePopupBox';
-    popupBox.setAttribute('id', 'messagePopupBox');
-
-    for (let errorMessage of errorMessages) {
-        const errorMessageParagraph = document.createElement('p');
-        errorMessageParagraph.className = 'errorMessage';
-        const errorMessageNode = document.createTextNode(errorMessage);
-        errorMessageParagraph.appendChild(errorMessageNode);
-        popupBox.appendChild(errorMessageParagraph);
+    hideElement (elementId) {
+        const element = document.getElementById(elementId);
+        element.innerHTML = ``;
+        element.className = 'hidden';
     }
-    popupBox.insertAdjacentHTML('beforeend',
-        `<div id = "messageButtonWrapper">
-            <button id = "errorOkButton"> Ok </button>
-        </div>`
-    );
-    parentElement.appendChild(popupBox);
-    const okButton = document.getElementById('errorOkButton');
+    displayElement (elementId) {
+        const element = document.getElementById(elementId).style.display = "block";
+    }
+    displayPopup (errorMessages, div = 'popUpWindow') {
+        const parentElement = document.getElementById(div);
+        const popupBox = document.createElement('div');
+        popupBox.className = 'messagePopupBox';
+        popupBox.setAttribute('id', 'messagePopupBox');
 
-    okButton.addEventListener('click', function() {
-        const hide = new DOMHandle;
-        hide.hideElement('messagePopupBox');
-    });
+        for (let errorMessage of errorMessages) {
+            const errorMessageParagraph = document.createElement('p');
+            errorMessageParagraph.className = 'errorMessage';
+            const errorMessageNode = document.createTextNode(errorMessage);
+            errorMessageParagraph.appendChild(errorMessageNode);
+            popupBox.appendChild(errorMessageParagraph);
+        }
+        popupBox.insertAdjacentHTML('beforeend',
+            `<div id = "messageButtonWrapper">
+                <button id = "errorOkButton"> Ok </button>
+            </div>`
+        );
+        parentElement.appendChild(popupBox);
+        const okButton = document.getElementById('errorOkButton');
+
+        okButton.addEventListener('click', function() {
+            const hide = new DOMHandle;
+            hide.hideElement('messagePopupBox');
+        });
 }
 displayQuestionPopup (question) {
     const parentElement = document.getElementById('addWrapper');
@@ -1743,7 +1735,7 @@ displayAddedTracks (addedTracks, parentElementId) {
         parentElement.appendChild(p);
     }    
 }
-}/* --- Class DOMHandle collapse --- */
+}/* --- Class DomHandle collapse --- */
 
 class Controller {
     getInputValue (elementId) {
@@ -1796,7 +1788,7 @@ class Controller {
                 return false;
             }
         }
-};
+} /* --- Class Controller collapse --- */
 
 class Artist {
     constructor(name, genres, coverImage) {
@@ -1887,7 +1879,6 @@ class Playlist {
         fetch(` https://folksa.ga/api/playlists/${playlistId}/tracks?key=flat_eric`, httpRequest)
             .then((response) => response.json())
                 .then((postedTrack) => {
-                    console.log(postedTrack);
                 })
                     .catch((errorMessage) => {
                         //const displayError = new DOMHandle;
@@ -1906,7 +1897,6 @@ class Playlist {
         }
     }
 }
-/*------------------------ */
 
 class Logic {
     calculateRating(object) {
