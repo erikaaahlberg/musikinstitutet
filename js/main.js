@@ -59,6 +59,7 @@ createPlaylistButton.addEventListener('click', function(){
 
 /* Handles all fetch queries. */
 class FetchHandle {
+   
     /* ----ADDED BY ERIKA----- */
     constructor (method, body) {
         this.method = method;
@@ -218,10 +219,11 @@ class FetchHandle {
             body: JSON.stringify(comment)
           })
           .then((response) => response.json())
-          .then((playlist) => {
-
-            const displayPlaylistComments = new DOMHandle();
-            displayPlaylistComments.displayPlaylistComments(comments);
+          .then((comment) => {
+ 
+            const newFetch = new FetchHandle();
+            newFetch.fetchPlaylistById(comment.playlist);
+        
           });
 
     }
@@ -675,16 +677,15 @@ class DOMHandle {
 
     }
     displaySpecificPlaylist(playlist, comments){
-        
-        runSlideShow.fadeOutAnimation(mainOutput, 'remove')
-        
+
         const fetchRating = new Logic();
-
-        const createdDate = playlist.createdAt.substring(0,10)
-        const createdTime = playlist.createdAt.substring(11,16)
-
-        const updatedDate = playlist.updatedAt.substring(0,10)
-        const updatedTime = playlist.updatedAt.substring(11,16)
+        const newDOM = new DOMHandle();
+        const newFetch = new FetchHandle();
+        
+        const createdDate = playlist.createdAt.substring(0,10);
+        const createdTime = playlist.createdAt.substring(11,16);
+        const updatedDate = playlist.updatedAt.substring(0,10);
+        const updatedTime = playlist.updatedAt.substring(11,16);
 
         let contentOfSpecificPlaylist =`
             <div id="contentOfSpecificPlaylist">
@@ -706,31 +707,27 @@ class DOMHandle {
                         DELETE PLAYLIST
                     </button>
                 </div>
+                <button id="displayComments">
+                    VIEW / ADD COMMENTS
+                </button>
                 <div class="underline"></div>
                 <h3>TRACKLIST</h3>
                 <div id="playlistTracklist"></div>
-                <form id="commentForm">
-                    <input placeholder="Comment.." type="text" id="commentField">
-                    <div id="commentBottom">
-                        <input placeholder="Name.." type="text" id="commentUser">
-                        <button type="button" id="addCommentButton"><img src="images/plus-circle.svg"></button>
-                    </div>
-                </form>
-                <div id="playlistComments"></div>
+                <div id="commentsOutput" class="fadeOut"></div>
             </div>
         `;
 
-        mainOutput.innerHTML=contentOfSpecificPlaylist
-
+        mainOutput.innerHTML=contentOfSpecificPlaylist;
+        newDOM.fadeOutAnimation(mainOutput, 'remove');
+        
         const deleteButton = document.getElementById('deletePlaylist');
         deleteButton.addEventListener('click', () => {
-            const deletePlaylist = new FetchHandle();
-            deletePlaylist.deleteItem('playlists', playlist._id);
+            newFetch.deleteItem('playlists', playlist._id);
             const playlistsButton = document.getElementById('playlistsButton');
             mainOutput.innerHTML = '<div id="searchResults"></div>';
             this.activateSearchButton(playlistsButton);
-            deletePlaylist.fetchPlaylists();
-            deletePlaylist.fetchTopPlaylists();
+            newFetch.fetchPlaylists();
+            newFetch.fetchTopPlaylists();
         });
 
         const playlistTracklist = document.getElementById('playlistTracklist');
@@ -743,42 +740,28 @@ class DOMHandle {
                     ${playlist.tracks[i].title}
                     <img src="images/rightArrow.svg">
                 </button>
-            `
+            `;
         }
 
         playlistTracklist.innerHTML=trackButton;
-
-        if(!playlist.comments.length == 0){
-        const displayPlaylistComments = new DOMHandle();
-        displayPlaylistComments.displayPlaylistComments(comments, playlist._id);
-        }
-
-        const addCommentButton = document.getElementById('addCommentButton');
-        const commentField = document.getElementById('commentField');
-        const commentUser = document.getElementById('commentUser');
-
-        addCommentButton.addEventListener('click', function(){
-
-        const addPlayListComment = new FetchHandle();
-        addPlayListComment.addPlayListComment(commentField.value, commentUser.value, playlist._id, comments);
-            setTimeout(function(){
-                addPlayListComment.fetchPlaylistById(playlist._id)
-            },400)
-
+           
+        const displayCommentsButton = document.getElementById('displayComments');
+        
+        displayCommentsButton.addEventListener('click', () => {
+            newDOM.displayPlaylistComments(comments, playlist._id);
         })
-        const everyOtherButton = new DOMHandle();
-        everyOtherButton.
-        everyOtherButton(playlistTracklist.children);
+        
+        newDOM.everyOtherButton(playlistTracklist.children);
 
         const ratePlaylist = document.getElementById('ratePlaylist');
         ratePlaylist.addEventListener('click', () => {
             const ratingNumber = document.getElementById('ratingNumber').value;
             const thisPlaylistId = playlist._id;
-            const rateThisPlaylist = new FetchHandle();
-            rateThisPlaylist.rateStuff('playlists', thisPlaylistId, ratingNumber);
-});
+            newFetch.rateStuff('playlists', thisPlaylistId, ratingNumber);
+        });
 
     }
+    //CLEANED
     displayTopPlaylist(list) {
         let topPlaylistsButtons = `<div class="topFivePlayLists">
                                    <p>THE HIGHEST RATED PLAYLISTS</p>`;
@@ -811,51 +794,120 @@ class DOMHandle {
     }
 
     displayPlaylistComments(comments, playlistID){
-        const playlistComments = document.getElementById('playlistComments');
-
-        let commentContent = "";
-
-        for(let i = 0; i < comments[0].length; i++){
-            commentContent +=`
-                <div class="playlistComment">
-                    <header>
-                        <p class="commenter">
-                            ${comments[0][i].username}
-                        </p>
-                        <button class="deleteComment" id="${comments[0][i]._id}">
-                            <img src="images/x-circle.svg">
-                        </button>
-                    </header>
-                    <div class="underline"></div>
-                    <p class="comment">
-                        ${comments[0][i].body}
-                    </p>
+        
+        const commentsOutput = document.getElementById('commentsOutput');
+        const newFetch = new FetchHandle();
+        const newDOM = new DOMHandle();
+        
+        newDOM.fadeOutAnimation(commentsOutput, 'remove');
+        
+        let commentField = `
+            <form id="commentForm">
+                <button type="button" id="commentCloseButton">
+                <img src="images/x-circle.svg">
+                BACK
+            </button>
+                <input placeholder="Comment.." type="text" id="commentField">
+                <div id="commentBottom">
+                    <input placeholder="Name.." type="text" id="commentUser">
+                    <button type="button" id="addCommentButton"><img src="images/plus-circle.svg"></button>
                 </div>
-            `
-        }
-
+            </form>
+            <div id="playlistComments"></div>
+        `;
+        
+        commentsOutput.innerHTML=commentField;
+        
+        const playlistComments = document.getElementById('playlistComments');
+        
+        let commentContent = "";
+        
+        if(!comments.length == 0){       
+            for(let i = 0; i < comments[0].length; i++){
+                 commentContent +=`
+                    <div class="playlistComment">
+                        <header>
+                            <p class="commenter">
+                                ${comments[0][i].username}
+                            </p>
+                            <button class="deleteComment" id="${comments[0][i]._id}">
+                                <img src="images/x-circle.svg">
+                            </button>
+                        </header>
+                        <div class="underline"></div>
+                        <p class="comment">
+                            ${comments[0][i].body}
+                        </p>
+                    </div>
+                `;
+            }           
+        } //END OF IF NOT NULL STATEMENT
+         
         playlistComments.innerHTML=commentContent;
+        
+        const addCommentButton = document.getElementById('addCommentButton');
+        const commentFieldDiv = document.getElementById('commentField');
+        const commentUser = document.getElementById('commentUser');
+
+        addCommentButton.addEventListener('click', function(){       
+            newDOM.fadeOutAnimation(playlistComments, 'add');
+            setTimeout( () =>{
+                playlistComments.innerHTML=`
+                    <div id="commentMessage">
+                        <img src="images/check.svg">
+                        <p> THANK YOU FOR LEAVING A COMMENT</p>
+                    </div>
+                `;
+                newDOM.fadeOutAnimation(playlistComments, 'remove');
+                setTimeout( () => {
+                    newFetch.addPlayListComment(commentFieldDiv.value, commentUser.value, playlistID)
+                    newDOM.fadeOutAnimation(commentsOutput, 'add');
+                }, 500);
+            }, 500);
+        });
 
         const deleteCommentButton = document.
         getElementsByClassName('deleteComment');
 
         for (i = 0; i < deleteCommentButton.length; i++) {
-            deleteCommentButton[i].addEventListener('click', function() {
-                const newFetch = new FetchHandle();
-                newFetch.deleteItem('comments', this.id);
-            setTimeout(function(){
-                newFetch.fetchPlaylistById(playlistID)
-            })
-            })
+            deleteCommentButton[i].addEventListener('click', function(){
+                newDOM.fadeOutAnimation(playlistComments, 'add');
+                setTimeout( () => {
+                    playlistComments.innerHTML=`
+                        <div id="commentMessage">
+                            <img src="images/check.svg">
+                            <p> COMMENT HAS BEEN DELETE </p>
+                        </div>
+                    `;
+                    newDOM.fadeOutAnimation(playlistComments, 'remove');
+                    setTimeout( () => {
+                        console.log(this.id)
+                        newFetch.deleteItem('comments', this.id);
+                        newDOM.fadeOutAnimation(commentsOutput, 'add');
+                        newFetch.fetchPlaylistById(playlistID)
+                    }, 500);
+                }, 500);
+            });
         }
-    }
+        
+        const commentCloseButton = document.getElementById('commentCloseButton');
+        
+        commentCloseButton.addEventListener('click', () => {    
+            let commentContent ='';
+            newDOM.fadeOutAnimation(commentsOutput, 'add');
+            setTimeout( () => {
+                commentsOutput.innerHTML=commentContent;
+            }, 1000);
+        });
+        
+    } // CLEANED
 
     filterSearch() {
         for (let sbutton of searchButton) {
             if (sbutton.classList.contains('activeButton')) {
                 const filter = searchField.value.toUpperCase();
                 const buttons = document.querySelectorAll('.showByIdButton');
-                console.log(buttons);
+                
                 let visibleButtons = [];
                 for (let i = 0; i < buttons.length; i++) {
                     let dataGenre = buttons[i].getAttribute('data-genre').toUpperCase();
