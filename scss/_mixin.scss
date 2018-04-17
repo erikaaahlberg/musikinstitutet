@@ -5,14 +5,22 @@ $mainRadius: 5px;
 $mainAnimationTime: 400ms;
 
 @mixin listButtons{
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     color: $textColor;
     background: none;
     border: none;
     border-radius: 5px;
     width: 100%;
+    -webkit-transition: 200ms;
+    -o-transition: 200ms;
     transition: 200ms;
     cursor: pointer;
     padding: 10px 15px;
@@ -31,6 +39,8 @@ $mainAnimationTime: 400ms;
     border: none;
     color: white;
     background: #d3790a;
+    -webkit-transition: 300ms;
+    -o-transition: 300ms;
     transition: 300ms;
     &:hover {
         background: $accentColor;
