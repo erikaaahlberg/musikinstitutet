@@ -1,6 +1,6 @@
 Group: belgianBlueManGroup
 
-https://erikaaahlberg.github.io/musikinstitutet/
+http://www.arsenikrecords.se/musikinstitutet/
 
 Sidan är byggd på ren JavaScript, HTML & CSS. Vi ville ha ett naturligt integrationsflöde med smidiga animationer.
 
