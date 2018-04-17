@@ -323,14 +323,12 @@ class DOMHandle {
             sbutton.classList.remove('activeButton');
         }
     }
-
     displayAll(allAlbums, allTracks, allArtists, allPlaylists) {
         this.displayAlbums(allAlbums);
         this.displayTracks(allTracks);
         this.displayArtists(allArtists);
         this.displayPlaylists(allPlaylists);
     }
-
     /* Console logs the JSON-object. Doesn't add anything to the DOM right now. */
     displayAlbums(allAlbums) {
         let searchedAlbumButtons = '';
@@ -372,7 +370,6 @@ class DOMHandle {
             })
         }
     }
-
     displayTracks(allTracks) {
         const newFetch = new FetchHandle();
         const deActivate = new DOMHandle();
@@ -403,8 +400,7 @@ class DOMHandle {
                 }, mainAnimationTime);
             });
         }
-   }
-    
+    }
     displayArtists(allArtists) {
 
         const deActivate = new DOMHandle();
@@ -436,7 +432,6 @@ class DOMHandle {
         }
 
     }
-    
     displayPlaylists(allPlaylists) {
 
         const newFetch = new FetchHandle();
@@ -468,7 +463,6 @@ class DOMHandle {
         }
 
     }
-    
     displayTopPlaylist(list) {
 
         const newDOM = new DOMHandle();
@@ -504,7 +498,6 @@ class DOMHandle {
             })
         }
     }
-    
     displaySpecificAlbum(album) {
         const fetchRating = new Logic();
         const newDOM = new DOMHandle();
@@ -604,7 +597,6 @@ class DOMHandle {
 
         newDOM.everyOtherButton(albumTrackButton);
     }
-    
     displaySpecificTrack(track) {
 
         const fetchRating = new Logic();
@@ -676,7 +668,6 @@ class DOMHandle {
 
         });
     }
-    
     displaySpecificArtist(artist, albums){
         const newDOM = new DOMHandle();
         const newFetch = new FetchHandle();
@@ -767,7 +758,6 @@ class DOMHandle {
 
         newDOM.everyOtherButton(artistAlbumButtons);
     }
-    
     displaySpecificPlaylist(playlist, comments){
 
         const fetchRating = new Logic();
@@ -863,7 +853,6 @@ class DOMHandle {
 
         newDOM.everyOtherButton(playlistTracklist.children);
     }
-    
     displayPlaylistComments(comments, playlistID){
 
         const commentsOutput = document.getElementById('commentsOutput');
@@ -976,7 +965,58 @@ class DOMHandle {
             }, mainAnimationTime);
         });
     }
-    
+    displayElement (elementId) {
+        const element = document.getElementById(elementId).style.display = "block";
+    }
+    displayPopup (errorMessages, div = 'popUpWindow') {
+        const parentElement = document.getElementById(div);
+        const popupBox = document.createElement('div');
+        popupBox.className = 'messagePopupBox';
+        popupBox.setAttribute('id', 'messagePopupBox');
+
+        for (let errorMessage of errorMessages) {
+            const errorMessageParagraph = document.createElement('p');
+            errorMessageParagraph.className = 'errorMessage';
+            const errorMessageNode = document.createTextNode(errorMessage);
+            errorMessageParagraph.appendChild(errorMessageNode);
+            popupBox.appendChild(errorMessageParagraph);
+        }
+        popupBox.insertAdjacentHTML('beforeend',
+            `<div id = "messageButtonWrapper">
+                <button id = "errorOkButton"> Ok </button>
+            </div>`
+        );
+        parentElement.appendChild(popupBox);
+        const okButton = document.getElementById('errorOkButton');
+
+        okButton.addEventListener('click', function() {
+            const hide = new DOMHandle;
+            hide.hideElement('popUpWindow');
+        });
+    }
+    displayQuestionPopup (question) {
+        const parentElement = document.getElementById('addWrapper');
+        const popupBox = document.createElement('div');
+        popupBox.className = 'messagePopupBox';
+        popupBox.setAttribute('id', 'messagePopupBox');
+
+        popupBox.innerHTML = `
+            <p>${question}</p>
+            <div id = "messageButtonWrapper">
+                <button id = "yesButton"> Yes </button>
+                <button id = "noButton"> No </button>
+            </div>
+        `;
+        parentElement.appendChild(popupBox);
+    }
+    displayAddedTracks (addedTracks, parentElementId) {
+        const lastTrack = addedTracks.slice(-1)[0];
+        const parentElement = document.getElementById(parentElementId);
+        const p = document.createElement('p');
+        const addedTrack = document.createTextNode(lastTrack);
+        p.appendChild(addedTrack);
+        parentElement.appendChild(p);
+    }
     filterSearch() {
         for (let sbutton of searchButton) {
             /* If a search-choice is activated, initiate the search. */
@@ -1085,7 +1125,7 @@ class DOMHandle {
             .then((fetchedTracks) => {
                 for (let track of fetchedTracks) {
                     let option = document.createElement('option');
-                    
+
                     if (!track.artists[0]) {
                         track.artists[0] = { name: 'No name', _id: false };
                     }
@@ -1106,7 +1146,6 @@ class DOMHandle {
             });
         });
     }
-
     chooseAlbumSelector (parentElementId) {
         const albumDom = new DOMHandle();
         const albumFetch = new FetchHandle();
@@ -1132,7 +1171,6 @@ class DOMHandle {
                 }
         });
     }
-
     addTrackToAlbumEventListener() {
         event.preventDefault();
         const addedTracks = [];
@@ -1146,7 +1184,7 @@ class DOMHandle {
         const newTrackArtist = trackController.getInputValue('inputTrackArtist');
 
         const albumSelector = document.getElementById('albumSelector');
-        let selectedIndex = albumSelector.selectedIndex;  
+        let selectedIndex = albumSelector.selectedIndex;
         const selectedAlbum =  document.getElementsByTagName('option')[selectedIndex].innerHTML;
 
         const isArtistEmpty = trackController.isEmpty(newTrackArtist);
@@ -1179,7 +1217,6 @@ class DOMHandle {
             });
         }
     }
-
     createAlbumContent(){
         const addDiv = document.getElementById('addDiv');
 
@@ -1254,10 +1291,10 @@ class DOMHandle {
             `;
 
             addDiv.innerHTML = addToExistingAlbumContent;
-          
+
             /* Printing album selector */
             albumDom.chooseAlbumSelector('addTrackToExistingAlbum');
-            
+
             /* Create new album link */
             const createAlbumLink = document.getElementById('createAlbum');
             createAlbumLink.addEventListener('click', function(){
@@ -1393,7 +1430,6 @@ class DOMHandle {
             }
         });
     }
-
     createArtistContent(){
         const artistDom = new DOMHandle();
         const artistFetch = new FetchHandle();
@@ -1476,83 +1512,6 @@ class DOMHandle {
             }, mainAnimationTime)
         });
     }
-
-    displayGenres(item) {
-        let genres = '';
-        if (item.genres.length != 0) {
-            item.genres.forEach((element) => {
-                genres += element + ' ';
-            })
-            return genres;
-        }
-        genres += 'none';
-        return genres;
-    }
-    
-    slideShowBanner(){
-        const slideShowBannerDiv = document.
-        getElementById('slideShow');
-
-        const bannerImages = [
-            "image1.jpg",
-            "image2.jpg",
-            "image3.jpg",
-            "image4.jpg",
-            "image5.jpg",
-        ];
-
-        const dotWrapper = document.
-        getElementById('slideDotsWrapper')
-
-        let dots = "";
-        for(let i = 0; i < bannerImages.length; i++){
-            dots +=`<div class="slideDot"></div>`;
-        }
-
-        dotWrapper.innerHTML=dots;
-
-        function startSlide(i){
-            if(i <= bannerImages.length-1){
-                 let addSlide = `
-                    <div class="slideWrapper fadeSlide">
-                        <img src="images/${bannerImages[i]}"
-                    </div>
-                `;
-                const dot = `<div id="slideDotsWrapper"></div>`
-
-                slideShowBannerDiv.innerHTML=addSlide+dot
-
-                slideShowBannerDiv.
-                nextElementSibling.children[i].
-                classList.add('activeDot');
-
-                setTimeout(function(){
-                slideShowBannerDiv.
-                nextElementSibling.children[i].
-                classList.remove('activeDot');
-                }, 2500)
-
-                setTimeout(function(){
-                    slideShowBannerDiv.firstElementChild.
-                    classList.remove('fadeSlide');
-                })
-
-                setTimeout(function(){
-
-                    if(i === bannerImages.length-1){
-                        i = 0;
-                    } else {
-                        i++
-                    }
-
-                    startSlide(i)
-                }, 2500)
-            }
-        }
-        let i = 0;
-        startSlide(i)
-    }
-
     createPlaylistContent(){
         const addDiv = document.getElementById('addDiv');
         const playlistController = new Controller();
@@ -1714,7 +1673,80 @@ class DOMHandle {
             }
         });
     }
+    displayGenres(item) {
+        let genres = '';
+        if (item.genres.length != 0) {
+            item.genres.forEach((element) => {
+                genres += element + ' ';
+            })
+            return genres;
+        }
+        genres += 'none';
+        return genres;
+    }
+    slideShowBanner(){
+        const slideShowBannerDiv = document.
+        getElementById('slideShow');
 
+        const bannerImages = [
+            "image1.jpg",
+            "image2.jpg",
+            "image3.jpg",
+            "image4.jpg",
+            "image5.jpg",
+        ];
+
+        const dotWrapper = document.
+        getElementById('slideDotsWrapper')
+
+        let dots = "";
+        for(let i = 0; i < bannerImages.length; i++){
+            dots +=`<div class="slideDot"></div>`;
+        }
+
+        dotWrapper.innerHTML=dots;
+
+        function startSlide(i){
+            if(i <= bannerImages.length-1){
+                 let addSlide = `
+                    <div class="slideWrapper fadeSlide">
+                        <img src="images/${bannerImages[i]}"
+                    </div>
+                `;
+                const dot = `<div id="slideDotsWrapper"></div>`
+
+                slideShowBannerDiv.innerHTML=addSlide+dot
+
+                slideShowBannerDiv.
+                nextElementSibling.children[i].
+                classList.add('activeDot');
+
+                setTimeout(function(){
+                slideShowBannerDiv.
+                nextElementSibling.children[i].
+                classList.remove('activeDot');
+                }, 2500)
+
+                setTimeout(function(){
+                    slideShowBannerDiv.firstElementChild.
+                    classList.remove('fadeSlide');
+                })
+
+                setTimeout(function(){
+
+                    if(i === bannerImages.length-1){
+                        i = 0;
+                    } else {
+                        i++
+                    }
+
+                    startSlide(i)
+                }, 2500)
+            }
+        }
+        let i = 0;
+        startSlide(i)
+    }
     fadeOutAnimation(div, addRemove){
         if(addRemove === 'remove'){
             div.classList.remove('fadeOut');
@@ -1722,66 +1754,10 @@ class DOMHandle {
             div.classList.add('fadeOut');
         }
     }
-
     hideElement (elementId) {
         const element = document.getElementById(elementId);
         element.innerHTML = ``;
         element.classList.add('hidden');
-    }
-
-    displayElement (elementId) {
-        const element = document.getElementById(elementId).style.display = "block";
-    }
-
-    displayPopup (errorMessages, div = 'popUpWindow') {
-        const parentElement = document.getElementById(div);
-        const popupBox = document.createElement('div');
-        popupBox.className = 'messagePopupBox';
-        popupBox.setAttribute('id', 'messagePopupBox');
-
-        for (let errorMessage of errorMessages) {
-            const errorMessageParagraph = document.createElement('p');
-            errorMessageParagraph.className = 'errorMessage';
-            const errorMessageNode = document.createTextNode(errorMessage);
-            errorMessageParagraph.appendChild(errorMessageNode);
-            popupBox.appendChild(errorMessageParagraph);
-        }
-        popupBox.insertAdjacentHTML('beforeend',
-            `<div id = "messageButtonWrapper">
-                <button id = "errorOkButton"> Ok </button>
-            </div>`
-        );
-        parentElement.appendChild(popupBox);
-        const okButton = document.getElementById('errorOkButton');
-
-        okButton.addEventListener('click', function() {
-            const hide = new DOMHandle;
-            hide.hideElement('popUpWindow');
-        });
-    }
-
-    displayQuestionPopup (question) {
-        const parentElement = document.getElementById('addWrapper');
-        const popupBox = document.createElement('div');
-        popupBox.className = 'messagePopupBox';
-        popupBox.setAttribute('id', 'messagePopupBox');
-
-        popupBox.innerHTML = `
-            <p>${question}</p>
-            <div id = "messageButtonWrapper">
-                <button id = "yesButton"> Yes </button>
-                <button id = "noButton"> No </button>
-            </div>
-        `;
-        parentElement.appendChild(popupBox);
-    }
-    displayAddedTracks (addedTracks, parentElementId) {
-        const lastTrack = addedTracks.slice(-1)[0];
-        const parentElement = document.getElementById(parentElementId);
-        const p = document.createElement('p');
-        const addedTrack = document.createTextNode(lastTrack);
-        p.appendChild(addedTrack);
-        parentElement.appendChild(p);
     }
 }/* --- Class DomHandle collapse --- */
 
