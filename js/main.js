@@ -894,8 +894,7 @@ class DOMHandle {
         const playlistComments = document.getElementById('playlistComments');
 
         let commentContent = "";
-
-        if(!comments.length == 0){
+        if (comments.length != 0) {
             for(let i = 0; i < comments[0].length; i++){
                  commentContent +=`
                     <div class="playlistComment">
@@ -1147,7 +1146,7 @@ class DOMHandle {
         const newTrackArtist = trackController.getInputValue('inputTrackArtist');
 
         const albumSelector = document.getElementById('albumSelector');
-        let selectedIndex = albumSelector.selectedIndex;   
+        let selectedIndex = albumSelector.selectedIndex;  
         const selectedAlbum =  document.getElementsByTagName('option')[selectedIndex].innerHTML;
 
         const isArtistEmpty = trackController.isEmpty(newTrackArtist);
@@ -1253,8 +1252,9 @@ class DOMHandle {
                 </button>
             </div>
             `;
-            
+
             addDiv.innerHTML = addToExistingAlbumContent;
+          
             /* Printing album selector */
             albumDom.chooseAlbumSelector('addTrackToExistingAlbum');
             
